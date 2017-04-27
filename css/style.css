@@ -3200,7 +3200,7 @@ color
 }
 .article-entry pre,
 .article-entry .highlight {
-  background: #000;
+  background: #002b36;
   margin: 10px 0;
   padding: 10px 10px;
   overflow: auto;
@@ -3209,7 +3209,7 @@ color
 }
 .article-entry .highlight .gutter pre,
 .article-entry .gist .gist-file .gist-data .line-numbers {
-  color: #70c0b1;
+  color: #9e90ff;
 }
 .article-entry pre,
 .article-entry code {
@@ -3236,13 +3236,13 @@ color
   border: none;
 }
 .article-entry pre {
-  color: #eaeaea;
+  color: #fff;
 }
 .article-entry pre code {
   background: none;
   text-shadow: none;
   padding: 0;
-  color: #eaeaea;
+  color: #fff;
 }
 .article-entry p code {
   margin: 0 3px;
@@ -3385,7 +3385,7 @@ color
 .article-entry .highlight {
   border-radius: 4px;
   padding: 0 10px;
-  color: #eaeaea;
+  color: #fff;
 }
 .article-entry .highlight pre {
   border: none;
@@ -3412,7 +3412,7 @@ color
 }
 .article-entry .highlight figcaption {
   font-size: 0.85em;
-  color: #969896;
+  color: #75715e;
   line-height: 1em;
   margin-bottom: 1em;
 }
@@ -3443,7 +3443,7 @@ color
   border-style: solid;
   border-color: #ddd;
   border-width: 1px 0;
-  background: #000;
+  background: #002b36;
   padding: 15px 20px 15px 0;
 }
 .article-entry .gist .gist-file {
@@ -3469,8 +3469,8 @@ color
   border: none;
 }
 .article-entry .gist .gist-file .gist-meta {
-  background: #000;
-  color: #969896;
+  background: #002b36;
+  color: #75715e;
   font: 0.85em "Lucida Grande", Verdana, "Helvetica Neue", Arial, sans-serif;
   text-shadow: 0 0;
   padding: 0;
@@ -3505,10 +3505,10 @@ pre .command {
   color: #258fb8;
 }
 pre .comment {
-  color: #969896;
+  color: #75715e;
 }
 pre .keyword {
-  color: #c397d8;
+  color: #66d9ef;
 }
 pre .function,
 pre .class .params {
@@ -3517,18 +3517,18 @@ pre .class .params {
 pre .params,
 pre .function,
 pre .css .value {
-  color: #e78c45;
+  color: #fd971f;
 }
 pre .css ~ * .tag,
 pre .at_rule,
 pre .preprocessor {
-  color: #e7c547;
+  color: #f92672;
 }
 pre .built_in,
 pre .class,
 pre .css ~ * .class,
 pre .function {
-  color: #7aa6da;
+  color: #a6e22e;
 }
 pre .value,
 pre .number {
@@ -3536,7 +3536,7 @@ pre .number {
 }
 pre .id,
 pre .css ~ * .id {
-  color: #e78c45;
+  color: #fd971f;
 }
 pre .link_label,
 pre .code,
