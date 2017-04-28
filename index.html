@@ -155,66 +155,10 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <hr>
-<p>title: 关联对象<br>categories: 开发<br>tags: </p>
-<h2 id="苹果"><a href="#苹果" class="headerlink" title=" - 苹果"></a> - 苹果</h2><h1 id="关联对象"><a href="#关联对象" class="headerlink" title="关联对象"></a>关联对象</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>关联对象是指两个对象关联起来，其中一个对象作为另一个对象的一部分；它允许开发者为任何对象附着键值数据。</p>
+              <p>title: 关联对象<br>categories: 开发<br>tags: </p>
+<h2 id="苹果"><a href="#苹果" class="headerlink" title=" - 苹果"></a> - 苹果</h2><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>关联对象是指两个对象关联起来，其中一个对象作为另一个对象的一部分；它允许开发者为任何对象附着键值数据。</p>
 <p>可以给某对象关联许多其他对象，这些对象通过“键”来区分。存储对象值的时候，可以指明“存储策略”，用以维护相应的“内存管理语义”。</p>
-<p>设置关联对象用的键是个“不透明的指针”，即所指向的数据结构不局限于某种特定类型的指针。再设置关联对象值时，若想令两个键匹配到同一个值，则二者必须时完全相同的指针才行。故设置关联对象值时，通常使用静态全局变量做键。</p>
-<p>下列方法可以管理关联对象：</p>
-<p>（1）以给定的键和策略为某对象设置关联对象值</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">void objc_setAssociatedObject(id object, const void *key, id value, objc_AssociationPolicy policy)</div></pre></td></tr></table></figure>
-<p>（2）根据给定的键从某对象中获取响应的关联对象值。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">id objc_getAssociatedObject(id object, const void *key)</div></pre></td></tr></table></figure>
-<p>（3）移除指定对象的全部关联对象</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">void objc_removeAssociatedObject(id object)</div></pre></td></tr></table></figure>
-<h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><blockquote>
-<p><code>id object</code> 被关联的对象</p>
-<p><code>const void *key</code> 要关联的对象的键值</p>
-<p><code>id value</code> 要关联的对象</p>
-<p><code>objc_AssociationPolicy policy</code> 关联时采用的存数策略</p>
-</blockquote>
-<h2 id="存储策略"><a href="#存储策略" class="headerlink" title="存储策略"></a>存储策略</h2><table>
-<thead>
-<tr>
-<th style="text-align:left">关联类型</th>
-<th style="text-align:left">等效的@property属性</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">OBJC_ASSOCIATION_ASSIGN</td>
-<td style="text-align:left">assign</td>
-</tr>
-<tr>
-<td style="text-align:left">OBJC_ASSOCIATION_RETAIN_NONATOMIC</td>
-<td style="text-align:left">nonatomic,retain</td>
-</tr>
-<tr>
-<td style="text-align:left">OBJC_ASSOCIATION_COPY_NONATOMIC</td>
-<td style="text-align:left">nonatomic,copy</td>
-</tr>
-<tr>
-<td style="text-align:left">OBJC_ASSOCIATION_RETAIN</td>
-<td style="text-align:left">retain</td>
-</tr>
-<tr>
-<td style="text-align:left">OBJC_ASSOCIATION_COPY</td>
-<td style="text-align:left">copy</td>
-</tr>
-</tbody>
-</table>
-<h2 id="使用例子"><a href="#使用例子" class="headerlink" title="使用例子"></a>使用例子</h2><p>（1）在分类中添加属性</p>
-<p><code>.h文件</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@interface UIView(AddVariables)</div><div class="line">	</div><div class="line">@property (nonatomic, retain) NSString *viewName;</div><div class="line">	</div><div class="line">@end</div></pre></td></tr></table></figure>
-<p><code>.m文件</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">#import &lt;objc/runtime.h&gt;</div><div class="line"></div><div class="line">//定义存取的Key</div><div class="line">static const void *viewNameKey = &quot;key&quot;;</div><div class="line">	</div><div class="line">@implementation UIView(AddVariables)</div><div class="line">	</div><div class="line">-(NSString *)viewName</div><div class="line">&#123;</div><div class="line">	return (NSString *)objc_getAssociatedObject(self, viewNameKey);</div><div class="line">&#125;	</div><div class="line">	 </div><div class="line">-(void)setViewName:(NSString *)newViewNameKey</div><div class="line">&#123;</div><div class="line">	objc_setAssociatedObject(self, viewNameKey, newViewNameKey, OBJC_ASSOCIATION_RETAIN_NONATOMIC);</div><div class="line">&#125;</div><div class="line">@end</div></pre></td></tr></table></figure>
-<p>（2）调试使用</p>
-<p>当相关对象被销毁时，关联对象会被释放，这个事实意味着可以用关联对象来追踪另一个对象何时销毁。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">#import &lt;objc/runtime.h&gt;</div><div class="line">	</div><div class="line">//定义存取的Key</div><div class="line">static const void *viewNameKey = &quot;key&quot;;</div><div class="line">	</div><div class="line">@implementation Watcher(AddVariables)</div><div class="line">	</div><div class="line">-(void)dealloc</div><div class="line">&#123;</div><div class="line">	NSLog(@&quot;Hey!The thing I was watching is going away!&quot;);</div><div class="line">&#125;	</div><div class="line">	</div><div class="line">@end</div><div class="line">	</div><div class="line">...</div><div class="line">	</div><div class="line">NSObject *something = [NSObject new];		</div><div class="line">objc_setAssociatedObject(something, viewNameKey, [Watcher new], OBJC_ASSOCIATION_RETAIN);</div></pre></td></tr></table></figure>
-<p>（3）警告视图处理</p>
-<p>在同一个类里处理多个警告信息视图，那么就必须在delegate方法中检查传入的alertView参数，并据此选用响应的逻辑，要是能在创建警告视图的时候直接把处理每个按钮的逻辑整理好，那就简单多了！</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">static const void *MyAlertViewKey = &quot;key&quot;;  </div><div class="line">	</div><div class="line">- (void) askUserQuestion  </div><div class="line">&#123;  </div><div class="line">	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@“Question” message:@“What?” delegate:self cancelButtonTitle:@“cancel” otherButtonTitles:@“Continue”,nil];  </div><div class="line">	  </div><div class="line">	void (^block)(NSInteger) = ^(NSInteger buttonIndex)</div><div class="line">	&#123;  </div><div class="line">	    if(buttonIndex == 0)</div><div class="line">	    &#123;  </div><div class="line">	        [self doCancel];  </div><div class="line">	    &#125; </div><div class="line">	    else </div><div class="line">	    &#123;  </div><div class="line">	        [self doContinue];  </div><div class="line">	     &#125;  </div><div class="line">	&#125;;  </div><div class="line">	       </div><div class="line">	objc_setAssociatedObject(alert, MyAlertViewKey, block, BJC_ASSOCIATION_COPY);  </div><div class="line">	[alert show];  </div><div class="line">&#125;  </div><div class="line">	  </div><div class="line">- (void)alertView:(UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex  </div><div class="line">&#123;  </div><div class="line">	void (^block)(NSInteger) = objc_getAssociatedObject (alertView, MyAlertViewKey);  </div><div class="line">	block(buttonIndex);  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
+          
       
       
     </div>
@@ -224,6 +168,10 @@
       
 
       
+      
+        <p class="article-more-link">
+          <a  href="/uncategorized/Assotiated Object.html/#more">大航海 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
