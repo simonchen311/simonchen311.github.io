@@ -3,14 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Simon’s Home</title>
+  <title>多GitHub账号的SSH配置 | Simon’s Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Simon’s Home">
-<meta property="og:url" content="http://simonchen.club/index.html">
+  <meta name="description" content="github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。 如果是单账户，很方便，默认拿id_rsa与你的 github服务器的公钥对比；如果是多用户如user1,user2,那么就不能用在user2的身上了，怎么办呢？ 下面我将使用图文形式详细想大家介绍下多github用户配置ssh key。 #####创建key 利用ssh-keygen -t rsa -C &amp;qu">
+<meta name="keywords" content="git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="多GitHub账号的SSH配置">
+<meta property="og:url" content="http://simonchen.club/multiSSHKey.html/index.html">
 <meta property="og:site_name" content="Simon’s Home">
+<meta property="og:description" content="github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。 如果是单账户，很方便，默认拿id_rsa与你的 github服务器的公钥对比；如果是多用户如user1,user2,那么就不能用在user2的身上了，怎么办呢？ 下面我将使用图文形式详细想大家介绍下多github用户配置ssh key。 #####创建key 利用ssh-keygen -t rsa -C &amp;qu">
+<meta property="og:updated_time" content="2017-05-01T13:50:39.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Simon’s Home">
+<meta name="twitter:title" content="多GitHub账号的SSH配置">
+<meta name="twitter:description" content="github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。 如果是单账户，很方便，默认拿id_rsa与你的 github服务器的公钥对比；如果是多用户如user1,user2,那么就不能用在user2的身上了，怎么办呢？ 下面我将使用图文形式详细想大家介绍下多github用户配置ssh key。 #####创建key 利用ssh-keygen -t rsa -C &amp;qu">
   
     <link rel="alternative" href="/atom.xml" title="Simon’s Home" type="application/atom+xml">
   
@@ -21,9 +26,6 @@
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  
-    
-    
   
   
       <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
@@ -36,8 +38,8 @@
           rootUrl: '/',
           fancybox: true,
           animate: false,
-          isHome: true,
-          isPost: false,
+          isHome: false,
+          isPost: true,
           isArchive: false,
           isTag: false,
           isCategory: false,
@@ -137,9 +139,7 @@
         </header>                
     </div>
 </nav>
-      <div class="body-wrap">
-  
-    <article id="post-multiSSHKey" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-multiSSHKey" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/multiSSHKey.html/" class="article-date">
@@ -155,12 +155,27 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/multiSSHKey.html/">多GitHub账号的SSH配置</a>
+    <h1 class="article-title" itemprop="name">
+      多GitHub账号的SSH配置
     </h1>
   
 
       </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/programming/">开发</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
       
     
     <div class="article-entry" itemprop="articleBody">
@@ -189,106 +204,137 @@
       
     </div>
     
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/programming/">开发</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
   </div>
   
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Assotiated Object" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/Assotiated Object.html/" class="article-date">
-      <time datetime="2016-11-10T04:03:00.000Z" itemprop="datePublished">2016-11-10</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
     
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Assotiated Object.html/">关联对象</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>关联对象是指两个对象关联起来，其中一个对象作为另一个对象的一部分；它允许开发者为任何对象附着键值数据。</p>
-<p>可以给某对象关联许多其他对象，这些对象通过“键”来区分。存储对象值的时候，可以指明“存储策略”，用以维护相应的“内存管理语义”。</p>
-<p>设置关联对象用的键是个“不透明的指针”，即所指向的数据结构不局限于某种特定类型的指针。再设置关联对象值时，若想令两个键匹配到同一个值，则二者必须时完全相同的指针才行。故设置关联对象值时，通常使用静态全局变量做键。</p>
-          
-      
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/programming/">开发</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a  href="/Assotiated Object.html/#more">More >></a>
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/multiSSHKey.html/">多GitHub账号的SSH配置</a></p>
+        <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
+        <p><span>发布时间:</span>2017年05月01日 - 21时29分</p>
+        <p><span>最后更新:</span>2017年05月01日 - 21时50分</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/multiSSHKey.html/" title="多GitHub账号的SSH配置">http://simonchen.club/multiSSHKey.html/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/multiSSHKey.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script src="/js/clipboard.min.js"></script>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
-      
-      <div class="clearfix"></div>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
+        </p>
     </div>
-    
-  </div>
+
+
+
+<nav id="article-nav">
+  
+    <a href="/Assotiated Object.html/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          关联对象
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
   
 </article>
 
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+</div>
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+        }
+    })
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+    }
+</script>
 
 
 
 
 
+<div class="bdsharebuttonbox">
+	<a href="#" class="fx fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+	<a href="#" class="fx fa-weixin bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+	<a href="#" class="fx fa-qq bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+	<a href="#" class="fx fa-facebook-official bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+	<a href="#" class="fx fa-twitter bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+	<a href="#" class="fx fa-linkedin bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+	<a href="#" class="fx fa-files-o bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+</div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
 
 
 
-  
-  
+
+    
+        <section class="youyan" id="comments">
+  <div id="uyan_frame"></div>
+  <script src="http://v2.uyan.cc/code/uyan.js?uid=2132200"></script>
+</section>
+
+    
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/Assotiated Object.html/" title="上一篇: 关联对象">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+    </div>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/multiSSHKey.html/">多GitHub账号的SSH配置</a></li><li class="post-list-item"><a class="post-list-link" href="/Assotiated Object.html/">关联对象</a></li></ul>
+    <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+    <script>
+        $(".post-list").addClass("toc-article");
+        $(".post-list-item a").attr("target","_blank");
+        $("#post-nav-button > a:nth-child(2)").click(function() {
+            $(".fa-bars, .fa-times").toggle();
+            $(".post-list").toggle(300);
+            if ($(".toc").length > 0) {
+                $("#toc, #tocButton").toggle(200, function() {
+                    if ($(".switch-area").is(":visible")) {
+                        $("#tocButton").attr("value", valueHide);
+                        }
+                    })
+            }
+            else {
+            }
+        })
+    </script>
+
+
+
+    <script>
+        
+    </script>
 </div>
       <footer id="footer">
     <div class="outer">
