@@ -166,25 +166,10 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。</p>
+              <p>github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。</p>
 <p>如果是单账户，很方便，默认拿id_rsa与你的 github服务器的公钥对比；如果是多用户如user1,user2,那么就不能用在user2的身上了，怎么办呢？</p>
 <p>下面我将使用图文形式详细想大家介绍下多github用户配置ssh key。</p>
-<p>#####创建key</p>
-<p>利用<code>ssh-keygen -t rsa -C &quot;[email]&quot;</code>创建不同的ssh key，但是不能再一路回车了，需要给文件创建别名，以防止被覆盖：</p>
-<p><code>Enter file in which to save the key (/Users/Sunghao/.ssh/id_rsa): [输入任意的rsa名称]</code></p>
-<p>#####配置config文件</p>
-<p>我是在mac环境下配置的，如果在./ssh文件夹下没有config文件，则用<code>touch config</code>进行创建，然后打开文件，输入以下文本:</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Host 名称<span class="number">1</span></div><div class="line">HostName github.com</div><div class="line">PreferredAuthentications publickey</div><div class="line">IdentityFile ~/.ssh/在第一步创建的rsa名称<span class="number">1</span></div><div class="line"></div><div class="line">Host 名称<span class="number">2</span></div><div class="line">HostName github.com</div><div class="line">PreferredAuthentications publickey</div><div class="line">IdentityFile ~/.ssh/在第一步创建的rsa名称<span class="number">2</span></div></pre></td></tr></table></figure>
-<p>#####测试ssh是否配置成功</p>
-<p>分别使用<code>ssh -T git@第二步配置的host的名称</code>，如果出现：</p>
-<blockquote>
-<p>Hi xxxx! You’ve successfully authenticated, but GitHub does not provide shell access.</p>
-</blockquote>
-<p>则配置成功。</p>
-<p>#####clone远程仓库</p>
-<p>在clone的时候需要修改Host名称即可：</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone git@[host名称代替原本的名称]:url</div></pre></td></tr></table></figure>
-
+          
       
       
     </div>
@@ -202,6 +187,10 @@
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
     </div>
 
+      
+        <p class="article-more-link">
+          <a  href="/multiSSHKey.html/#more">More >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
