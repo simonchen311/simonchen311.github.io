@@ -5,17 +5,17 @@
   
   <title>多GitHub账号的SSH配置 | Simon’s Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。 如果是单账户，很方便，默认拿id_rsa与你的 github服务器的公钥对比；如果是多用户如user1,user2,那么就不能用在user2的身上了，怎么办呢？ 下面我将使用图文形式详细想大家介绍下多github用户配置ssh key。">
+  <meta name="description" content="github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。 如果是单账户，很方便，默认拿id_rsa与你的 github服务器的公钥对比；如果是多用户如user1,user2,那么就不能用在user2的身上了，怎么办呢？ 下面详细说明下多github用户配置ssh key。">
 <meta name="keywords" content="git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="多GitHub账号的SSH配置">
 <meta property="og:url" content="http://simonchen.club/multiSSHKey.html/index.html">
 <meta property="og:site_name" content="Simon’s Home">
-<meta property="og:description" content="github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。 如果是单账户，很方便，默认拿id_rsa与你的 github服务器的公钥对比；如果是多用户如user1,user2,那么就不能用在user2的身上了，怎么办呢？ 下面我将使用图文形式详细想大家介绍下多github用户配置ssh key。">
-<meta property="og:updated_time" content="2017-05-01T13:54:25.000Z">
+<meta property="og:description" content="github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。 如果是单账户，很方便，默认拿id_rsa与你的 github服务器的公钥对比；如果是多用户如user1,user2,那么就不能用在user2的身上了，怎么办呢？ 下面详细说明下多github用户配置ssh key。">
+<meta property="og:updated_time" content="2017-05-01T13:55:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="多GitHub账号的SSH配置">
-<meta name="twitter:description" content="github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。 如果是单账户，很方便，默认拿id_rsa与你的 github服务器的公钥对比；如果是多用户如user1,user2,那么就不能用在user2的身上了，怎么办呢？ 下面我将使用图文形式详细想大家介绍下多github用户配置ssh key。">
+<meta name="twitter:description" content="github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。 如果是单账户，很方便，默认拿id_rsa与你的 github服务器的公钥对比；如果是多用户如user1,user2,那么就不能用在user2的身上了，怎么办呢？ 下面详细说明下多github用户配置ssh key。">
   
     <link rel="alternative" href="/atom.xml" title="Simon’s Home" type="application/atom+xml">
   
@@ -183,7 +183,7 @@
           
         <p>github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。</p>
 <p>如果是单账户，很方便，默认拿id_rsa与你的 github服务器的公钥对比；如果是多用户如user1,user2,那么就不能用在user2的身上了，怎么办呢？</p>
-<p>下面我将使用图文形式详细想大家介绍下多github用户配置ssh key。</p>
+<p>下面详细说明下多github用户配置ssh key。</p>
 <a id="more"></a>
 <p>####创建key</p>
 <p>利用<code>ssh-keygen -t rsa -C &quot;[email]&quot;</code>创建不同的ssh key，但是不能再一路回车了，需要给文件创建别名，以防止被覆盖：</p>
@@ -212,7 +212,7 @@
         <p><span>本文标题:</span><a href="/multiSSHKey.html/">多GitHub账号的SSH配置</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
         <p><span>发布时间:</span>2017年05月01日 - 21时29分</p>
-        <p><span>最后更新:</span>2017年05月01日 - 21时54分</p>
+        <p><span>最后更新:</span>2017年05月01日 - 21时55分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/multiSSHKey.html/" title="多GitHub账号的SSH配置">http://simonchen.club/multiSSHKey.html/</a>
             <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/multiSSHKey.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
