@@ -193,14 +193,12 @@
 </ul>
 <p>下面针对FBKVOController这个开源解决方案来继续的阅读其源码，看看其是如何实现这些改进的。</p>
 <a id="more"></a>
-<p>##源码分析</p>
-<p>FBKVOController的结构很简单，其核心代码包括如下几个类：</p>
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><p>FBKVOController的结构很简单，其核心代码包括如下几个类：</p>
 <ul>
 <li>FBKVOController</li>
 <li>NSObject+FBKVOController</li>
 </ul>
-<p>###FBKVOContrller</p>
-<p>FBKVOController类在头文件中对外暴露了几个使用接口，外部在使用的时候只需要按照其提供的接口来传入对应的参数即可使用，非常简单：</p>
+<h3 id="FBKVOContrller"><a href="#FBKVOContrller" class="headerlink" title="FBKVOContrller"></a>FBKVOContrller</h3><p>FBKVOController类在头文件中对外暴露了几个使用接口，外部在使用的时候只需要按照其提供的接口来传入对应的参数即可使用，非常简单：</p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)observe:(<span class="keyword">nullable</span> <span class="keyword">id</span>)object keyPath:(<span class="built_in">NSString</span> *)keyPath options:(<span class="built_in">NSKeyValueObservingOptions</span>)options block:(FBKVONotificationBlock)block;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)observe:(<span class="keyword">nullable</span> <span class="keyword">id</span>)object keyPath:(<span class="built_in">NSString</span> *)keyPath options:(<span class="built_in">NSKeyValueObservingOptions</span>)options action:(SEL)action;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)observe:(<span class="keyword">nullable</span> <span class="keyword">id</span>)object keyPath:(<span class="built_in">NSString</span> *)keyPath options:(<span class="built_in">NSKeyValueObservingOptions</span>)options context:(<span class="keyword">nullable</span> <span class="keyword">void</span> *)context;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)observe:(<span class="keyword">nullable</span> <span class="keyword">id</span>)object keyPaths:(<span class="built_in">NSArray</span>&lt;<span class="built_in">NSString</span> *&gt; *)keyPaths options:(<span class="built_in">NSKeyValueObservingOptions</span>)options block:(FBKVONotificationBlock)block;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)observe:(<span class="keyword">nullable</span> <span class="keyword">id</span>)object keyPaths:(<span class="built_in">NSArray</span>&lt;<span class="built_in">NSString</span> *&gt; *)keyPaths options:(<span class="built_in">NSKeyValueObservingOptions</span>)options action:(SEL)action;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)observe:(<span class="keyword">nullable</span> <span class="keyword">id</span>)object keyPaths:(<span class="built_in">NSArray</span>&lt;<span class="built_in">NSString</span> *&gt; *)keyPaths options:(<span class="built_in">NSKeyValueObservingOptions</span>)options context:(<span class="keyword">nullable</span> <span class="keyword">void</span> *)context;</div></pre></td></tr></table></figure>
 <p>从其提供的接口可以看出，在注册观察者时可以分别传入一个block来处理观察通知回调，也可以指定一个SEL来处理，同样也提供与原生一致的NSKeyValueObserving回调来处理。</p>
 <p>同时FBKVOController也可以一次传入多个keyPath来一次性注册观察，从未减少了很多代码的编写量来依次单个注册。</p>
@@ -256,7 +254,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义"><span class="toc-number">1.</span> <span class="toc-text">定义</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义"><span class="toc-number">1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#源码分析"><span class="toc-number">2.</span> <span class="toc-text">源码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#FBKVOContrller"><span class="toc-number">2.1.</span> <span class="toc-text">FBKVOContrller</span></a></li></ol></li></ol>
 </div>
 <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
 
