@@ -187,12 +187,9 @@
 <p>[2] KVO的所有获取改变通知有着统一的回调函数进行处理，如果观察者同时观察了多个属性的变化，那么这个回调可能会变得非常复杂。</p>
 <p><a href="https://github.com/facebook/KVOController" target="_blank" rel="external">FBKVOController</a>是Facebook开源的一套基于KVO再封装的解决方案，相比较原生的KVO，它有如下这些优点：</p>
 <ul>
-<li><p>在注册观察者的时候提供了多种形式处理回调：block或者指定一个处理回调方法等等，从而达到了分散回调处理方法的目的。</p>
-</li>
-<li><p>不再需要手动移除观察者了，FBKVOController会在内部自动在观察者controller释放掉的时候进行移除处理。</p>
-</li>
-<li><p>在多线程环境下安全。</p>
-</li>
+<li>在注册观察者的时候提供了多种形式处理回调：block或者指定一个处理回调方法等等，从而达到了分散回调处理方法的目的。</li>
+<li>不再需要手动移除观察者了，FBKVOController会在内部自动在观察者controller释放掉的时候进行移除处理。</li>
+<li>在多线程环境下安全。</li>
 </ul>
 <p>下面针对FBKVOController这个开源解决方案来继续的阅读其源码，看看其是如何实现这些改进的。</p>
 <a id="more"></a>
