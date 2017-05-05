@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://simonchen.club/FBKVOController Source Code analysis.html/index.html">
 <meta property="og:site_name" content="Simon’s Home">
 <meta property="og:description" content="定义键值观察(KVO)在苹果的官方文档中是这么定义的：它是一种允许观察者对象在所观察其他对象的属性发生改变时可以获得这些改变的通知这样一种机制。 但是原生的KVO在实现上存在着这么一些问题： [1] KVO在添加观察者后，在不再需要继续观察的时候应该将其移除；并且添加和移除需要成对出现，我们在开发的时候往往可能会由于疏忽导致代码里忘记在不需要使用的时候去释放掉观察者，那么这样就会埋下程序会cras">
-<meta property="og:updated_time" content="2016-11-10T04:03:00.000Z">
+<meta property="og:updated_time" content="2016-11-13T14:15:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="FBKVOController源码解析">
 <meta name="twitter:description" content="定义键值观察(KVO)在苹果的官方文档中是这么定义的：它是一种允许观察者对象在所观察其他对象的属性发生改变时可以获得这些改变的通知这样一种机制。 但是原生的KVO在实现上存在着这么一些问题： [1] KVO在添加观察者后，在不再需要继续观察的时候应该将其移除；并且添加和移除需要成对出现，我们在开发的时候往往可能会由于疏忽导致代码里忘记在不需要使用的时候去释放掉观察者，那么这样就会埋下程序会cras">
@@ -143,7 +143,7 @@
   
     <div class="article-meta">
       <a href="/FBKVOController Source Code analysis.html/" class="article-date">
-      <time datetime="2016-11-10T04:03:00.000Z" itemprop="datePublished">2016-11-10</time>
+      <time datetime="2016-11-13T12:42:00.000Z" itemprop="datePublished">2016-11-13</time>
 </a>
     </div>
   
@@ -220,8 +220,8 @@
     <div class="copyright">
         <p><span>本文标题:</span><a href="/FBKVOController Source Code analysis.html/">FBKVOController源码解析</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
-        <p><span>发布时间:</span>2016年11月10日 - 12时03分</p>
-        <p><span>最后更新:</span>2016年11月10日 - 12时03分</p>
+        <p><span>发布时间:</span>2016年11月13日 - 20时42分</p>
+        <p><span>最后更新:</span>2016年11月13日 - 22时15分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/FBKVOController Source Code analysis.html/" title="FBKVOController源码解析">http://simonchen.club/FBKVOController Source Code analysis.html/</a>
             <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/FBKVOController Source Code analysis.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
@@ -237,9 +237,18 @@
 
 <nav id="article-nav">
   
+    <a href="/Assotiated Object.html/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          关联对象
+        
+      </div>
+    </a>
   
-    <a href="/Assotiated Object.html/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">关联对象</div>
+  
+    <a href="/multiSSHKey.html/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">多GitHub账号的SSH配置</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -307,11 +316,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+            <a href="/Assotiated Object.html/" title="上一篇: 关联对象">
+                <i class="fa fa-angle-left"></i>
+            </a>
         
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
         
-            <a href="/Assotiated Object.html/" title="下一篇: 关联对象">
+            <a href="/multiSSHKey.html/" title="下一篇: 多GitHub账号的SSH配置">
                 <i class="fa fa-angle-right"></i>
             </a>
         
