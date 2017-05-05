@@ -3,20 +3,20 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Simon’s Home</title>
+  <title>KVC与KVO | Simon’s Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="KVC和KVO@[iOS, Study] ###概述 KVC是一种通过字符串名称间接访问对象属性的方法。其方法在NSKeyValueCoding中被声明，默认的实现方法由NSObject提供。非对象参数和返回类型会被识别自动封装、解封。  通过KVC这种间接访问方法，开发者就能在运行时确定属性的绑定，而不是在编译时。   ###键和键路径  key： 键是一个标识了对象某个属性的字符串。通常在接收">
-<meta name="keywords">
+  <meta name="description" content="概述KVC是一种通过字符串名称间接访问对象属性的方法。其方法在NSKeyValueCoding中被声明，默认的实现方法由NSObject提供。非对象参数和返回类型会被识别自动封装、解封。  通过KVC这种间接访问方法，开发者就能在运行时确定属性的绑定，而不是在编译时。">
+<meta name="keywords" content="iOS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Simon’s Home">
+<meta property="og:title" content="KVC与KVO">
 <meta property="og:url" content="http://simonchen.club/KVC and KVO.html/index.html">
 <meta property="og:site_name" content="Simon’s Home">
-<meta property="og:description" content="KVC和KVO@[iOS, Study] ###概述 KVC是一种通过字符串名称间接访问对象属性的方法。其方法在NSKeyValueCoding中被声明，默认的实现方法由NSObject提供。非对象参数和返回类型会被识别自动封装、解封。  通过KVC这种间接访问方法，开发者就能在运行时确定属性的绑定，而不是在编译时。   ###键和键路径  key： 键是一个标识了对象某个属性的字符串。通常在接收">
+<meta property="og:description" content="概述KVC是一种通过字符串名称间接访问对象属性的方法。其方法在NSKeyValueCoding中被声明，默认的实现方法由NSObject提供。非对象参数和返回类型会被识别自动封装、解封。  通过KVC这种间接访问方法，开发者就能在运行时确定属性的绑定，而不是在编译时。">
 <meta property="og:image" content="http://simonchen.club/KVC%20and%20KVO.html/keypath.jpg">
-<meta property="og:updated_time" content="2017-05-05T17:20:22.000Z">
+<meta property="og:updated_time" content="2016-10-30T07:45:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Simon’s Home">
-<meta name="twitter:description" content="KVC和KVO@[iOS, Study] ###概述 KVC是一种通过字符串名称间接访问对象属性的方法。其方法在NSKeyValueCoding中被声明，默认的实现方法由NSObject提供。非对象参数和返回类型会被识别自动封装、解封。  通过KVC这种间接访问方法，开发者就能在运行时确定属性的绑定，而不是在编译时。   ###键和键路径  key： 键是一个标识了对象某个属性的字符串。通常在接收">
+<meta name="twitter:title" content="KVC与KVO">
+<meta name="twitter:description" content="概述KVC是一种通过字符串名称间接访问对象属性的方法。其方法在NSKeyValueCoding中被声明，默认的实现方法由NSObject提供。非对象参数和返回类型会被识别自动封装、解封。  通过KVC这种间接访问方法，开发者就能在运行时确定属性的绑定，而不是在编译时。">
 <meta name="twitter:image" content="http://simonchen.club/KVC%20and%20KVO.html/keypath.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Simon’s Home" type="application/atom+xml">
@@ -145,7 +145,7 @@
   
     <div class="article-meta">
       <a href="/KVC and KVO.html/" class="article-date">
-      <time datetime="2017-05-05T17:20:22.000Z" itemprop="datePublished">2017-05-06</time>
+      <time datetime="2016-10-30T07:22:00.000Z" itemprop="datePublished">2016-10-30</time>
 </a>
     </div>
   
@@ -154,18 +154,41 @@
       <input type="hidden" class="isFancy" />
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      KVC与KVO
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/programming/">开发</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h2 id="KVC和KVO"><a href="#KVC和KVO" class="headerlink" title="KVC和KVO"></a>KVC和KVO</h2><p>@[iOS, Study]</p>
-<p>###概述</p>
-<p>KVC是一种通过字符串名称间接访问对象属性的方法。其方法在NSKeyValueCoding中被声明，默认的实现方法由NSObject提供。<code>非对象参数和返回类型</code>会被识别自动封装、解封。</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>KVC是一种通过字符串名称间接访问对象属性的方法。其方法在NSKeyValueCoding中被声明，默认的实现方法由NSObject提供。<code>非对象参数和返回类型</code>会被识别自动封装、解封。</p>
 <blockquote>
 <p>通过KVC这种间接访问方法，开发者就能在<strong>运行时</strong>确定属性的绑定，而不是在编译时。</p>
 </blockquote>
-<hr>
-<p>###键和键路径</p>
-<ul>
+<a id="more"></a>
+<h2 id="键和键路径"><a href="#键和键路径" class="headerlink" title="键和键路径"></a>键和键路径</h2><ul>
 <li><strong>key：</strong> 键是一个标识了对象某个属性的字符串。通常在接收的对象中，一个键对应的是一个访问方法或者实例变量的名称。</li>
 </ul>
 <blockquote>
@@ -177,10 +200,7 @@
 <blockquote>
 <p> <strong>注意：</strong>Objective-c中的点语法是调用属性的存取方法，而键路径中的点是用以界定元素。</p>
 </blockquote>
-<hr>
-<p>###使用KVC</p>
-<p>####获取值</p>
-<ul>
+<h2 id="使用KVC"><a href="#使用KVC" class="headerlink" title="使用KVC"></a>使用KVC</h2><h3 id="获取值"><a href="#获取值" class="headerlink" title="获取值"></a>获取值</h3><ul>
 <li><p>+(id)valueForKey:(NSString *)key</p>
 </li>
 <li><p>-(id)valueForKeyPath:(NSString *)keyPath</p>
@@ -191,8 +211,7 @@
 <blockquote>
 <p>当键没有对应的存取器或者实例变量的时候，接收对象会向自己发送valueForUndefinedKey：这个消息，它的默认实现是抛出异常NSUndefinedKeyException，可以重写这个函数做错误处理。</p>
 </blockquote>
-<p>####修改值</p>
-<ul>
+<h3 id="修改值"><a href="#修改值" class="headerlink" title="修改值"></a>修改值</h3><ul>
 <li><p>+(void)setValue:(id)anObject forKey:(NSString *)key</p>
 </li>
 <li><p>-(void)setValue:(id)value forKeyPath:(NSString *)keyPath</p>
@@ -205,8 +224,7 @@
 <blockquote>
 <p>当对非类对象属性设置nil时被调用，默认抛出异常。</p>
 </blockquote>
-<p>####一对多关系成员的情况</p>
-<p><code>有序一对多关系成员  NSArray</code></p>
+<h3 id="一对多关系成员的情况"><a href="#一对多关系成员的情况" class="headerlink" title="一对多关系成员的情况"></a>一对多关系成员的情况</h3><p><code>有序一对多关系成员  NSArray</code></p>
 <ul>
 <li>-(NSMutableArray <em>)mutableArrayValueForKey:(NSString </em>)key    </li>
 <li>-(NSMutableArray <em>)mutableArrayValueForKeyPath:(NSString </em>)keyPath</li>
@@ -216,16 +234,14 @@
 <li>-(NSMutableSet <em>)mutableSetValueForKey:(NSString </em>)key</li>
 <li>-(NSMutableSet <em>)mutableSetValueForKeyPath:(NSString </em>)keyPath</li>
 </ul>
-<p>###存取方法</p>
-<p>为了在调用<code>valueForKey:</code>，<code>setValue:forKey:</code>，<code>mutableArrayValueForKey:</code>和<code>mutableSetValueForKey:</code>时确定存取方法的位置，就必须实现如下的方法。</p>
-<p>####valueForKey:<br>为了返回一个键的对应值，就需要实现<code>-&lt;key&gt;</code>方法。而<code>-is&lt;key&gt;</code>能够支持Boolean类型的属性，例如：</p>
+<h3 id="存取方法"><a href="#存取方法" class="headerlink" title="存取方法"></a>存取方法</h3><p>为了在调用<code>valueForKey:</code>，<code>setValue:forKey:</code>，<code>mutableArrayValueForKey:</code>和<code>mutableSetValueForKey:</code>时确定存取方法的位置，就必须实现如下的方法。</p>
+<h4 id="valueForKey"><a href="#valueForKey" class="headerlink" title="valueForKey:"></a>valueForKey:</h4><p>为了返回一个键的对应值，就需要实现<code>-&lt;key&gt;</code>方法。而<code>-is&lt;key&gt;</code>能够支持Boolean类型的属性，例如：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- (BOOL)hidden &#123;</div><div class="line">   // Implementation specific code.</div><div class="line">   return ...;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (BOOL)isHidden &#123;</div><div class="line">   // Implementation specific code.</div><div class="line">   return ...;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>####setValue:forKey:<br>需要实现<code>set&lt;Key&gt;:</code>方法：</p>
+<h4 id="setValue-forKey"><a href="#setValue-forKey" class="headerlink" title="setValue:forKey:"></a>setValue:forKey:</h4><p>需要实现<code>set&lt;Key&gt;:</code>方法：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">- (void)setHidden:(BOOL)flag &#123;</div><div class="line">   // Implementation specific code.</div><div class="line">   return;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>如果属性是一个非对象类型，还必须要重写<code>-setNilValueForKey:</code>来处理对该属性设置nil值：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- (void)setNilValueForKey:(NSString *)theKey &#123;</div><div class="line"> </div><div class="line">    if ([theKey isEqualToString:@&quot;hidden&quot;]) &#123;</div><div class="line">        [self setValue:@YES forKey:@&quot;hidden&quot;];</div><div class="line">    &#125;</div><div class="line">    else &#123;</div><div class="line">        [super setNilValueForKey:theKey];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>####有序集合</p>
-<p>对于不可改变的有序集合，需要实现如下方法：</p>
+<h4 id="有序集合"><a href="#有序集合" class="headerlink" title="有序集合"></a>有序集合</h4><p>对于不可改变的有序集合，需要实现如下方法：</p>
 <ul>
 <li><p><strong><code>-countOf&lt;Key&gt;</code></strong>    必须实现， 类似于 NSArray 的<code>count</code>方法，返回一对多关系中对象的数量。</p>
 </li>
@@ -235,16 +251,14 @@
 </li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">- (NSUInteger)countOfEmployees &#123;</div><div class="line">    return [self.employees count];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (id)objectInEmployeesAtIndex:(NSUInteger)index &#123;</div><div class="line">    return [employees objectAtIndex:index];</div><div class="line">&#125;</div><div class="line"> </div><div class="line">- (NSArray *)employeesAtIndexes:(NSIndexSet *)indexes &#123;</div><div class="line">    return [self.employees objectsAtIndexes:indexes];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)getEmployees:(Employee * __unsafe_unretained *)buffer range:(NSRange)inRange &#123;</div><div class="line">    // Return the objects in the specified range in the provided buffer.</div><div class="line">    // For example, if the employees were stored in an underlying NSArray</div><div class="line">    [self.employees getObjects:buffer range:inRange];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>####mutableArrayValueForKey:</p>
-<p>对于可改变的有序集合还需要实现一些额外的方法：</p>
+<h4 id="mutableArrayValueForKey"><a href="#mutableArrayValueForKey" class="headerlink" title="mutableArrayValueForKey:"></a>mutableArrayValueForKey:</h4><p>对于可改变的有序集合还需要实现一些额外的方法：</p>
 <ul>
 <li><strong><code>-insertObject:in&lt;Key&gt;AtIndex:</code></strong> 或者 <strong><code>-insert&lt;Key&gt;:atIndexes:</code></strong>    二者之一必须被实现。类似于NSMutableArray <code>insertObject:atIndex:</code> 和 <code>-insertObjects:atIndexes:</code> 。</li>
 <li><strong><code>-removeObjectFrom&lt;Key&gt;AtIndex:</code></strong> 或者 <strong><code>remove&lt;Key&gt;AtIndexes:</code></strong>     二者之一必须被实现。类似于 NSMutableArray <code>removeObjectAtIndex:</code> 和 <code>removeObjectsAtIndexes:</code> 。</li>
 <li><strong><code>-replaceObjectIn&lt;Key&gt;AtIndex:withObject:</code></strong> 或者 <strong><code>-replace&lt;Key&gt;AtIndexes:with&lt;Key&gt;:</code></strong>    可选方法 。</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">- (void)insertObject:(Employee *)employee inEmployeesAtIndex:(NSUInteger)index &#123;</div><div class="line">    [self.employees insertObject:employee atIndex:index];</div><div class="line">    return;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">- (void)insertEmployees:(NSArray *)employeeArray atIndexes:(NSIndexSet *)indexes &#123;</div><div class="line">    [self.employees insertObjects:employeeArray atIndexes:indexes];</div><div class="line">    return;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)removeObjectFromEmployeesAtIndex:(NSUInteger)index &#123;</div><div class="line">    [self.employees removeObjectAtIndex:index];</div><div class="line">&#125;</div><div class="line"> </div><div class="line">- (void)removeEmployeesAtIndexes:(NSIndexSet *)indexes &#123;</div><div class="line">    [self.employees removeObjectsAtIndexes:indexes];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)replaceObjectInEmployeesAtIndex:(NSUInteger)index</div><div class="line">                             withObject:(id)anObject &#123;</div><div class="line"> </div><div class="line">    [self.employees replaceObjectAtIndex:index withObject:anObject];</div><div class="line">&#125;</div><div class="line"> </div><div class="line">- (void)replaceEmployeesAtIndexes:(NSIndexSet *)indexes</div><div class="line">                    withEmployees:(NSArray *)employeeArray &#123;</div><div class="line"> </div><div class="line">    [self.employees replaceObjectsAtIndexes:indexes withObjects:employeeArray];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>####无序集合</p>
-<p>对于不可改变的无序集合，需要实现如下方法：</p>
+<h4 id="无序集合"><a href="#无序集合" class="headerlink" title="无序集合"></a>无序集合</h4><p>对于不可改变的无序集合，需要实现如下方法：</p>
 <ul>
 <li><p><strong><code>-countOf&lt;Key&gt;</code></strong>    必须实现， 类似于 NSSet 的<code>count</code>方法。</p>
 </li>
@@ -254,8 +268,7 @@
 </li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">- (NSUInteger)countOfTransactions &#123;</div><div class="line">    return [self.transactions count];</div><div class="line">&#125;</div><div class="line"> </div><div class="line">- (NSEnumerator *)enumeratorOfTransactions &#123;</div><div class="line">    return [self.transactions objectEnumerator];</div><div class="line">&#125;</div><div class="line"> </div><div class="line">- (Transaction *)memberOfTransactions:(Transaction *)anObject &#123;</div><div class="line">    return [self.transactions member:anObject];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>####mutableSetValueForKey:</p>
-<p>对于可改变的无序集合还需要实现一些额外的方法：</p>
+<h4 id="mutableSetValueForKey"><a href="#mutableSetValueForKey" class="headerlink" title="mutableSetValueForKey:"></a>mutableSetValueForKey:</h4><p>对于可改变的无序集合还需要实现一些额外的方法：</p>
 <ul>
 <li><strong><code>-add&lt;Key&gt;Object:</code></strong> 或者 <strong><code>-add&lt;Key&gt;:</code></strong>    二者之一必须被实现。类似于NSMutableSet的<code>addObject:</code> 方法。</li>
 <li><strong><code>-remove&lt;Key&gt;Object:</code></strong> 或者 <strong><code>-remove&lt;Key&gt;:</code></strong>     二者之一必须被实现。类似于 NSMutableArray <code>remove&lt;Key&gt;:</code> 方法 。</li>
@@ -263,8 +276,7 @@
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">- (void)addTransactionsObject:(Transaction *)anObject &#123;</div><div class="line">    [self.transactions addObject:anObject];</div><div class="line">&#125;</div><div class="line"> </div><div class="line">- (void)addTransactions:(NSSet *)manyObjects &#123;</div><div class="line">    [self.transactions unionSet:manyObjects];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)removeTransactionsObject:(Transaction *)anObject &#123;</div><div class="line">    [self.transactions removeObject:anObject];</div><div class="line">&#125;</div><div class="line"> </div><div class="line">- (void)removeTransactions:(NSSet *)manyObjects &#123;</div><div class="line">    [self.transactions minusSet:manyObjects];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)intersectTransactions:(NSSet *)otherObjects &#123;</div><div class="line">    return [self.transactions intersectSet:otherObjects];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <hr>
-<p>###KVC的实现</p>
-<h4 id="setValue-forKey的搜索方式"><a href="#setValue-forKey的搜索方式" class="headerlink" title="setValue:forKey的搜索方式"></a>setValue:forKey的搜索方式</h4><ol>
+<h3 id="KVC的实现"><a href="#KVC的实现" class="headerlink" title="KVC的实现"></a>KVC的实现</h3><h4 id="setValue-forKey的搜索方式"><a href="#setValue-forKey的搜索方式" class="headerlink" title="setValue:forKey的搜索方式"></a>setValue:forKey的搜索方式</h4><ol>
 <li><p>首先搜索<code>set&lt;Key&gt;:</code>方法</p>
 </li>
 <li><p>上面的setter方法没有找到，如果类方法accessInstanceVariablesDirectly返回YES，那么按<code>_&lt;key&gt;</code>，<code>_is&lt;Key&gt;</code>，<code>&lt;key&gt;</code>，<code>is&lt;key&gt;</code>的顺序搜索成员名。</p>
@@ -276,8 +288,7 @@
 <ol>
 <li>如果找到设置成员的值，如果没有调用<code>setValue:forUndefinedKey:</code>。</li>
 </ol>
-<p>####valueForKey:的搜索方式</p>
-<ol>
+<h4 id="valueForKey-的搜索方式"><a href="#valueForKey-的搜索方式" class="headerlink" title="valueForKey:的搜索方式"></a>valueForKey:的搜索方式</h4><ol>
 <li><p>首先按<code>get&lt;Key&gt;</code>、<code>&lt;key&gt;</code>、<code>is&lt;Key&gt;</code>的顺序查找getter方法，找到直接调用。如果是bool、int等内建值类型，会做NSNumber的转换。</p>
 </li>
 <li><p>上面的getter没有找到，查找<code>countOf&lt;Key&gt;</code>、<code>objectIn&lt;Key&gt;AtIndex:</code>、<code>&lt;Key&gt;AtIndexes</code>格式的方法。</p>
@@ -294,8 +305,7 @@
 <li><p>再没查到，调用<code>valueForUndefinedKey:</code>。</p>
 </li>
 </ol>
-<p>####mutableArrayValueForKey:的搜索方式</p>
-<ol>
+<h4 id="mutableArrayValueForKey-的搜索方式"><a href="#mutableArrayValueForKey-的搜索方式" class="headerlink" title="mutableArrayValueForKey:的搜索方式"></a>mutableArrayValueForKey:的搜索方式</h4><ol>
 <li>搜索<code>insertObject:in&lt;Key&gt;AtIndex:</code>、<code>removeObjectFrom&lt;Key&gt;AtIndex:</code>或者<code>insert&lt;Key&gt;:atIndexes</code>、<code>remove&lt;Key&gt;AtIndexes:</code>格式的方法。</li>
 </ol>
 <p>如果至少一个insert方法和至少一个remove方法找到，那么同样返回一个可以响应NSMutableArray所有方法的代理集合。那么发送给这个代理集合的NSMutableArray消息方法，以<code>insertObject:in&lt;Key&gt;AtIndex:</code>、<code>removeObjectFrom&lt;Key&gt;AtIndex:</code>、<code>insert&lt;Key&gt;:atIndexes</code>、<code>remove&lt;Key&gt;AtIndexes:</code>组合的形式调用。还有两个可选实现的接口：<code>replaceObjectIn&lt;Key&gt;AtIndex:withObject:</code>、<code>replace&lt;Key&gt;AtIndexes:with&lt;Key&gt;:</code>。</p>
@@ -309,8 +319,7 @@
 <li><p>再找不到，调用<code>setValue:forUndefinedKey:</code>。</p>
 </li>
 </ol>
-<p>####mutableSetValueForKey:的搜索方式</p>
-<ol>
+<h4 id="mutableSetValueForKey-的搜索方式"><a href="#mutableSetValueForKey-的搜索方式" class="headerlink" title="mutableSetValueForKey:的搜索方式"></a>mutableSetValueForKey:的搜索方式</h4><ol>
 <li><p>搜索<code>add&lt;Key&gt;Object:</code>、<code>remove&lt;Key&gt;Object:</code>或者<code>add&lt;Key&gt;:</code>、<code>remove&lt;Key&gt;:</code>格式的方法，如果至少一个insert方法和至少一个remove方法找到，那么返回一个可以响应NSMutableSet所有方法的代理集合。那么发送给这个代理集合的NSMutableSet消息方法，以<code>add&lt;Key&gt;Object:</code>、<code>remove&lt;Key&gt;Object:</code>、<code>add&lt;Key&gt;:</code>、<code>remove&lt;Key&gt;:</code>组合的形式调用。还有两个可选实现的接口：<code>intersect&lt;Key&gt;</code>、<code>set&lt;Key&gt;:</code>。</p>
 </li>
 <li><p>如果reciever是ManagedObejct，那么就不会继续搜索了。</p>
@@ -323,29 +332,25 @@
 </li>
 </ol>
 <hr>
-<p>###核查值的正确性</p>
-<p>KVC提供属性值确认的API，它可以用来检查set的值是否正确、为不正确的值做一个替换值或者拒绝设置新值并返回错误原因，格式为：<code>validate&lt;Key&gt;:error:</code>。</p>
+<h3 id="核查值的正确性"><a href="#核查值的正确性" class="headerlink" title="核查值的正确性"></a>核查值的正确性</h3><p>KVC提供属性值确认的API，它可以用来检查set的值是否正确、为不正确的值做一个替换值或者拒绝设置新值并返回错误原因，格式为：<code>validate&lt;Key&gt;:error:</code>。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">-(BOOL)validateName:(id *)ioValue error:(NSError **)outError  </div><div class="line">&#123;  </div><div class="line">    // The name must not be nil, and must be at least two characters long.  </div><div class="line">    if ((*ioValue == nil) || ([(NSString *)*ioValue length] &lt; 2]) &#123;  </div><div class="line">        if (outError != NULL) &#123;  </div><div class="line">            NSString *errorString = NSLocalizedStringFromTable(  </div><div class="line">                    @&quot;A Person&apos;s name must be at least two characters long&quot;, @&quot;Person&quot;,  </div><div class="line">                    @&quot;validation: too short name error&quot;);  </div><div class="line">            NSDictionary *userInfoDict =  </div><div class="line">                [NSDictionary dictionaryWithObject:errorString  </div><div class="line">                                            forKey:NSLocalizedDescriptionKey];  </div><div class="line">            *outError = [[[NSError alloc] initWithDomain:PERSON_ERROR_DOMAIN  </div><div class="line">                                                    code:PERSON_INVALID_NAME_CODE  </div><div class="line">                                                userInfo:userInfoDict] autorelease];  </div><div class="line">        &#125;  </div><div class="line">        return NO;  </div><div class="line">    &#125;  </div><div class="line">    return YES;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p><code>validateValue:forKey:error:</code>，默认实现会搜索 <code>validate&lt;Key&gt;:error:</code>格式的核查方法，找到则调用，未找到默认返回YES。</p>
 <blockquote>
 <p>注意其中的内存管理问题。</p>
 </blockquote>
 <hr>
-<p>###集合操作</p>
-<p>集合操作通过对valueForKeyPath:传递参数来使用，一定要用在集合(如：array)上，否则产生运行时刻错误。其格式如下：</p>
+<h3 id="集合操作"><a href="#集合操作" class="headerlink" title="集合操作"></a>集合操作</h3><p>集合操作通过对valueForKeyPath:传递参数来使用，一定要用在集合(如：array)上，否则产生运行时刻错误。其格式如下：</p>
 <p><img src="./keypath.jpg" alt="Alt text"></p>
 <p><code>Left key path</code>部分：如果存在，那则为需要操作对象路径。</p>
 <p><code>Collectionoperator</code>部分：通过@符号确定使用的集合操作。</p>
 <p><code>Rightkey path</code>部分：需要进行集合操作的属性。</p>
-<p>####数据操作</p>
-<p><code>@avg</code>    平均值</p>
+<h4 id="数据操作"><a href="#数据操作" class="headerlink" title="数据操作"></a>数据操作</h4><p><code>@avg</code>    平均值</p>
 <p><code>@count</code>    总数</p>
 <p><code>@max</code>    最大</p>
 <p><code>@min</code>    最小</p>
 <p><code>@sum</code>    总数</p>
 <p>确保操作的属性为数字类型，否则运行时刻错误。</p>
-<p>####对象操作</p>
-<p>针对数组的情况</p>
+<h4 id="对象操作"><a href="#对象操作" class="headerlink" title="对象操作"></a>对象操作</h4><p>针对数组的情况</p>
 <p><code>@distinctUnionOfObjects</code>    返回指定属性去重后的值的数组</p>
 <p><code>@unionOfObjects</code>     返回指定属性的值的数组，不去重</p>
 <p>属性的值不能为空，否则产生异常。</p>
@@ -354,8 +359,7 @@
 <p><code>@unionOfArrays</code>    返回指定属性的值的数组，不去重</p>
 <p><code>@distinctUnionOfSets</code>    同上，只是返回值为NSSet</p>
 <hr>
-<p>###KVO</p>
-<p>KVO键值观察是就对象属性变化透明地通知观察者的一种机制。</p>
+<h2 id="KVO"><a href="#KVO" class="headerlink" title="KVO"></a>KVO</h2><p>KVO键值观察是就对象属性变化透明地通知观察者的一种机制。</p>
 <p>用法比较简单</p>
 <ul>
 <li><strong>注册观察者</strong></li>
@@ -413,11 +417,9 @@
 </table>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">enum &#123;</div><div class="line"></div><div class="line">   //更改之前的值</div><div class="line">   NSKeyValueObservingOptionNew = 0x01,</div><div class="line"></div><div class="line">   //更改之后的值</div><div class="line">   NSKeyValueObservingOptionOld = 0x02,</div><div class="line"></div><div class="line">   //把初始化的值提供给处理方法，一旦注册，立马就会调用一次。通常它会带有新值，而不会带有旧值。</div><div class="line">   NSKeyValueObservingOptionInitial = 0x04,</div><div class="line"></div><div class="line">   //2次调用，在值改变前后分别调用一次</div><div class="line">   NSKeyValueObservingOptionPrior = 0x08 </div><div class="line">&#125;;</div><div class="line">typedef NSUInteger NSKeyValueObservingOptions;</div></pre></td></tr></table></figure>
 <hr>
-<p>###观察容器类</p>
-<p>观察容器类和观察容器里的对象是不同的。如果一个容器包含了A，B和C对象，<code>增加D就改变了容器，而改变A对象则不会改变容器，</code>一般来讲，可以先观察容器，然后在添加对象后观察对象，而在删除对象后停止观察。</p>
+<h3 id="观察容器类"><a href="#观察容器类" class="headerlink" title="观察容器类"></a>观察容器类</h3><p>观察容器类和观察容器里的对象是不同的。如果一个容器包含了A，B和C对象，<code>增加D就改变了容器，而改变A对象则不会改变容器，</code>一般来讲，可以先观察容器，然后在添加对象后观察对象，而在删除对象后停止观察。</p>
 <hr>
-<p>###KVO的实现</p>
-<p>KVO观察通知依赖于<code>NSObject</code>的两个方法，他们自动被调用</p>
+<h3 id="KVO的实现"><a href="#KVO的实现" class="headerlink" title="KVO的实现"></a>KVO的实现</h3><p>KVO观察通知依赖于<code>NSObject</code>的两个方法，他们自动被调用</p>
 <ul>
 <li><strong>willChangeValueForKey: </strong>    一定会被调用，用以记录旧值</li>
 <li><strong>didChangeValueForKey:</strong>    改变发生后调用，用以记录新值    </li>
@@ -425,8 +427,7 @@
 <blockquote>
 <p>调用addObserver之后，会定义一个所观察的属性所属类的子类，subclass里边实现了属性的setter方法，setter方法中实现发动通知的功能（也就是插入了上述两个函数）。然后subclass中重写了class函数，还让返&gt;回属性类的class，再让属性类对象的isa指向subclass，这样就伪装成表面上看还是属性类自己实现的通知功能。</p>
 </blockquote>
-<p>###KVO的权衡</p>
-<ul>
+<h3 id="KVO的权衡"><a href="#KVO的权衡" class="headerlink" title="KVO的权衡"></a>KVO的权衡</h3><ul>
 <li><p>KVO不能对属性吗进行编译时的检查。</p>
 </li>
 <li><p>没有像NSNotificationCenter那样方便清理所有观察者的remove方法，只能一个一个去除。</p>
@@ -443,12 +444,12 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/KVC and KVO.html/"></a></p>
+        <p><span>本文标题:</span><a href="/KVC and KVO.html/">KVC与KVO</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
-        <p><span>发布时间:</span>2017年05月06日 - 01时20分</p>
-        <p><span>最后更新:</span>2017年05月06日 - 01时20分</p>
+        <p><span>发布时间:</span>2016年10月30日 - 15时22分</p>
+        <p><span>最后更新:</span>2016年10月30日 - 15时45分</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/KVC and KVO.html/" title="">http://simonchen.club/KVC and KVO.html/</a>
+            <span>原始链接:</span><a class="post-url" href="/KVC and KVO.html/" title="KVC与KVO">http://simonchen.club/KVC and KVO.html/</a>
             <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/KVC and KVO.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script src="/js/clipboard.min.js"></script>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
@@ -462,15 +463,11 @@
 
 <nav id="article-nav">
   
-    <a href="/multiSSHKey.html/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          多GitHub账号的SSH配置
-        
-      </div>
-    </a>
   
+    <a href="/Assotiated Object.html/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">关联对象</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
   
 </nav>
 
@@ -479,7 +476,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#KVC和KVO"><span class="toc-number">1.</span> <span class="toc-text">KVC和KVO</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#setValue-forKey的搜索方式"><span class="toc-number">1.0.1.</span> <span class="toc-text">setValue:forKey的搜索方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数组操作"><span class="toc-number">1.0.2.</span> <span class="toc-text">数组操作</span></a></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#键和键路径"><span class="toc-number">2.</span> <span class="toc-text">键和键路径</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用KVC"><span class="toc-number">3.</span> <span class="toc-text">使用KVC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#获取值"><span class="toc-number">3.1.</span> <span class="toc-text">获取值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改值"><span class="toc-number">3.2.</span> <span class="toc-text">修改值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一对多关系成员的情况"><span class="toc-number">3.3.</span> <span class="toc-text">一对多关系成员的情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#存取方法"><span class="toc-number">3.4.</span> <span class="toc-text">存取方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#valueForKey"><span class="toc-number">3.4.1.</span> <span class="toc-text">valueForKey:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#setValue-forKey"><span class="toc-number">3.4.2.</span> <span class="toc-text">setValue:forKey:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#有序集合"><span class="toc-number">3.4.3.</span> <span class="toc-text">有序集合</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mutableArrayValueForKey"><span class="toc-number">3.4.4.</span> <span class="toc-text">mutableArrayValueForKey:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#无序集合"><span class="toc-number">3.4.5.</span> <span class="toc-text">无序集合</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mutableSetValueForKey"><span class="toc-number">3.4.6.</span> <span class="toc-text">mutableSetValueForKey:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KVC的实现"><span class="toc-number">3.5.</span> <span class="toc-text">KVC的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#setValue-forKey的搜索方式"><span class="toc-number">3.5.1.</span> <span class="toc-text">setValue:forKey的搜索方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#valueForKey-的搜索方式"><span class="toc-number">3.5.2.</span> <span class="toc-text">valueForKey:的搜索方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mutableArrayValueForKey-的搜索方式"><span class="toc-number">3.5.3.</span> <span class="toc-text">mutableArrayValueForKey:的搜索方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mutableSetValueForKey-的搜索方式"><span class="toc-number">3.5.4.</span> <span class="toc-text">mutableSetValueForKey:的搜索方式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#核查值的正确性"><span class="toc-number">3.6.</span> <span class="toc-text">核查值的正确性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#集合操作"><span class="toc-number">3.7.</span> <span class="toc-text">集合操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#数据操作"><span class="toc-number">3.7.1.</span> <span class="toc-text">数据操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对象操作"><span class="toc-number">3.7.2.</span> <span class="toc-text">对象操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数组操作"><span class="toc-number">3.7.3.</span> <span class="toc-text">数组操作</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#KVO"><span class="toc-number">4.</span> <span class="toc-text">KVO</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#观察容器类"><span class="toc-number">4.1.</span> <span class="toc-text">观察容器类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KVO的实现"><span class="toc-number">4.2.</span> <span class="toc-text">KVO的实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KVO的权衡"><span class="toc-number">4.3.</span> <span class="toc-text">KVO的权衡</span></a></li></ol></li></ol>
 </div>
 <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
 
@@ -536,16 +533,16 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/multiSSHKey.html/" title="上一篇: 多GitHub账号的SSH配置">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
         
-            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+            <a href="/Assotiated Object.html/" title="下一篇: 关联对象">
+                <i class="fa fa-angle-right"></i>
+            </a>
         
     </div>
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/KVC and KVO.html/">KVC and KVO</a></li><li class="post-list-item"><a class="post-list-link" href="/multiSSHKey.html/">多GitHub账号的SSH配置</a></li><li class="post-list-item"><a class="post-list-link" href="/FBKVOController Source Code analysis.html/">FBKVOController源码阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/Assotiated Object.html/">关联对象</a></li></ul>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/multiSSHKey.html/">多GitHub账号的SSH配置</a></li><li class="post-list-item"><a class="post-list-link" href="/FBKVOController Source Code analysis.html/">FBKVOController源码阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/Assotiated Object.html/">关联对象</a></li><li class="post-list-item"><a class="post-list-link" href="/KVC and KVO.html/">KVC与KVO</a></li></ul>
     <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
     <script>
         $(".post-list").addClass("toc-article");
