@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>FBKVOController源码解析 | Simon’s Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="定义键值观察(KVO)在苹果的官方文档中是这么定义的：它是一种允许观察者对象在所观察其他对象的属性发生改变时可以获得这些改变的通知这样一种机制。 但是原生的KVO在实现上存在着这么一些问题： [1] KVO在添加观察者后，在不再需要继续观察的时候应该将其移除；并且添加和移除需要成对出现，我们在开发的时候往往可能会由于疏忽导致代码里忘记在不需要使用的时候去释放掉观察者，那么这样就会埋下程序会cras">
+<meta name="keywords" content="iOS,Source Code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FBKVOController源码解析">
+<meta property="og:url" content="http://simonchen.club/FBKVOController Source Code analysis.html/index.html">
+<meta property="og:site_name" content="Simon’s Home">
+<meta property="og:description" content="定义键值观察(KVO)在苹果的官方文档中是这么定义的：它是一种允许观察者对象在所观察其他对象的属性发生改变时可以获得这些改变的通知这样一种机制。 但是原生的KVO在实现上存在着这么一些问题： [1] KVO在添加观察者后，在不再需要继续观察的时候应该将其移除；并且添加和移除需要成对出现，我们在开发的时候往往可能会由于疏忽导致代码里忘记在不需要使用的时候去释放掉观察者，那么这样就会埋下程序会cras">
+<meta property="og:updated_time" content="2016-11-10T04:03:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FBKVOController源码解析">
+<meta name="twitter:description" content="定义键值观察(KVO)在苹果的官方文档中是这么定义的：它是一种允许观察者对象在所观察其他对象的属性发生改变时可以获得这些改变的通知这样一种机制。 但是原生的KVO在实现上存在着这么一些问题： [1] KVO在添加观察者后，在不再需要继续观察的时候应该将其移除；并且添加和移除需要成对出现，我们在开发的时候往往可能会由于疏忽导致代码里忘记在不需要使用的时候去释放掉观察者，那么这样就会埋下程序会cras">
+  
+    <link rel="alternative" href="/atom.xml" title="Simon’s Home" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/head.jpg">
+  
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+  <!-- 加载特效 -->
+    <script src="/js/pace.js"></script>
+    <link href="/css/pace/pace-theme-flash.css" rel="stylesheet" />
+  <script>
+      var yiliaConfig = {
+          rootUrl: '/',
+          fancybox: true,
+          animate: false,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false
+      }
+  </script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            
+            <img src="/img/head.jpg" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+            
+        </a>
+
+        <hgroup>
+          <h1 class="header-author"><a href="/" title="Hi Mate">Simon Chen</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">凡配称为理想的事物，就必带有善美的本质</p>
+        
+        
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">首页</a></li>
+                        
+                            <li><a href="/archives">归档</a></li>
+                        
+                            <li><a href="/tags">类别</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                
+                
+
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="Me">Simon Chen</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                
+                    <img src="/img/head.jpg" class="js-avatar" style="width: 100%; height: 100%; opacity: 1;">
+                
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="Me">Simon Chen</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">凡配称为理想的事物，就必带有善美的本质</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">首页</a></li>
+                
+                    <li><a href="/archives">归档</a></li>
+                
+                    <li><a href="/tags">类别</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                </div>
+            </nav>
+        </header>                
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-FBKVOController Source Code analysis" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/FBKVOController Source Code analysis.html/" class="article-date">
+      <time datetime="2016-11-10T04:03:00.000Z" itemprop="datePublished">2016-11-10</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      FBKVOController源码解析
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/programming/">开发</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Source-Code/">Source Code</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>键值观察(KVO)在苹果的官方文档中是这么定义的：它是一种允许观察者对象在所观察其他对象的属性发生改变时可以获得这些改变的通知这样一种机制。</p>
+<p>但是原生的KVO在实现上存在着这么一些问题：</p>
+<p>[1] KVO在添加观察者后，在不再需要继续观察的时候应该将其移除；并且添加和移除需要成对出现，我们在开发的时候往往可能会由于疏忽导致代码里忘记在不需要使用的时候去释放掉观察者，那么这样就会埋下程序会crash的隐患。</p>
+<p>[2] KVO的所有获取改变通知有着统一的回调函数进行处理，如果观察者同时观察了多个属性的变化，那么这个回调可能会变得非常复杂。</p>
+<p><a href="https://github.com/facebook/KVOController" target="_blank" rel="external">FBKVOController</a>是Facebook开源的一套基于KVO再封装的解决方案，相比较原生的KVO，它有如下这些优点：</p>
+<ul>
+<li><p>在注册观察者的时候提供了多种形式处理回调：block或者指定一个处理回调方法等等，从而达到了分散回调处理方法的目的。</p>
+</li>
+<li><p>不再需要手动移除观察者了，FBKVOController会在内部自动在观察者controller释放掉的时候进行移除处理。</p>
+</li>
+<li><p>在多线程环境下安全。</p>
+</li>
+</ul>
+<p>下面针对FBKVOController这个开源解决方案来继续的阅读其源码，看看其是如何实现这些改进的。</p>
+<a id="more"></a>
+<p>##源码分析</p>
+<p>FBKVOController的结构很简单，其核心代码包括如下几个类：</p>
+<ul>
+<li>FBKVOController</li>
+<li>NSObject+FBKVOController</li>
+</ul>
+<p>###FBKVOContrller</p>
+<p>FBKVOController类在头文件中对外暴露了几个使用接口，外部在使用的时候只需要按照其提供的接口来传入对应的参数即可使用，非常简单：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)observe:(<span class="keyword">nullable</span> <span class="keyword">id</span>)object keyPath:(<span class="built_in">NSString</span> *)keyPath options:(<span class="built_in">NSKeyValueObservingOptions</span>)options block:(FBKVONotificationBlock)block;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)observe:(<span class="keyword">nullable</span> <span class="keyword">id</span>)object keyPath:(<span class="built_in">NSString</span> *)keyPath options:(<span class="built_in">NSKeyValueObservingOptions</span>)options action:(SEL)action;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)observe:(<span class="keyword">nullable</span> <span class="keyword">id</span>)object keyPath:(<span class="built_in">NSString</span> *)keyPath options:(<span class="built_in">NSKeyValueObservingOptions</span>)options context:(<span class="keyword">nullable</span> <span class="keyword">void</span> *)context;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)observe:(<span class="keyword">nullable</span> <span class="keyword">id</span>)object keyPaths:(<span class="built_in">NSArray</span>&lt;<span class="built_in">NSString</span> *&gt; *)keyPaths options:(<span class="built_in">NSKeyValueObservingOptions</span>)options block:(FBKVONotificationBlock)block;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)observe:(<span class="keyword">nullable</span> <span class="keyword">id</span>)object keyPaths:(<span class="built_in">NSArray</span>&lt;<span class="built_in">NSString</span> *&gt; *)keyPaths options:(<span class="built_in">NSKeyValueObservingOptions</span>)options action:(SEL)action;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)observe:(<span class="keyword">nullable</span> <span class="keyword">id</span>)object keyPaths:(<span class="built_in">NSArray</span>&lt;<span class="built_in">NSString</span> *&gt; *)keyPaths options:(<span class="built_in">NSKeyValueObservingOptions</span>)options context:(<span class="keyword">nullable</span> <span class="keyword">void</span> *)context;</div></pre></td></tr></table></figure>
+<p>从其提供的接口可以看出，在注册观察者时可以分别传入一个block来处理观察通知回调，也可以指定一个SEL来处理，同样也提供与原生一致的NSKeyValueObserving回调来处理。</p>
+<p>同时FBKVOController也可以一次传入多个keyPath来一次性注册观察，从未减少了很多代码的编写量来依次单个注册。</p>
+<p>接下来就选择第一个以block形式的回调处理的接口其内部是如何实现的：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)observe:(<span class="keyword">nullable</span> <span class="keyword">id</span>)object keyPath:(<span class="built_in">NSString</span> *)keyPath options:(<span class="built_in">NSKeyValueObservingOptions</span>)options block:(FBKVONotificationBlock)block</div><div class="line">&#123;</div><div class="line">  <span class="built_in">NSAssert</span>(<span class="number">0</span> != keyPath.length &amp;&amp; <span class="literal">NULL</span> != block, <span class="string">@"missing required parameters observe:%@ keyPath:%@ block:%p"</span>, object, keyPath, block);</div><div class="line">  <span class="keyword">if</span> (<span class="literal">nil</span> == object || <span class="number">0</span> == keyPath.length || <span class="literal">NULL</span> == block) &#123;</div><div class="line">    <span class="keyword">return</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">// create info</span></div><div class="line">  _FBKVOInfo *info = [[_FBKVOInfo alloc] initWithController:<span class="keyword">self</span> keyPath:keyPath options:options block:block];</div><div class="line"></div><div class="line">  <span class="comment">// observe object with info</span></div><div class="line">  [<span class="keyword">self</span> _observe:object info:info];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/FBKVOController Source Code analysis.html/">FBKVOController源码解析</a></p>
+        <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
+        <p><span>发布时间:</span>2016年11月10日 - 12时03分</p>
+        <p><span>最后更新:</span>2016年11月10日 - 12时03分</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/FBKVOController Source Code analysis.html/" title="FBKVOController源码解析">http://simonchen.club/FBKVOController Source Code analysis.html/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/FBKVOController Source Code analysis.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script src="/js/clipboard.min.js"></script>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+<nav id="article-nav">
+  
+  
+    <a href="/Assotiated Object.html/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">关联对象</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义"><span class="toc-number">1.</span> <span class="toc-text">定义</span></a></li></ol>
+</div>
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+        }
+    })
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+    }
+</script>
+
+
+
+
+
+<div class="bdsharebuttonbox">
+	<a href="#" class="fx fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+	<a href="#" class="fx fa-weixin bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+	<a href="#" class="fx fa-qq bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+	<a href="#" class="fx fa-facebook-official bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+	<a href="#" class="fx fa-twitter bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+	<a href="#" class="fx fa-linkedin bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+	<a href="#" class="fx fa-files-o bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+</div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+
+
+
+    
+        <section class="youyan" id="comments">
+  <div id="uyan_frame"></div>
+  <script src="http://v2.uyan.cc/code/uyan.js?uid=2132200"></script>
+</section>
+
+    
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+        
+            <a href="/Assotiated Object.html/" title="下一篇: 关联对象">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/multiSSHKey.html/">多GitHub账号的SSH配置</a></li><li class="post-list-item"><a class="post-list-link" href="/FBKVOController Source Code analysis.html/">FBKVOController源码解析</a></li><li class="post-list-item"><a class="post-list-link" href="/Assotiated Object.html/">关联对象</a></li></ul>
+    <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+    <script>
+        $(".post-list").addClass("toc-article");
+        $(".post-list-item a").attr("target","_blank");
+        $("#post-nav-button > a:nth-child(2)").click(function() {
+            $(".fa-bars, .fa-times").toggle();
+            $(".post-list").toggle(300);
+            if ($(".toc").length > 0) {
+                $("#toc, #tocButton").toggle(200, function() {
+                    if ($(".switch-area").is(":visible")) {
+                        $("#tocButton").attr("value", valueHide);
+                        }
+                    })
+            }
+            else {
+            }
+        })
+    </script>
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                &copy; 2017 Simon Chen
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/luuman/hexo-theme-spfk" target="_blank">spfk</a> by luuman
+            </div>
+        </div>
+        
+    </div>
+</footer>
+
+    </div>
+    <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var backgroundnum = 24;
+            var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+            $("#mobile-nav").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+            $(".left-col").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+        })
+    </script>
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    $(document).ready(function() {
+        if ($("#comments").length < 1) {
+            $("#scroll > a:nth-child(2)").hide();
+        };
+    })
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+  </div>
+</body>
+</html>
