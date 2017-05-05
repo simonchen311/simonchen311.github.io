@@ -5,17 +5,17 @@
   
   <title>FBKVOController源码阅读 | Simon’s Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="定义键值观察(KVO)在苹果的官方文档中是这么定义的：它是一种允许观察者对象在所观察其他对象的属性发生改变时可以获得这些改变的通知这样一种机制。 但是原生的KVO在实现上存在着这么一些问题：  KVO在添加观察者后，在不再需要继续观察的时候应该将其移除；并且添加和移除需要成对出现，我们在开发的时候往往可能会由于疏忽导致代码里忘记在不需要使用的时候去释放掉观察者，那么这样就会埋下程序会crash的">
+  <meta name="description" content="定义键值观察(KVO)在苹果的官方文档中是这么定义的：它是一种允许观察者对象在所观察其他对象的属性发生改变时可以获得这些改变的通知这样一种机制。 但是原生的KVO在实现上存在着这么一些问题：   KVO在添加观察者后，在不再需要继续观察的时候应该将其移除；并且添加和移除需要成对出现，我们在开发的时候往往可能会由于疏忽导致代码里忘记在不需要使用的时候去释放掉观察者，那么这样就会埋下程序会crash">
 <meta name="keywords" content="iOS,Source Code">
 <meta property="og:type" content="article">
 <meta property="og:title" content="FBKVOController源码阅读">
 <meta property="og:url" content="http://simonchen.club/FBKVOController Source Code analysis.html/index.html">
 <meta property="og:site_name" content="Simon’s Home">
-<meta property="og:description" content="定义键值观察(KVO)在苹果的官方文档中是这么定义的：它是一种允许观察者对象在所观察其他对象的属性发生改变时可以获得这些改变的通知这样一种机制。 但是原生的KVO在实现上存在着这么一些问题：  KVO在添加观察者后，在不再需要继续观察的时候应该将其移除；并且添加和移除需要成对出现，我们在开发的时候往往可能会由于疏忽导致代码里忘记在不需要使用的时候去释放掉观察者，那么这样就会埋下程序会crash的">
+<meta property="og:description" content="定义键值观察(KVO)在苹果的官方文档中是这么定义的：它是一种允许观察者对象在所观察其他对象的属性发生改变时可以获得这些改变的通知这样一种机制。 但是原生的KVO在实现上存在着这么一些问题：   KVO在添加观察者后，在不再需要继续观察的时候应该将其移除；并且添加和移除需要成对出现，我们在开发的时候往往可能会由于疏忽导致代码里忘记在不需要使用的时候去释放掉观察者，那么这样就会埋下程序会crash">
 <meta property="og:updated_time" content="2016-11-13T14:15:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="FBKVOController源码阅读">
-<meta name="twitter:description" content="定义键值观察(KVO)在苹果的官方文档中是这么定义的：它是一种允许观察者对象在所观察其他对象的属性发生改变时可以获得这些改变的通知这样一种机制。 但是原生的KVO在实现上存在着这么一些问题：  KVO在添加观察者后，在不再需要继续观察的时候应该将其移除；并且添加和移除需要成对出现，我们在开发的时候往往可能会由于疏忽导致代码里忘记在不需要使用的时候去释放掉观察者，那么这样就会埋下程序会crash的">
+<meta name="twitter:description" content="定义键值观察(KVO)在苹果的官方文档中是这么定义的：它是一种允许观察者对象在所观察其他对象的属性发生改变时可以获得这些改变的通知这样一种机制。 但是原生的KVO在实现上存在着这么一些问题：   KVO在添加观察者后，在不再需要继续观察的时候应该将其移除；并且添加和移除需要成对出现，我们在开发的时候往往可能会由于疏忽导致代码里忘记在不需要使用的时候去释放掉观察者，那么这样就会埋下程序会crash">
   
     <link rel="alternative" href="/atom.xml" title="Simon’s Home" type="application/atom+xml">
   
@@ -184,11 +184,13 @@
         <p><br></p>
 <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>键值观察(KVO)在苹果的官方文档中是这么定义的：它是一种允许观察者对象在所观察其他对象的属性发生改变时可以获得这些改变的通知这样一种机制。</p>
 <p>但是原生的KVO在实现上存在着这么一些问题：</p>
+<p><br></p>
 <ul>
 <li>KVO在添加观察者后，在不再需要继续观察的时候应该将其移除；并且添加和移除需要成对出现，我们在开发的时候往往可能会由于疏忽导致代码里忘记在不需要使用的时候去释放掉观察者，那么这样就会埋下程序会crash的隐患。</li>
 <li>KVO的所有获取改变通知有着统一的回调函数进行处理，如果观察者同时观察了多个属性的变化，那么这个回调可能会变得非常复杂。</li>
 </ul>
 <p><a href="https://github.com/facebook/KVOController" target="_blank" rel="external">FBKVOController</a>是Facebook开源的一套基于KVO再封装的解决方案，相比较原生的KVO，它有如下这些优点：</p>
+<p><br></p>
 <ul>
 <li>在注册观察者的时候提供了多种形式处理回调：block或者指定一个处理回调方法等等，从而达到了分散回调处理方法的目的。</li>
 <li>不再需要手动移除观察者了，FBKVOController会在内部自动在观察者controller释放掉的时候进行移除处理。</li>
@@ -198,6 +200,7 @@
 <a id="more"></a>
 <p><br></p>
 <h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><p>FBKVOController的结构很简单，其核心代码包括如下几个类：</p>
+<p><br></p>
 <ul>
 <li>FBKVOController</li>
 <li>NSObject+FBKVOController</li>
