@@ -229,6 +229,8 @@
 <p><code>NSDictionary</code>提供了<font color="red">Key-to-Object</font>的映射，并且Key必须是一个遵守NSCopying协议的不可变对象，如NSString，因为在添加到字典中的键值对，字典始终会对key进行一次拷贝，从而复制到其私有的位置。</p>
 <p><code>NSMapTable</code>提供的是一种一般意义上的映射，它与字典不同的是，它支持<code>Object-to-Object</code>的映射；在创建<code>NSMapTable</code>对象时会提供一些选项来决定Object的管理方式，无论是作为键还是值的Object都需要指明：<br>NSMapTableStrongMemory (a “memory option”)：添加后其引用计数+1<br>NSMapTableWeakMemory (a “memory option”)：不会修改引用计数，并且在对象释放后，会将其从容器中移除<br>NSMapTableObjectPointerPersonality (a “personality option”)使用移位指针(shifted pointer)来做hash检测及确定两个对象是否相等<br>NSMapTableCopyIn (a “copy option”)：添加的是复制的一份新的对象于集合中</p>
 </blockquote>
+<p>这几行代码在我刚开始看的时候有点迷糊，捋顺之后其实不难理解：因为每一个所观察的属性都会被单独封装为一个<code>_FBKVOInfo</code>对象，而同时可能观察很多属性，所以要将这些单个的<code>_FBKVOInfo</code>对象放在集合中保存(NSMutableSet)，而后面再不再继续需要观察某个属性的时候（也就是对象的委托观察者dealloc的时候），就需要将其所观察的全部属性从集合中移除，所以这里选择了<code>NSMapTable</code>，以委托观察者的weak引用为键，在其被dealloc的时候会被自动移除。</p>
+<p>[7] </p>
 
       
       
