@@ -252,16 +252,11 @@
 <p><br></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>到这里，FBKVOController源码的主要部分阅读就进行完毕了，总的来说该框架做了下面几件事情：</p>
 <ul>
-<li><p>提供懒加载的方式为对象关联一个<code>FBKVOController</code>来处理KVO观察，并且可以指定是否当观察者添加到集合中对其引用计数+1。</p>
-</li>
-<li><p>对每一个所观察的属性封装为<code>_FBKVOInfo</code>对象，对象中除了持有者所观察的属性keypath之外，还包括观察选项NSKeyBalueObservingOptions，回调方式，_FBKVOInfoState观察状态和<code>FBKVOController</code>对象的弱引用。</p>
-</li>
-<li><p><code>FBKVOController</code>对象将所有的<code>_FBKVOInfo</code>对象集合添加到<code>NSMapTable</code>中进行管理，以观察者的强或者弱引用为键，以集合为值。</p>
-</li>
-<li><p><code>_FBKVOSharedController</code>作为单例对象，集中处理所有的观察回调，并通过不同的方式传递给观察者。同时其内部维护着所有<code>_FBKVOInfo</code>对象弱引用集合，当对应的<code>_FBKVOInfo</code>对象释放后，会在集合中移除该对象，那么再观察回调中不再会对所观察的属性进行进一步处理。</p>
-</li>
-<li><p>在<code>FBKVOController</code>dealloc时会移除掉所用的观察，无需再次手动释放，也就是将<code>NSMapTable</code>中的数据清空，并移除观察。</p>
-</li>
+<li>提供懒加载的方式为对象关联一个<code>FBKVOController</code>来处理KVO观察，并且可以指定是否当观察者添加到集合中对其引用计数+1。</li>
+<li>对每一个所观察的属性封装为<code>_FBKVOInfo</code>对象，对象中除了持有者所观察的属性keypath之外，还包括观察选项NSKeyBalueObservingOptions，回调方式，_FBKVOInfoState观察状态和<code>FBKVOController</code>对象的弱引用。</li>
+<li><code>FBKVOController</code>对象将所有的<code>_FBKVOInfo</code>对象集合添加到<code>NSMapTable</code>中进行管理，以观察者的强或者弱引用为键，以集合为值。</li>
+<li><code>_FBKVOSharedController</code>作为单例对象，集中处理所有的观察回调，并通过不同的方式传递给观察者。同时其内部维护着所有<code>_FBKVOInfo</code>对象弱引用集合，当对应的<code>_FBKVOInfo</code>对象释放后，会在集合中移除该对象，那么再观察回调中不再会对所观察的属性进行进一步处理。</li>
+<li>在<code>FBKVOController</code>dealloc时会移除掉所用的观察，无需再次手动释放，也就是将<code>NSMapTable</code>中的数据清空，并移除观察。</li>
 </ul>
 
       
