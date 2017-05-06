@@ -12,10 +12,12 @@
 <meta property="og:url" content="http://simonchen.club/iOS-Runtime-Object.html/index.html">
 <meta property="og:site_name" content="Simon’s Home">
 <meta property="og:description" content="前言Objective-C（下简称 OC）是一门动态性语言， 它把尽可能多的决策从编译、链接时期推迟到运行时期。这意味着 OC 不仅需要编译器，还需要一个执行编译代码的运行时系统（runtime system）。Runtime system 对于 OC 而言就像一个操作系统，让它能正常工作，实际上它是一个基本上用C和汇编写的库，这个库使得C语言有了面向对象的能力。  这次我看的是objc4-706">
-<meta property="og:updated_time" content="2017-05-06T06:37:34.000Z">
+<meta property="og:image" content="http://simonchen.club/iOS-Runtime-Object.html/ea5977d7-b8f1-45bb-b8af-24f37327bfda.png">
+<meta property="og:updated_time" content="2017-05-06T06:47:53.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS Runtime 运行时笔记(一)">
 <meta name="twitter:description" content="前言Objective-C（下简称 OC）是一门动态性语言， 它把尽可能多的决策从编译、链接时期推迟到运行时期。这意味着 OC 不仅需要编译器，还需要一个执行编译代码的运行时系统（runtime system）。Runtime system 对于 OC 而言就像一个操作系统，让它能正常工作，实际上它是一个基本上用C和汇编写的库，这个库使得C语言有了面向对象的能力。  这次我看的是objc4-706">
+<meta name="twitter:image" content="http://simonchen.club/iOS-Runtime-Object.html/ea5977d7-b8f1-45bb-b8af-24f37327bfda.png">
   
     <link rel="alternative" href="/atom.xml" title="Simon’s Home" type="application/atom+xml">
   
@@ -216,8 +218,14 @@
 <h3 id="cache"><a href="#cache" class="headerlink" title="cache"></a>cache</h3><p>每当一个对象接收到一个消息时，它会根据isa指针去查找这个对象所属的类。因为在类对象中存放着这个对象所有的实例方法。但是在实际上，这个对象只有一部分方法是常用的，很多方法其实很少用或者根本用不上。如果每次接受消息都是往methodLists中遍历一遍所有方法，势必其性能会不高。为了提高查找效率，cache就派上用场了。在每次调用过一个方法后，这个方法就会被缓存到cache列表中，下次调用的时候Runtime就会优先去cache中查找，如果cache没有，才去methodLists中查找方法。</p>
 <p>cache是一个指向<code>Objc_cache</code>结构体指针，具体定义在runtime.h头文件下面：</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> objc_cache *Cache OBJC2_UNAVAILABLE;</div><div class="line"></div><div class="line"><span class="comment">// 方法缓存结构体</span></div><div class="line"><span class="keyword">struct</span> objc_cache &#123;</div><div class="line"></div><div class="line"><span class="comment">//指向方法selector的指针与该字段做一个AND位操作(index = (mask &amp; selector))。这可以作为一个简单的hash散列算法</span></div><div class="line"></div><div class="line"><span class="comment">//指定分配的缓存bucket总数，runtime使用这个字段来确定开始线性查找数组的索引位置</span></div><div class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> mask <span class="comment">/* total = mask + 1 */</span> OBJC2_UNAVAILABLE;</div><div class="line"></div><div class="line"><span class="comment">//指定实际占用的缓存bucket的总数</span></div><div class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> occupied OBJC2_UNAVAILABLE;</div><div class="line"></div><div class="line"><span class="comment">//指向Method数据结构指针的数组，这个数组包含不超过mask+1个元素，可能是NULL。另外bucket可能是不连续的</span></div><div class="line">Method buckets[<span class="number">1</span>] OBJC2_UNAVAILABLE;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//generate class pair with new name</span></div><div class="line"> <span class="comment">//class pair创建两个class，一个就是newClass，另外一个是其meta-Class，orignalClass是newClass的父类</span></div><div class="line"><span class="comment">//返回的是newClassUIRefreshControl</span></div><div class="line">subClass = objc_allocateClassPair(originalClass, [newClassName cStringUsingEncoding:<span class="built_in">NSUTF8StringEncoding</span>], <span class="number">0</span>);</div><div class="line">        </div><div class="line"><span class="comment">//add set content inset override</span></div><div class="line">&#123;</div><div class="line">     IMP contentInsetIMP = (IMP)setContentInset;</div><div class="line">     SEL contentInsetSelector = sel_registerName(<span class="string">"setContentInset:"</span>);</div><div class="line">            </div><div class="line">      <span class="comment">//第三个参数是types：一个定义该函数返回值类型和参数类型的字符串</span></div><div class="line">      <span class="comment">//v 是void      无返回类型</span></div><div class="line">      <span class="comment">//@ 是id(self)  对象</span></div><div class="line">      <span class="comment">//: 是SEL(_cmd) 方法名称</span></div><div class="line">      <span class="comment">//&#123;UIEdgeInsets=dddd&#125; 参数</span></div><div class="line">     class_addMethod(subClass, contentInsetSelector, contentInsetIMP, <span class="string">"v@:&#123;UIEdgeInsets=dddd&#125;"</span>);</div><div class="line">&#125;</div><div class="line">          </div><div class="line"><span class="comment">//reginster class</span></div><div class="line">objc_registerClassPair(subClass);</div></pre></td></tr></table></figure>
-<p>这段代码里使用<code>objc_allocateClassPair</code>和<code>objc_registerClassPair</code>动态的创建了一个类，并为</p>
+<p><br></p>
+<h3 id="Meta-Class"><a href="#Meta-Class" class="headerlink" title="Meta Class"></a>Meta Class</h3><p>在<code>objc_class</code>结构体中，类对象内部也有一个isa指针，指向的是它的元类<code>Meta Class</code>。</p>
+<p>元类也是一个对象，它也有一个isa指针，所有的元类的isa指向的是其基类的Meta Class，例如NSObject继承关系链下的所有对象的类的isa指针指向的就是NSObject类的Meta Class，而基类的Meta Class的isa指针指向的是自己，于是形成一个回路。</p>
+<p>每一个Meta Class的super class指针指向它原本Class的 Super Class的Meta Class。但是最上层的Meta Class的 Super Class指向NSObject Class本身</p>
+<p>Meta Class还有一个重要的是，类方法会存放在元类的类方法列表中，方法查找时如果是类方法，就会在这里面查找。</p>
+<p><br></p>
+<h3 id="体系图"><a href="#体系图" class="headerlink" title="体系图"></a>体系图</h3><p>通过上面的分析，就可以描绘出类与其元类的继承体系了：</p>
+<p><img src="/iOS-Runtime-Object.html/ea5977d7-b8f1-45bb-b8af-24f37327bfda.png" alt="体系图"></p>
 
       
       
@@ -230,7 +238,7 @@
         <p><span>本文标题:</span><a href="/iOS-Runtime-Object.html/">iOS Runtime 运行时笔记(一)</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
         <p><span>发布时间:</span>2016年09月24日 - 11时09分</p>
-        <p><span>最后更新:</span>2017年05月06日 - 14时37分</p>
+        <p><span>最后更新:</span>2017年05月06日 - 14时47分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/iOS-Runtime-Object.html/" title="iOS Runtime 运行时笔记(一)">http://simonchen.club/iOS-Runtime-Object.html/</a>
             <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/iOS-Runtime-Object.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
@@ -268,7 +276,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Object"><span class="toc-number">2.</span> <span class="toc-text">Object</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#相关引申"><span class="toc-number">2.1.</span> <span class="toc-text">相关引申</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Class"><span class="toc-number">3.</span> <span class="toc-text">Class</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Ivar"><span class="toc-number">3.1.</span> <span class="toc-text">Ivar</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cache"><span class="toc-number">3.2.</span> <span class="toc-text">cache</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Object"><span class="toc-number">2.</span> <span class="toc-text">Object</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#相关引申"><span class="toc-number">2.1.</span> <span class="toc-text">相关引申</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Class"><span class="toc-number">3.</span> <span class="toc-text">Class</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Ivar"><span class="toc-number">3.1.</span> <span class="toc-text">Ivar</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cache"><span class="toc-number">3.2.</span> <span class="toc-text">cache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Meta-Class"><span class="toc-number">3.3.</span> <span class="toc-text">Meta Class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#体系图"><span class="toc-number">3.4.</span> <span class="toc-text">体系图</span></a></li></ol></li></ol>
 </div>
 <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
 
