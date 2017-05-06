@@ -3,19 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>多GitHub账号的SSH配置 | Simon’s Home</title>
+  <title>iOS应用的沙盒目录结构 | Simon’s Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。 如果是单账户，很方便，默认拿id_rsa与你的 github服务器的公钥对比；如果是多用户如user1,user2,那么就不能用在user2的身上了，怎么办呢？ 下面详细说明下多github用户配置ssh key。">
-<meta name="keywords" content="git">
+  <meta name="description" content="总览出于安全，iOS系统的沙盒机制规定每个应用都只能访问当前沙盒目录下的文件（也有例外，比如通讯录可以授权给其他应用访问）。  lldb中敲入NSHomeDirectory()可以显示当前沙盒目录路径  每个沙盒目录包括下面的结构目录：  .app Documents Library tmp">
+<meta name="keywords" content="iOS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="多GitHub账号的SSH配置">
-<meta property="og:url" content="http://simonchen.club/multiSSHKey.html/index.html">
+<meta property="og:title" content="iOS应用的沙盒目录结构">
+<meta property="og:url" content="http://simonchen.club/sandbox.html/index.html">
 <meta property="og:site_name" content="Simon’s Home">
-<meta property="og:description" content="github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。 如果是单账户，很方便，默认拿id_rsa与你的 github服务器的公钥对比；如果是多用户如user1,user2,那么就不能用在user2的身上了，怎么办呢？ 下面详细说明下多github用户配置ssh key。">
-<meta property="og:updated_time" content="2017-05-06T01:31:38.000Z">
+<meta property="og:description" content="总览出于安全，iOS系统的沙盒机制规定每个应用都只能访问当前沙盒目录下的文件（也有例外，比如通讯录可以授权给其他应用访问）。  lldb中敲入NSHomeDirectory()可以显示当前沙盒目录路径  每个沙盒目录包括下面的结构目录：  .app Documents Library tmp">
+<meta property="og:updated_time" content="2017-05-06T03:10:56.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="多GitHub账号的SSH配置">
-<meta name="twitter:description" content="github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。 如果是单账户，很方便，默认拿id_rsa与你的 github服务器的公钥对比；如果是多用户如user1,user2,那么就不能用在user2的身上了，怎么办呢？ 下面详细说明下多github用户配置ssh key。">
+<meta name="twitter:title" content="iOS应用的沙盒目录结构">
+<meta name="twitter:description" content="总览出于安全，iOS系统的沙盒机制规定每个应用都只能访问当前沙盒目录下的文件（也有例外，比如通讯录可以授权给其他应用访问）。  lldb中敲入NSHomeDirectory()可以显示当前沙盒目录路径  每个沙盒目录包括下面的结构目录：  .app Documents Library tmp">
   
     <link rel="alternative" href="/atom.xml" title="Simon’s Home" type="application/atom+xml">
   
@@ -139,11 +139,11 @@
         </header>                
     </div>
 </nav>
-      <div class="body-wrap"><article id="post-multiSSHKey" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-sandbox" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/multiSSHKey.html/" class="article-date">
-      <time datetime="2016-10-17T13:29:00.000Z" itemprop="datePublished">2016-10-17</time>
+      <a href="/sandbox.html/" class="article-date">
+      <time datetime="2016-09-24T03:09:00.000Z" itemprop="datePublished">2016-09-24</time>
 </a>
     </div>
   
@@ -156,7 +156,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      多GitHub账号的SSH配置
+      iOS应用的沙盒目录结构
     </h1>
   
 
@@ -171,7 +171,7 @@
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -181,25 +181,40 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。</p>
-<p>如果是单账户，很方便，默认拿id_rsa与你的 github服务器的公钥对比；如果是多用户如user1,user2,那么就不能用在user2的身上了，怎么办呢？</p>
-<p>下面详细说明下多github用户配置ssh key。</p>
+        <p><br></p>
+<h2 id="总览"><a href="#总览" class="headerlink" title="总览"></a>总览</h2><p>出于安全，iOS系统的沙盒机制规定每个应用都只能访问当前沙盒目录下的文件（也有例外，比如通讯录可以授权给其他应用访问）。</p>
+<blockquote>
+<p>lldb中敲入<code>NSHomeDirectory()</code>可以显示当前沙盒目录路径</p>
+</blockquote>
+<p>每个沙盒目录包括下面的结构目录：</p>
+<ul>
+<li>.app</li>
+<li>Documents</li>
+<li>Library</li>
+<li>tmp</li>
+</ul>
 <a id="more"></a>
 <p><br></p>
-<h2 id="创建key"><a href="#创建key" class="headerlink" title="创建key"></a>创建key</h2><p>利用<code>ssh-keygen -t rsa -C &quot;[email]&quot;</code>创建不同的ssh key，但是不能再一路回车了，需要给文件创建别名，以防止被覆盖：</p>
-<p><code>Enter file in which to save the key (/Users/Sunghao/.ssh/id_rsa): [输入任意的rsa名称]</code></p>
-<p><br></p>
-<h2 id="配置config文件"><a href="#配置config文件" class="headerlink" title="配置config文件"></a>配置config文件</h2><p>我是在mac环境下配置的，如果在./ssh文件夹下没有config文件，则用<code>touch config</code>进行创建，然后打开文件，输入以下文本:</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Host 名称<span class="number">1</span></div><div class="line">HostName github.<span class="keyword">com</span></div><div class="line">PreferredAuthentications publickey</div><div class="line">IdentityFile ~/.ssh/在第一步创建的rsa名称<span class="number">1</span></div><div class="line"></div><div class="line">Host 名称<span class="number">2</span></div><div class="line">HostName github.<span class="keyword">com</span></div><div class="line">PreferredAuthentications publickey</div><div class="line">IdentityFile ~/.ssh/在第一步创建的rsa名称<span class="number">2</span></div></pre></td></tr></table></figure>
-<p><br></p>
-<h2 id="测试ssh是否配置成功"><a href="#测试ssh是否配置成功" class="headerlink" title="测试ssh是否配置成功"></a>测试ssh是否配置成功</h2><p>分别使用<code>ssh -T git@第二步配置的host的名称</code>，如果出现：</p>
+<h3 id="app"><a href="#app" class="headerlink" title=".app"></a>.app</h3><p>该目录包含了应用程序本身的数据，包括资源文件和可执行文件。程序启动后，会根据需要从里面加载文件。上架前经过数字签名，上架后不可修改。</p>
 <blockquote>
-<p>Hi xxxx! You’ve successfully authenticated, but GitHub does not provide shell access.</p>
+<p>[[NSBundle mainBundle] bundlePath];</p>
 </blockquote>
-<p>则配置成功。</p>
 <p><br></p>
-<h2 id="clone远程仓库"><a href="#clone远程仓库" class="headerlink" title="clone远程仓库"></a>clone远程仓库</h2><p>在clone的时候需要修改Host名称即可：</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone git@[host名称代替原本的名称]:url</div></pre></td></tr></table></figure>
+<h3 id="Documents"><a href="#Documents" class="headerlink" title="Documents"></a>Documents</h3><p>保存应用运行时生成的需要持久化的数据，iTunes同步设备时会备份该目录。这些数据属于<code>不可再生数据</code>, 现在程序中的下载 / 上传的图片，数据库都存放在此目录下。</p>
+<ul>
+<li>二级目录<strong>/Inbox</strong>用来保存外部应用请求当前应用程序打开的文件</li>
+</ul>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span> *paths = <span class="built_in">NSSearchPathForDirectoriesInDomains</span>(<span class="built_in">NSDocumentDirectory</span>, <span class="built_in">NSUserDomainMask</span>, <span class="literal">YES</span>);  </div><div class="line"><span class="built_in">NSString</span> *path = [paths objectAtIndex:<span class="number">0</span>];</div></pre></td></tr></table></figure>
+<p><br></p>
+<h3 id="Library"><a href="#Library" class="headerlink" title="Library"></a>Library</h3><ul>
+<li>二级目录<strong>/Preferences</strong>用来保存偏好设置，以及在应用中使用NSUserDefaults写的数据都会保存到该目录下的一个plist文件中，ITunes同步时会备份。<br><br> </li>
+<li>二级目录<strong>/Caches</strong>主要是缓存文件，一般体积大不需要备份的非重要数据，属于<code>可再生数据</code>, 比如网络数据缓存存储到。ITunes同步时不会备份。</li>
+</ul>
+<p><br></p>
+<h2 id="tmp"><a href="#tmp" class="headerlink" title="tmp"></a>tmp</h2><p>存放各种临时数据，使用完毕后再将相应的文件从改目录删除。即使应用没有运行，系统也有可能会清楚掉下面的数据，iTunes也不会在同步时备份。</p>
+<blockquote>
+<p>lldb中敲入<code>NSTemporaryDirectory()</code>可以显示当前沙盒目录路径</p>
+</blockquote>
 
       
       
@@ -209,13 +224,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/multiSSHKey.html/">多GitHub账号的SSH配置</a></p>
+        <p><span>本文标题:</span><a href="/sandbox.html/">iOS应用的沙盒目录结构</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
-        <p><span>发布时间:</span>2016年10月17日 - 21时29分</p>
-        <p><span>最后更新:</span>2017年05月06日 - 09时31分</p>
+        <p><span>发布时间:</span>2016年09月24日 - 11时09分</p>
+        <p><span>最后更新:</span>2017年05月06日 - 11时10分</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/multiSSHKey.html/" title="多GitHub账号的SSH配置">http://simonchen.club/multiSSHKey.html/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/multiSSHKey.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/sandbox.html/" title="iOS应用的沙盒目录结构">http://simonchen.club/sandbox.html/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/sandbox.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script src="/js/clipboard.min.js"></script>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
@@ -228,18 +243,18 @@
 
 <nav id="article-nav">
   
-    <a href="/sandbox.html/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/make-a-static-library.html/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          iOS应用的沙盒目录结构
+          静态库的制作过程
         
       </div>
     </a>
   
   
-    <a href="/Assotiated Object.html/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">关联对象</div>
+    <a href="/multiSSHKey.html/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">多GitHub账号的SSH配置</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -250,7 +265,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建key"><span class="toc-number">1.</span> <span class="toc-text">创建key</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置config文件"><span class="toc-number">2.</span> <span class="toc-text">配置config文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试ssh是否配置成功"><span class="toc-number">3.</span> <span class="toc-text">测试ssh是否配置成功</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#clone远程仓库"><span class="toc-number">4.</span> <span class="toc-text">clone远程仓库</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#总览"><span class="toc-number">1.</span> <span class="toc-text">总览</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#app"><span class="toc-number">1.1.</span> <span class="toc-text">.app</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Documents"><span class="toc-number">1.2.</span> <span class="toc-text">Documents</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Library"><span class="toc-number">1.3.</span> <span class="toc-text">Library</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tmp"><span class="toc-number">2.</span> <span class="toc-text">tmp</span></a></li></ol>
 </div>
 <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
 
@@ -307,13 +322,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/sandbox.html/" title="上一篇: iOS应用的沙盒目录结构">
+            <a href="/make-a-static-library.html/" title="上一篇: 静态库的制作过程">
                 <i class="fa fa-angle-left"></i>
             </a>
         
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
         
-            <a href="/Assotiated Object.html/" title="下一篇: 关联对象">
+            <a href="/multiSSHKey.html/" title="下一篇: 多GitHub账号的SSH配置">
                 <i class="fa fa-angle-right"></i>
             </a>
         
