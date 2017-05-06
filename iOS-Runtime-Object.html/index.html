@@ -5,18 +5,18 @@
   
   <title>iOS Runtime 运行时笔记(一) | Simon’s Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前言Objective-C（下简称 OC）是一门动态性语言， 它把尽可能多的决策从编译、链接时期推迟到运行时期。这意味着 OC 不仅需要编译器，还需要一个执行编译代码的运行时系统（runtime system）。Runtime system 对于 OC 而言就像一个操作系统，让它能正常工作，实际上它是一个基本上用C和汇编写的库，这个库使得C语言有了面向对象的能力。  这次我看的是objc4-706">
+  <meta name="description" content="前言Objective-C（下简称 OC）是一门动态性语言， 它把尽可能多的决策从编译、链接时期推迟到运行时期。这意味着 OC 不仅需要编译器，还需要一个执行编译代码的运行时系统（runtime system）。Runtime system 对于 OC 而言就像一个操作系统，让它能正常工作，实际上它是一个基本上用C和汇编写的库，这个库使得C语言有了面向对象的能力。  这次我看的是objc4-7">
 <meta name="keywords" content="iOS,notes">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS Runtime 运行时笔记(一)">
 <meta property="og:url" content="http://simonchen.club/iOS-Runtime-Object.html/index.html">
 <meta property="og:site_name" content="Simon’s Home">
-<meta property="og:description" content="前言Objective-C（下简称 OC）是一门动态性语言， 它把尽可能多的决策从编译、链接时期推迟到运行时期。这意味着 OC 不仅需要编译器，还需要一个执行编译代码的运行时系统（runtime system）。Runtime system 对于 OC 而言就像一个操作系统，让它能正常工作，实际上它是一个基本上用C和汇编写的库，这个库使得C语言有了面向对象的能力。  这次我看的是objc4-706">
+<meta property="og:description" content="前言Objective-C（下简称 OC）是一门动态性语言， 它把尽可能多的决策从编译、链接时期推迟到运行时期。这意味着 OC 不仅需要编译器，还需要一个执行编译代码的运行时系统（runtime system）。Runtime system 对于 OC 而言就像一个操作系统，让它能正常工作，实际上它是一个基本上用C和汇编写的库，这个库使得C语言有了面向对象的能力。  这次我看的是objc4-7">
 <meta property="og:image" content="http://simonchen.club/iOS-Runtime-Object.html/ea5977d7-b8f1-45bb-b8af-24f37327bfda.png">
-<meta property="og:updated_time" content="2017-05-06T06:51:28.000Z">
+<meta property="og:updated_time" content="2017-05-06T06:55:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS Runtime 运行时笔记(一)">
-<meta name="twitter:description" content="前言Objective-C（下简称 OC）是一门动态性语言， 它把尽可能多的决策从编译、链接时期推迟到运行时期。这意味着 OC 不仅需要编译器，还需要一个执行编译代码的运行时系统（runtime system）。Runtime system 对于 OC 而言就像一个操作系统，让它能正常工作，实际上它是一个基本上用C和汇编写的库，这个库使得C语言有了面向对象的能力。  这次我看的是objc4-706">
+<meta name="twitter:description" content="前言Objective-C（下简称 OC）是一门动态性语言， 它把尽可能多的决策从编译、链接时期推迟到运行时期。这意味着 OC 不仅需要编译器，还需要一个执行编译代码的运行时系统（runtime system）。Runtime system 对于 OC 而言就像一个操作系统，让它能正常工作，实际上它是一个基本上用C和汇编写的库，这个库使得C语言有了面向对象的能力。  这次我看的是objc4-7">
 <meta name="twitter:image" content="http://simonchen.club/iOS-Runtime-Object.html/ea5977d7-b8f1-45bb-b8af-24f37327bfda.png">
   
     <link rel="alternative" href="/atom.xml" title="Simon’s Home" type="application/atom+xml">
@@ -183,7 +183,8 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Objective-C（下简称 OC）是一门动态性语言， 它把尽可能多的决策从编译、链接时期推迟到运行时期。这意味着 OC 不仅需要编译器，还需要一个执行编译代码的运行时系统（runtime system）。Runtime system 对于 OC 而言就像一个操作系统，让它能正常工作，实际上它是一个基本上用C和汇编写的库，这个库使得C语言有了面向对象的能力。</p>
+        <p><br> </p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Objective-C（下简称 OC）是一门动态性语言， 它把尽可能多的决策从编译、链接时期推迟到运行时期。这意味着 OC 不仅需要编译器，还需要一个执行编译代码的运行时系统（runtime system）。Runtime system 对于 OC 而言就像一个操作系统，让它能正常工作，实际上它是一个基本上用C和汇编写的库，这个库使得C语言有了面向对象的能力。</p>
 <blockquote>
 <p>这次我看的是<code>objc4-706</code>版本，下面的源码也是基于这个版本来的。</p>
 </blockquote>
@@ -238,7 +239,7 @@
         <p><span>本文标题:</span><a href="/iOS-Runtime-Object.html/">iOS Runtime 运行时笔记(一)</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
         <p><span>发布时间:</span>2016年09月26日 - 14时49分</p>
-        <p><span>最后更新:</span>2017年05月06日 - 14时51分</p>
+        <p><span>最后更新:</span>2017年05月06日 - 14时55分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/iOS-Runtime-Object.html/" title="iOS Runtime 运行时笔记(一)">http://simonchen.club/iOS-Runtime-Object.html/</a>
             <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/iOS-Runtime-Object.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
@@ -264,8 +265,8 @@
     </a>
   
   
-    <a href="/multiSSHKey.html/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">多GitHub账号的SSH配置</div>
+    <a href="/iOS-Runtime-Method.html/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">iOS Runtime 运行时笔记(二)</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -339,12 +340,12 @@
         
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
         
-            <a href="/multiSSHKey.html/" title="下一篇: 多GitHub账号的SSH配置">
+            <a href="/iOS-Runtime-Method.html/" title="下一篇: iOS Runtime 运行时笔记(二)">
                 <i class="fa fa-angle-right"></i>
             </a>
         
     </div>
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/FBKVOController Source Code analysis.html/">FBKVOController源码阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/KVC and KVO.html/">KVC与KVO</a></li><li class="post-list-item"><a class="post-list-link" href="/Assotiated Object.html/">关联对象</a></li><li class="post-list-item"><a class="post-list-link" href="/multiSSHKey.html/">多GitHub账号的SSH配置</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Object.html/">iOS Runtime 运行时笔记(一)</a></li><li class="post-list-item"><a class="post-list-link" href="/sandbox.html/">iOS应用的沙盒目录结构</a></li><li class="post-list-item"><a class="post-list-link" href="/make-a-static-library.html/">静态库的制作过程</a></li></ul>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/FBKVOController Source Code analysis.html/">FBKVOController源码阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/KVC and KVO.html/">KVC与KVO</a></li><li class="post-list-item"><a class="post-list-link" href="/Assotiated Object.html/">关联对象</a></li><li class="post-list-item"><a class="post-list-link" href="/multiSSHKey.html/">多GitHub账号的SSH配置</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Method.html/">iOS Runtime 运行时笔记(二)</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Object.html/">iOS Runtime 运行时笔记(一)</a></li><li class="post-list-item"><a class="post-list-link" href="/sandbox.html/">iOS应用的沙盒目录结构</a></li><li class="post-list-item"><a class="post-list-link" href="/make-a-static-library.html/">静态库的制作过程</a></li></ul>
     <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
     <script>
         $(".post-list").addClass("toc-article");

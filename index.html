@@ -428,6 +428,74 @@
 
 
   
+    <article id="post-iOS-Runtime-Method" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/iOS-Runtime-Method.html/" class="article-date">
+      <time datetime="2016-10-08T06:54:00.000Z" itemprop="datePublished">2016-10-08</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/iOS-Runtime-Method.html/">iOS Runtime 运行时笔记(二)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <p><br> </p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在<a href="http://simonchen.club/iOS-Runtime-Object.html/">上一篇</a>学习了Runtime下的对象与类的实现，这一篇开始了解在Runtime下的消息机制。</p>
+          
+      
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/programming/">开发</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/notes/">notes</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a  href="/iOS-Runtime-Method.html/#more">More >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-iOS-Runtime-Object" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -455,7 +523,8 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Objective-C（下简称 OC）是一门动态性语言， 它把尽可能多的决策从编译、链接时期推迟到运行时期。这意味着 OC 不仅需要编译器，还需要一个执行编译代码的运行时系统（runtime system）。Runtime system 对于 OC 而言就像一个操作系统，让它能正常工作，实际上它是一个基本上用C和汇编写的库，这个库使得C语言有了面向对象的能力。</p>
+              <p><br> </p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Objective-C（下简称 OC）是一门动态性语言， 它把尽可能多的决策从编译、链接时期推迟到运行时期。这意味着 OC 不仅需要编译器，还需要一个执行编译代码的运行时系统（runtime system）。Runtime system 对于 OC 而言就像一个操作系统，让它能正常工作，实际上它是一个基本上用C和汇编写的库，这个库使得C语言有了面向对象的能力。</p>
 <blockquote>
 <p>这次我看的是<code>objc4-706</code>版本，下面的源码也是基于这个版本来的。</p>
 </blockquote>
