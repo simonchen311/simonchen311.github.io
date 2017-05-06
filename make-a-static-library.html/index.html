@@ -3,19 +3,25 @@
 <head>
   <meta charset="utf-8">
   
-  <title>多GitHub账号的SSH配置 | Simon’s Home</title>
+  <title>静态库的制作过程 | Simon’s Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。 如果是单账户，很方便，默认拿id_rsa与你的 github服务器的公钥对比；如果是多用户如user1,user2,那么就不能用在user2的身上了，怎么办呢？ 下面详细说明下多github用户配置ssh key。">
-<meta name="keywords" content="git">
+  <meta name="description" content="起因今天由于项目的需要，需要制作一份iOS静态库，所以在此记录下其制作过程。">
+<meta name="keywords" content="iOS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="多GitHub账号的SSH配置">
-<meta property="og:url" content="http://simonchen.club/multiSSHKey.html/index.html">
+<meta property="og:title" content="静态库的制作过程">
+<meta property="og:url" content="http://simonchen.club/make-a-static-library.html/index.html">
 <meta property="og:site_name" content="Simon’s Home">
-<meta property="og:description" content="github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。 如果是单账户，很方便，默认拿id_rsa与你的 github服务器的公钥对比；如果是多用户如user1,user2,那么就不能用在user2的身上了，怎么办呢？ 下面详细说明下多github用户配置ssh key。">
-<meta property="og:updated_time" content="2017-05-06T01:31:38.000Z">
+<meta property="og:description" content="起因今天由于项目的需要，需要制作一份iOS静态库，所以在此记录下其制作过程。">
+<meta property="og:image" content="http://simonchen.club/make-a-static-library.html/1.jpg">
+<meta property="og:image" content="http://simonchen.club/make-a-static-library.html/2.jpg">
+<meta property="og:image" content="http://simonchen.club/make-a-static-library.html/3.jpg">
+<meta property="og:image" content="http://simonchen.club/make-a-static-library.html/4.jpg">
+<meta property="og:image" content="http://simonchen.club/make-a-static-library.html/5.jpg">
+<meta property="og:updated_time" content="2017-05-06T02:45:17.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="多GitHub账号的SSH配置">
-<meta name="twitter:description" content="github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。 如果是单账户，很方便，默认拿id_rsa与你的 github服务器的公钥对比；如果是多用户如user1,user2,那么就不能用在user2的身上了，怎么办呢？ 下面详细说明下多github用户配置ssh key。">
+<meta name="twitter:title" content="静态库的制作过程">
+<meta name="twitter:description" content="起因今天由于项目的需要，需要制作一份iOS静态库，所以在此记录下其制作过程。">
+<meta name="twitter:image" content="http://simonchen.club/make-a-static-library.html/1.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Simon’s Home" type="application/atom+xml">
   
@@ -139,11 +145,11 @@
         </header>                
     </div>
 </nav>
-      <div class="body-wrap"><article id="post-multiSSHKey" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-make-a-static-library" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/multiSSHKey.html/" class="article-date">
-      <time datetime="2016-10-17T13:29:00.000Z" itemprop="datePublished">2016-10-17</time>
+      <a href="/make-a-static-library.html/" class="article-date">
+      <time datetime="2016-09-12T02:32:57.000Z" itemprop="datePublished">2016-09-12</time>
 </a>
     </div>
   
@@ -156,7 +162,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      多GitHub账号的SSH配置
+      静态库的制作过程
     </h1>
   
 
@@ -171,7 +177,7 @@
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -181,25 +187,30 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。</p>
-<p>如果是单账户，很方便，默认拿id_rsa与你的 github服务器的公钥对比；如果是多用户如user1,user2,那么就不能用在user2的身上了，怎么办呢？</p>
-<p>下面详细说明下多github用户配置ssh key。</p>
+        <p><br></p>
+<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>今天由于项目的需要，需要制作一份iOS静态库，所以在此记录下其制作过程。</p>
 <a id="more"></a>
 <p><br></p>
-<h2 id="创建key"><a href="#创建key" class="headerlink" title="创建key"></a>创建key</h2><p>利用<code>ssh-keygen -t rsa -C &quot;[email]&quot;</code>创建不同的ssh key，但是不能再一路回车了，需要给文件创建别名，以防止被覆盖：</p>
-<p><code>Enter file in which to save the key (/Users/Sunghao/.ssh/id_rsa): [输入任意的rsa名称]</code></p>
+<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><h3 id="创建工程"><a href="#创建工程" class="headerlink" title="创建工程"></a>创建工程</h3><p>首先打开Xcode新建一个工程，在<code>Framework &amp; Library</code>栏下选择Cocoa Touch Static Library，然后点击Next，输入Product Name。</p>
+<p><img src="/make-a-static-library.html/1.jpg" alt="描述"></p>
 <p><br></p>
-<h2 id="配置config文件"><a href="#配置config文件" class="headerlink" title="配置config文件"></a>配置config文件</h2><p>我是在mac环境下配置的，如果在./ssh文件夹下没有config文件，则用<code>touch config</code>进行创建，然后打开文件，输入以下文本:</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Host 名称<span class="number">1</span></div><div class="line">HostName github.<span class="keyword">com</span></div><div class="line">PreferredAuthentications publickey</div><div class="line">IdentityFile ~/.ssh/在第一步创建的rsa名称<span class="number">1</span></div><div class="line"></div><div class="line">Host 名称<span class="number">2</span></div><div class="line">HostName github.<span class="keyword">com</span></div><div class="line">PreferredAuthentications publickey</div><div class="line">IdentityFile ~/.ssh/在第一步创建的rsa名称<span class="number">2</span></div></pre></td></tr></table></figure>
+<h3 id="编写代码"><a href="#编写代码" class="headerlink" title="编写代码"></a>编写代码</h3><p>创建.h文件和.m文件，并在其中编写所需要的代码；当然，也可以添加已经写好的文件。（这里写个简单的例子方便参考）</p>
+<p>头文件</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//myFramework.h </span></div><div class="line"><span class="meta">#import <span class="meta-string">&lt;Foundation/Foundation.h&gt;</span> </span></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">myFramework</span> : <span class="title">NSObject</span> </span></div><div class="line">- (<span class="keyword">int</span>)f; </div><div class="line">- <span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<p>实现文件</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// myFramework.m</span></div><div class="line"> <span class="meta">#import <span class="meta-string">"myFramework.h"</span> </span></div><div class="line"> </div><div class="line"> <span class="class"><span class="keyword">@implementation</span> <span class="title">myFramework</span> </span></div><div class="line"> </div><div class="line"> - (<span class="keyword">int</span>)f </div><div class="line"> &#123; </div><div class="line">     <span class="keyword">return</span> <span class="number">200</span>; </div><div class="line"> &#125; </div><div class="line"> </div><div class="line"> <span class="keyword">@end</span></div></pre></td></tr></table></figure>
 <p><br></p>
-<h2 id="测试ssh是否配置成功"><a href="#测试ssh是否配置成功" class="headerlink" title="测试ssh是否配置成功"></a>测试ssh是否配置成功</h2><p>分别使用<code>ssh -T git@第二步配置的host的名称</code>，如果出现：</p>
-<blockquote>
-<p>Hi xxxx! You’ve successfully authenticated, but GitHub does not provide shell access.</p>
-</blockquote>
-<p>则配置成功。</p>
+<h3 id="修改Scheme"><a href="#修改Scheme" class="headerlink" title="修改Scheme"></a>修改Scheme</h3><p>在导航工具栏中，点击<code>Edit Scheme</code></p>
+<p><img src="/make-a-static-library.html/2.jpg" alt="描述"></p>
+<p>将Build Configuration中Debug修改为release。如果Destination选择iOS Device，那么制作的库只能在真机下运行，如果Destination选择模拟器，那么制作的库只能在模拟器下运行。</p>
+<p><img src="/make-a-static-library.html/3.jpg" alt="描述"></p>
 <p><br></p>
-<h2 id="clone远程仓库"><a href="#clone远程仓库" class="headerlink" title="clone远程仓库"></a>clone远程仓库</h2><p>在clone的时候需要修改Host名称即可：</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone git@[host名称代替原本的名称]:url</div></pre></td></tr></table></figure>
+<h3 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h3><p>关闭窗口，command+B重新编译程序，可以发现Products中的libmyFramework.a由红色变成黑色，右键点击库，选择Show in Finder就能找到.a静态库了，在Release-iphoneos文件夹下的.a库只能在真机上运行，而Release-iphonesimulator文件夹下的.a库只能在模拟器上运行，将其和头文件一起拷贝出来，就可以给其他工程用了，这就意味着一份静态库制作好了！</p>
+<p><img src="/make-a-static-library.html/4.jpg" alt="描述"></p>
+<h3 id="合并"><a href="#合并" class="headerlink" title="合并"></a>合并</h3><p>现在需要将真机和模拟器下的.a文件合并成一个文件，这样就可以制作在真机和模拟器上都可以使用的库了。打开终端，输入以下指令就可以合并两个静态库了：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lipo -create 路径1/yourlib.a  路径2/yourlib.a -output 路径3/yourlib.a</div></pre></td></tr></table></figure>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>这次制作库是为了考证，对于两份完全相同的库，调用其中的函数到底是调用哪个库的，经过测试找出了结论：在一个工程中引用了两份完全相同的库（存储在不同的文件夹下），调用其中的函数，是根据Library Search Paths的顺序来调用的，后面相同的库中的函数则不会再去调用。如下图所示，调用相同库中的函数，只会调用在路径$(PROJECT_DIR)/framework下的库中的函数，另一份库则不会去调用。</p>
+<p><img src="/make-a-static-library.html/5.jpg" alt="描述"></p>
 
       
       
@@ -209,13 +220,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/multiSSHKey.html/">多GitHub账号的SSH配置</a></p>
+        <p><span>本文标题:</span><a href="/make-a-static-library.html/">静态库的制作过程</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
-        <p><span>发布时间:</span>2016年10月17日 - 21时29分</p>
-        <p><span>最后更新:</span>2017年05月06日 - 09时31分</p>
+        <p><span>发布时间:</span>2016年09月12日 - 10时32分</p>
+        <p><span>最后更新:</span>2017年05月06日 - 10时45分</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/multiSSHKey.html/" title="多GitHub账号的SSH配置">http://simonchen.club/multiSSHKey.html/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/multiSSHKey.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/make-a-static-library.html/" title="静态库的制作过程">http://simonchen.club/make-a-static-library.html/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/make-a-static-library.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script src="/js/clipboard.min.js"></script>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
@@ -228,18 +239,9 @@
 
 <nav id="article-nav">
   
-    <a href="/make-a-static-library.html/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          静态库的制作过程
-        
-      </div>
-    </a>
   
-  
-    <a href="/Assotiated Object.html/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">关联对象</div>
+    <a href="/multiSSHKey.html/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">多GitHub账号的SSH配置</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -250,7 +252,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建key"><span class="toc-number">1.</span> <span class="toc-text">创建key</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置config文件"><span class="toc-number">2.</span> <span class="toc-text">配置config文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试ssh是否配置成功"><span class="toc-number">3.</span> <span class="toc-text">测试ssh是否配置成功</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#clone远程仓库"><span class="toc-number">4.</span> <span class="toc-text">clone远程仓库</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#起因"><span class="toc-number">1.</span> <span class="toc-text">起因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#流程"><span class="toc-number">2.</span> <span class="toc-text">流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建工程"><span class="toc-number">2.1.</span> <span class="toc-text">创建工程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编写代码"><span class="toc-number">2.2.</span> <span class="toc-text">编写代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改Scheme"><span class="toc-number">2.3.</span> <span class="toc-text">修改Scheme</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编译"><span class="toc-number">2.4.</span> <span class="toc-text">编译</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#合并"><span class="toc-number">2.5.</span> <span class="toc-text">合并</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后记"><span class="toc-number">3.</span> <span class="toc-text">后记</span></a></li></ol>
 </div>
 <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
 
@@ -307,13 +309,11 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/make-a-static-library.html/" title="上一篇: 静态库的制作过程">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
         
-            <a href="/Assotiated Object.html/" title="下一篇: 关联对象">
+            <a href="/multiSSHKey.html/" title="下一篇: 多GitHub账号的SSH配置">
                 <i class="fa fa-angle-right"></i>
             </a>
         
