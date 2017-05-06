@@ -6,13 +6,13 @@
   <title>RunLoop | Simon’s Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="以前对RunLoop的认知一直是停留在非常模糊的阶段，只是知道其与线程相关，维持线程的运转不退出，趁现在任务不紧，花点时间研究下RunLoop的源码，看其作用以及是如何实现的。  概念一个线程一般只执行完一个任务后就退出，但是RunLoop能执行这么一种机制：让线程可以随时处理事件且处于不退出的状态，处理完成后线程处于休眠状态，当有事件的时候会被唤醒。 RunLoop本身是不能够直接来创建的，除了">
-<meta name="keywords" content="iOS">
+<meta name="keywords" content="iOS,Mechanism">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RunLoop">
 <meta property="og:url" content="http://simonchen.club/Runloop.html/index.html">
 <meta property="og:site_name" content="Simon’s Home">
 <meta property="og:description" content="以前对RunLoop的认知一直是停留在非常模糊的阶段，只是知道其与线程相关，维持线程的运转不退出，趁现在任务不紧，花点时间研究下RunLoop的源码，看其作用以及是如何实现的。  概念一个线程一般只执行完一个任务后就退出，但是RunLoop能执行这么一种机制：让线程可以随时处理事件且处于不退出的状态，处理完成后线程处于休眠状态，当有事件的时候会被唤醒。 RunLoop本身是不能够直接来创建的，除了">
-<meta property="og:updated_time" content="2017-05-06T10:27:33.000Z">
+<meta property="og:updated_time" content="2017-05-06T10:30:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RunLoop">
 <meta name="twitter:description" content="以前对RunLoop的认知一直是停留在非常模糊的阶段，只是知道其与线程相关，维持线程的运转不退出，趁现在任务不紧，花点时间研究下RunLoop的源码，看其作用以及是如何实现的。  概念一个线程一般只执行完一个任务后就退出，但是RunLoop能执行这么一种机制：让线程可以随时处理事件且处于不退出的状态，处理完成后线程处于休眠状态，当有事件的时候会被唤醒。 RunLoop本身是不能够直接来创建的，除了">
@@ -171,7 +171,7 @@
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mechanism/">Mechanism</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -256,7 +256,7 @@
         <p><span>本文标题:</span><a href="/Runloop.html/">RunLoop</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
         <p><span>发布时间:</span>2016年11月21日 - 16时31分</p>
-        <p><span>最后更新:</span>2017年05月06日 - 18时27分</p>
+        <p><span>最后更新:</span>2017年05月06日 - 18时30分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/Runloop.html/" title="RunLoop">http://simonchen.club/Runloop.html/</a>
             <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/Runloop.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
