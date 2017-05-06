@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://simonchen.club/Runloop.html/index.html">
 <meta property="og:site_name" content="Simon’s Home">
 <meta property="og:description" content="以前对RunLoop的认知一直是停留在非常模糊的阶段，只是知道其与线程相关，维持线程的运转不退出，趁现在任务不紧，花点时间研究下RunLoop的源码，看其作用以及是如何实现的。  概念一个线程一般只执行完一个任务后就退出，但是RunLoop能执行这么一种机制：让线程可以随时处理事件且处于不退出的状态，处理完成后线程处于休眠状态，当有事件的时候会被唤醒。 RunLoop本身是不能够直接来创建的，除了">
-<meta property="og:updated_time" content="2017-05-06T09:18:07.000Z">
+<meta property="og:updated_time" content="2017-05-06T09:34:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RunLoop">
 <meta name="twitter:description" content="以前对RunLoop的认知一直是停留在非常模糊的阶段，只是知道其与线程相关，维持线程的运转不退出，趁现在任务不紧，花点时间研究下RunLoop的源码，看其作用以及是如何实现的。  概念一个线程一般只执行完一个任务后就退出，但是RunLoop能执行这么一种机制：让线程可以随时处理事件且处于不退出的状态，处理完成后线程处于休眠状态，当有事件的时候会被唤醒。 RunLoop本身是不能够直接来创建的，除了">
@@ -193,11 +193,32 @@
 <p><br></p>
 <h2 id="RunLoopMode"><a href="#RunLoopMode" class="headerlink" title="RunLoopMode"></a>RunLoopMode</h2><p>一个RunLoop内部包含了多个RunLoopMode，RunLoop同一时间只能且必须在一种特定的Mode下运行</p>
 <ul>
-<li>NSDefaultRunLoopMode</li>
-<li>UITrackingRunLoopMode</li>
-<li>UIInitializetionRunLoopMode</li>
-<li>NSRunLoopCommonModes</li>
+<li><code>NSDefaultRunLoopMode(kCFRunLoopDefaultMode)</code>：默认Mode</li>
+<li><code>UITrackingRunLoopMode</code>：用于UI跟踪的Mode，在ScrollView滑动时，为了保证UI顺畅度而切换到当前的Mode中来</li>
+<li><code>UIInitializetionRunLoopMode</code>：在刚启动App时进入的第一个Mode，之后不会再使用</li>
+<li><code>GSEventReceiveRunLoopMode</code>：接受系统时间的内部Mode</li>
+<li><code>NSRunLoopCommonModes(kCFRunLoopCommonModes)</code>：占位Mode，不是一种真正意义的Mode。主线程里有两个预制的Mode：kCFRunLoopDefaultMode 和 UITrackingRunLoopMode，这两个 Mode 都已经被标记为”Common”属性。</li>
 </ul>
+<p><br></p>
+<h3 id="内部构成"><a href="#内部构成" class="headerlink" title="内部构成"></a>内部构成</h3><p>一个RunLoopMode内部又是由多个Source/Timer/Observer构成的。</p>
+<p><br></p>
+<h4 id="CFRunLoopSource"><a href="#CFRunLoopSource" class="headerlink" title="CFRunLoopSource"></a>CFRunLoopSource</h4><p>Source是对RunLoop的数据源抽象类，是事件产生的地方，它定义了两种Source:</p>
+<ol>
+<li><code>Source0</code>：处理APP内部事件，APP自己负责管理触发（也即手动触发），例如UIEvent，CFSocket。使用时，你需要先调用 CFRunLoopSourceSignal(source)，将这个 Source 标记为待处理，然后手动调用 CFRunLoopWakeUp(runloop) 来唤醒 RunLoop，让其处理这个事件；</li>
+<li><code>Source1</code>：由RunLoop和内核管理，Mach port驱动，例如：CFMachPort（端口？）、CFMessagePort。它被用于通过内核和其他线程互相发送消息，并且这种Source能够主动唤醒RunLoop线程；</li>
+</ol>
+<p><br></p>
+<h4 id="CFRunLoopObserver"><a href="#CFRunLoopObserver" class="headerlink" title="CFRunLoopObserver"></a>CFRunLoopObserver</h4><p>注册在当前RunLoopMode中的观察者，用来接受通知来获取RunLoop当前的状态，观察者可以获得的状态有如下几个：</p>
+<ul>
+<li><code>kCFRunLoopEntry</code>：即将进入RunLoop</li>
+<li><code>kCFRunLoopBeforeTimers</code>: 即将处理Timer</li>
+<li><code>kCFRunLoopBeforeSources</code>：即将处理Source事件</li>
+<li><code>kCFRunLoopBeforeWaiting</code>：即将进入休眠</li>
+<li><code>kCFRunLoopAfterWaiting</code>：即将退出休眠被唤醒</li>
+<li><code>kCFRunLoopExit</code>：即将退出RunLoop</li>
+</ul>
+<p><br></p>
+<h4 id="CFRunLoopTimer"><a href="#CFRunLoopTimer" class="headerlink" title="CFRunLoopTimer"></a>CFRunLoopTimer</h4><p>用来存放注册在当前RunLoopMode中的定时器。当其加入到 RunLoop 时，RunLoop会注册对应的时间点，当时间点到时，RunLoop会被唤醒以执行那个回调。RunLoop并不能保证一定在该时间点触发，比如执行了一个很长的任务，则这个时间点的回调也会被跳过去不再执行。</p>
 
       
       
@@ -210,7 +231,7 @@
         <p><span>本文标题:</span><a href="/Runloop.html/">RunLoop</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
         <p><span>发布时间:</span>2016年11月21日 - 16时31分</p>
-        <p><span>最后更新:</span>2017年05月06日 - 17时18分</p>
+        <p><span>最后更新:</span>2017年05月06日 - 17时34分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/Runloop.html/" title="RunLoop">http://simonchen.club/Runloop.html/</a>
             <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/Runloop.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
@@ -243,7 +264,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概念"><span class="toc-number">1.</span> <span class="toc-text">概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NSRunLoop"><span class="toc-number">1.1.</span> <span class="toc-text">NSRunLoop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CFRunLoopRef"><span class="toc-number">1.2.</span> <span class="toc-text">CFRunLoopRef</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RunLoopMode"><span class="toc-number">2.</span> <span class="toc-text">RunLoopMode</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概念"><span class="toc-number">1.</span> <span class="toc-text">概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NSRunLoop"><span class="toc-number">1.1.</span> <span class="toc-text">NSRunLoop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CFRunLoopRef"><span class="toc-number">1.2.</span> <span class="toc-text">CFRunLoopRef</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RunLoopMode"><span class="toc-number">2.</span> <span class="toc-text">RunLoopMode</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#内部构成"><span class="toc-number">2.1.</span> <span class="toc-text">内部构成</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CFRunLoopSource"><span class="toc-number">2.1.1.</span> <span class="toc-text">CFRunLoopSource</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CFRunLoopObserver"><span class="toc-number">2.1.2.</span> <span class="toc-text">CFRunLoopObserver</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CFRunLoopTimer"><span class="toc-number">2.1.3.</span> <span class="toc-text">CFRunLoopTimer</span></a></li></ol></li></ol></li></ol>
 </div>
 <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
 
