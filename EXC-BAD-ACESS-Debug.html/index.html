@@ -3,19 +3,22 @@
 <head>
   <meta charset="utf-8">
   
-  <title>iOS Runtime 运行时笔记(三) | Simon’s Home</title>
+  <title>小技巧：EXC_BAD_ACESS的调试 | Simon’s Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Method SwizzleRuntime下的方法都是由SEL和IMP组成的结构体，两者之间构成了一种映射关系，而Method Swizzle是一种可以在运行时动态改变方法的IMP的技术，改变了两者的映射关系。 1234567891011121314151617181920212223242526+ (void)load &amp;#123;    static dispatch_once_t onc">
-<meta name="keywords" content="iOS,Mechanism,Runtime">
+  <meta name="description" content="今天在项目运行时出现EXC_BAD_ACESS错误，导致程序崩溃，在开发时遇到EXC_BAD_ACESS这种错误不容易找到原因，但通常是由于内存管理问题而引起的，查询其解决方法，有如下几种办法可以来帮助查询出错的地方。">
+<meta name="keywords" content="iOS,Skill">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS Runtime 运行时笔记(三)">
-<meta property="og:url" content="http://simonchen.club/iOS-Runtime-Swizzle.html/index.html">
+<meta property="og:title" content="小技巧：EXC_BAD_ACESS的调试">
+<meta property="og:url" content="http://simonchen.club/EXC-BAD-ACESS-Debug.html/index.html">
 <meta property="og:site_name" content="Simon’s Home">
-<meta property="og:description" content="Method SwizzleRuntime下的方法都是由SEL和IMP组成的结构体，两者之间构成了一种映射关系，而Method Swizzle是一种可以在运行时动态改变方法的IMP的技术，改变了两者的映射关系。 1234567891011121314151617181920212223242526+ (void)load &amp;#123;    static dispatch_once_t onc">
-<meta property="og:updated_time" content="2017-05-06T10:31:17.000Z">
+<meta property="og:description" content="今天在项目运行时出现EXC_BAD_ACESS错误，导致程序崩溃，在开发时遇到EXC_BAD_ACESS这种错误不容易找到原因，但通常是由于内存管理问题而引起的，查询其解决方法，有如下几种办法可以来帮助查询出错的地方。">
+<meta property="og:image" content="http://simonchen.club/EXC-BAD-ACESS-Debug.html/D5F9A994-0481-4438-AD0C-6CDDF5931D13.png">
+<meta property="og:image" content="http://simonchen.club/EXC-BAD-ACESS-Debug.html/-屏幕快照%202015-05-25%2021.50.39.jpg">
+<meta property="og:updated_time" content="2017-05-06T15:53:51.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS Runtime 运行时笔记(三)">
-<meta name="twitter:description" content="Method SwizzleRuntime下的方法都是由SEL和IMP组成的结构体，两者之间构成了一种映射关系，而Method Swizzle是一种可以在运行时动态改变方法的IMP的技术，改变了两者的映射关系。 1234567891011121314151617181920212223242526+ (void)load &amp;#123;    static dispatch_once_t onc">
+<meta name="twitter:title" content="小技巧：EXC_BAD_ACESS的调试">
+<meta name="twitter:description" content="今天在项目运行时出现EXC_BAD_ACESS错误，导致程序崩溃，在开发时遇到EXC_BAD_ACESS这种错误不容易找到原因，但通常是由于内存管理问题而引起的，查询其解决方法，有如下几种办法可以来帮助查询出错的地方。">
+<meta name="twitter:image" content="http://simonchen.club/EXC-BAD-ACESS-Debug.html/D5F9A994-0481-4438-AD0C-6CDDF5931D13.png">
   
     <link rel="alternative" href="/atom.xml" title="Simon’s Home" type="application/atom+xml">
   
@@ -139,11 +142,11 @@
         </header>                
     </div>
 </nav>
-      <div class="body-wrap"><article id="post-iOS-Runtime-Swizzle" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-EXC-BAD-ACESS-Debug" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/iOS-Runtime-Swizzle.html/" class="article-date">
-      <time datetime="2016-10-22T07:47:26.000Z" itemprop="datePublished">2016-10-22</time>
+      <a href="/EXC-BAD-ACESS-Debug.html/" class="article-date">
+      <time datetime="2016-12-06T15:39:36.000Z" itemprop="datePublished">2016-12-06</time>
 </a>
     </div>
   
@@ -156,7 +159,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      iOS Runtime 运行时笔记(三)
+      小技巧：EXC_BAD_ACESS的调试
     </h1>
   
 
@@ -171,7 +174,7 @@
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mechanism/">Mechanism</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Runtime/">Runtime</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Skill/">Skill</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -181,17 +184,20 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p><br> </p>
-<h2 id="Method-Swizzle"><a href="#Method-Swizzle" class="headerlink" title="Method Swizzle"></a>Method Swizzle</h2><p>Runtime下的方法都是由SEL和IMP组成的结构体，两者之间构成了一种映射关系，而Method Swizzle是一种可以在运行时动态改变方法的IMP的技术，改变了两者的映射关系。</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">+ (<span class="keyword">void</span>)load </div><div class="line">&#123;</div><div class="line">    <span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken;</div><div class="line">    <span class="built_in">dispatch_once</span>(&amp;onceToken, ^&#123;</div><div class="line"></div><div class="line">         SEL originalSelector = <span class="keyword">@selector</span>(selector1);</div><div class="line">         SEL swizzledSelector = <span class="keyword">@selector</span>(selector2);</div><div class="line"></div><div class="line">         Method originalMethod = class_getInstanceMethod(<span class="keyword">class</span>, originalSelector);</div><div class="line">         Method swizzledMethod = class_getInstanceMethod(<span class="keyword">class</span>, swizzledSelector);</div><div class="line"></div><div class="line">         <span class="comment">// [1]</span></div><div class="line">         <span class="built_in">BOOL</span> didAddMethod = class_addMethod([<span class="keyword">self</span> <span class="keyword">class</span>], originalSelector,  method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (didAddMethod)</div><div class="line">        &#123;</div><div class="line">           <span class="comment">// [2]</span></div><div class="line">           class_replaceMethod(<span class="keyword">class</span>, swizzledSelector, method_getImplementation(originalMethod),  method_getTypeEncoding(originalMethod));</div><div class="line">        &#125; </div><div class="line">        <span class="keyword">else</span> </div><div class="line">        &#123;</div><div class="line">          <span class="comment">// [3]</span></div><div class="line">          method_exchangeImplementations(originalMethod, swizzledMethod);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        <p>今天在项目运行时出现EXC_BAD_ACESS错误，导致程序崩溃，在开发时遇到EXC_BAD_ACESS这种错误不容易找到原因，但通常是由于内存管理问题而引起的，查询其解决方法，有如下几种办法可以来帮助查询出错的地方。</p>
 <a id="more"></a>
-<p>Method Swizzle的实现如上所示，</p>
-<p>[1] 首先利用<code>class_addMethod</code>尝试往类中添加一个新的方法，方法SEL是原有的方法名，但是其实现函数入口为新的IMP，这是所需要交换的方法可能不是由当前类实现，而是由其父类实现并继承下来。</p>
-<p>[2] 如果在第[1]步添加成功，则利用<code>class_replaceMethod</code>来进行方法交换，也就是说将新的SEL对应原有的实现函数IMP，这样就完成了方法交换。</p>
-<p>[3] 如果在第[1]步没有成功，那么就说明这个所需要交换的方法已经在当前类中有了实现，所以直接利用<code>method_exchangeImplementations</code>来经行方法交换达到目的。</p>
-<blockquote>
-<p>值得注意的是，我们往往会在<code>+load</code>方法中，并利用<code>dispatch_once</code>实现Method Swizzle。由于method swizzling会影响到类的全局状态，因此要尽量避免在并发处理中出现竞争的情况。<code>+load</code>能保证在类的初始化过程中被加载，并保证这种改变应用级别的行为的一致性；<code>dispatch_once</code>能确保代码在多线程环境下只执行一次。</p>
-</blockquote>
+<h2 id="全局断点"><a href="#全局断点" class="headerlink" title="全局断点"></a>全局断点</h2><p>进入断点面板，选择底部的“+”，单击<code>Exception Breakpoint</code>，无需修改任何设置即可实现全局断点的添加</p>
+<p><img src="/EXC-BAD-ACESS-Debug.html/D5F9A994-0481-4438-AD0C-6CDDF5931D13.png" alt="全局断点"></p>
+<p>设置好后，每当程序有异常抛出的时候，调试器就会中止程序运行并指向有问题的代码行。</p>
+<h2 id="NSZombieEnabled"><a href="#NSZombieEnabled" class="headerlink" title="NSZombieEnabled"></a>NSZombieEnabled</h2><p>在Xcode中的菜单栏中选择 Product -&gt; Scheme -&gt; Edit Scheme，打开窗口，设置<code>MallocStackLogging</code>和<code>NSZombieEnabled</code>两个环境变量查看错误来源。</p>
+<p><img src="/EXC-BAD-ACESS-Debug.html/-屏幕快照 2015-05-25 21.50.39.jpg" alt="NSZombieEnabled"></p>
+<p>最后记得把环境变量NSZombieEnabled，MallocStackLogging删除或设置为NO，因为它们会使得内存不会被释放。</p>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSString</span>* hello = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"Hello world"</span>]; <span class="built_in">NSLog</span>(<span class="string">@"What you say is %@"</span>,hello); </div><div class="line">[hello release];</div></pre></td></tr></table></figure>
+<p>设置环境变量后重新运行项目至崩溃点，此时程序会打印额外的关于内存的日志：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">BadAccess[596:207] * -[CFString release]: message sent to deallocated instance 0x5f3ef80</div></pre></td></tr></table></figure>
+<p>这次可以看到问题是”message sent to dealloced object”了，但具体是哪个语句引起的还并不知道，于是需要在lldb上输入以下语句：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">shell malloc_history pid address </div><div class="line">shell malloc_history 596 0×5f3ef80</div></pre></td></tr></table></figure>
+<p>再次运行,程序crash时会出现大量的stack trace信息，根据这些信息就可以定位相关的地方了。</p>
 
       
       
@@ -201,13 +207,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/iOS-Runtime-Swizzle.html/">iOS Runtime 运行时笔记(三)</a></p>
+        <p><span>本文标题:</span><a href="/EXC-BAD-ACESS-Debug.html/">小技巧：EXC_BAD_ACESS的调试</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
-        <p><span>发布时间:</span>2016年10月22日 - 15时47分</p>
-        <p><span>最后更新:</span>2017年05月06日 - 18时31分</p>
+        <p><span>发布时间:</span>2016年12月06日 - 23时39分</p>
+        <p><span>最后更新:</span>2017年05月06日 - 23时53分</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/iOS-Runtime-Swizzle.html/" title="iOS Runtime 运行时笔记(三)">http://simonchen.club/iOS-Runtime-Swizzle.html/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/iOS-Runtime-Swizzle.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/EXC-BAD-ACESS-Debug.html/" title="小技巧：EXC_BAD_ACESS的调试">http://simonchen.club/EXC-BAD-ACESS-Debug.html/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/EXC-BAD-ACESS-Debug.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script src="/js/clipboard.min.js"></script>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
@@ -220,20 +226,15 @@
 
 <nav id="article-nav">
   
-    <a href="/multiSSHKey.html/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/SDWebImage-Souce-Code-Analysis.html/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          多GitHub账号的SSH配置
+          SDWebImage源码阅读
         
       </div>
     </a>
   
-  
-    <a href="/iOS-Rutime-Assotiated Object.html/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">iOS Runtime 运行时笔记(四)</div>
-      <strong class="article-nav-caption">></strong>
-    </a>
   
 </nav>
 
@@ -242,7 +243,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Method-Swizzle"><span class="toc-number">1.</span> <span class="toc-text">Method Swizzle</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#全局断点"><span class="toc-number">1.</span> <span class="toc-text">全局断点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NSZombieEnabled"><span class="toc-number">2.</span> <span class="toc-text">NSZombieEnabled</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#例子"><span class="toc-number">2.1.</span> <span class="toc-text">例子</span></a></li></ol></li></ol>
 </div>
 <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
 
@@ -299,15 +300,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/multiSSHKey.html/" title="上一篇: 多GitHub账号的SSH配置">
+            <a href="/SDWebImage-Souce-Code-Analysis.html/" title="上一篇: SDWebImage源码阅读">
                 <i class="fa fa-angle-left"></i>
             </a>
         
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
         
-            <a href="/iOS-Rutime-Assotiated Object.html/" title="下一篇: iOS Runtime 运行时笔记(四)">
-                <i class="fa fa-angle-right"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
     </div>
     <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/EXC-BAD-ACESS-Debug.html/">小技巧：EXC_BAD_ACESS的调试</a></li><li class="post-list-item"><a class="post-list-link" href="/SDWebImage-Souce-Code-Analysis.html/">SDWebImage源码阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/Runloop.html/">RunLoop</a></li><li class="post-list-item"><a class="post-list-link" href="/FBKVOController Source Code analysis.html/">FBKVOController源码阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/KVC and KVO.html/">KVC与KVO</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Rutime-Assotiated Object.html/">iOS Runtime 运行时笔记(四)</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Swizzle.html/">iOS Runtime 运行时笔记(三)</a></li><li class="post-list-item"><a class="post-list-link" href="/multiSSHKey.html/">多GitHub账号的SSH配置</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Method.html/">iOS Runtime 运行时笔记(二)</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Object.html/">iOS Runtime 运行时笔记(一)</a></li><li class="post-list-item"><a class="post-list-link" href="/sandbox.html/">iOS应用的沙盒目录结构</a></li><li class="post-list-item"><a class="post-list-link" href="/make-a-static-library.html/">静态库的制作过程</a></li></ul>
