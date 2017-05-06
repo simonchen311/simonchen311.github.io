@@ -291,10 +291,10 @@
 
 
   
-    <article id="post-Assotiated Object" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-iOS-Rutime-Assotiated Object" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/Assotiated Object.html/" class="article-date">
+      <a href="/iOS-Rutime-Assotiated Object.html/" class="article-date">
       <time datetime="2016-10-30T04:03:00.000Z" itemprop="datePublished">2016-10-30</time>
 </a>
     </div>
@@ -308,7 +308,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/Assotiated Object.html/">关联对象</a>
+      <a class="article-title" href="/iOS-Rutime-Assotiated Object.html/">iOS Runtime 运行时笔记(四)</a>
     </h1>
   
 
@@ -318,7 +318,8 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>关联对象是指两个对象关联起来，其中一个对象作为另一个对象的一部分；它允许开发者为任何对象附着键值数据。</p>
+              <p>对于Runtime，还有一个经常使用的到的，那就是关联对象了</p>
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>关联对象是指两个对象关联起来，其中一个对象作为另一个对象的一部分；它允许开发者为任何对象附着键值数据。</p>
 <p>可以给某对象关联许多其他对象，这些对象通过“键”来区分。存储对象值的时候，可以指明“存储策略”，用以维护相应的“内存管理语义”。设置关联对象用的键是个“不透明的指针”，即所指向的数据结构不局限于某种特定类型的指针。</p>
           
       
@@ -340,8 +341,80 @@
 
       
         <p class="article-more-link">
-          <a  href="/Assotiated Object.html/#more">More >></a>
+          <a  href="/iOS-Rutime-Assotiated Object.html/#more">More >></a>
         </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-iOS-Runtime-Swizzle" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/iOS-Runtime-Swizzle.html/" class="article-date">
+      <time datetime="2016-10-22T07:47:26.000Z" itemprop="datePublished">2016-10-22</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/iOS-Runtime-Swizzle.html/">iOS Runtime 运行时笔记(三)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p><br> </p>
+<h2 id="Method-Swizzle"><a href="#Method-Swizzle" class="headerlink" title="Method Swizzle"></a>Method Swizzle</h2><p>Runtime下的方法都是由SEL和IMP组成的结构体，两者之间构成了一种映射关系，而Method Swizzle是一种可以在运行时动态改变方法的IMP的技术，改变了两者的映射关系。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">+ (<span class="keyword">void</span>)load </div><div class="line">&#123;</div><div class="line">    <span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken;</div><div class="line">    <span class="built_in">dispatch_once</span>(&amp;onceToken, ^&#123;</div><div class="line"></div><div class="line">         SEL originalSelector = <span class="keyword">@selector</span>(selector1);</div><div class="line">         SEL swizzledSelector = <span class="keyword">@selector</span>(selector2);</div><div class="line"></div><div class="line">         Method originalMethod = class_getInstanceMethod(<span class="keyword">class</span>, originalSelector);</div><div class="line">         Method swizzledMethod = class_getInstanceMethod(<span class="keyword">class</span>, swizzledSelector);</div><div class="line"></div><div class="line">         <span class="comment">// [1]</span></div><div class="line">         <span class="built_in">BOOL</span> didAddMethod = class_addMethod([<span class="keyword">self</span> <span class="keyword">class</span>], originalSelector,  method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (didAddMethod)</div><div class="line">        &#123;</div><div class="line">           <span class="comment">// [2]</span></div><div class="line">           class_replaceMethod(<span class="keyword">class</span>, swizzledSelector, method_getImplementation(originalMethod),  method_getTypeEncoding(originalMethod));</div><div class="line">        &#125; </div><div class="line">        <span class="keyword">else</span> </div><div class="line">        &#123;</div><div class="line">          <span class="comment">// [3]</span></div><div class="line">          method_exchangeImplementations(originalMethod, swizzledMethod);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Method Swizzle的实现如上所示，</p>
+<p>[1] 首先利用<code>class_addMethod</code>尝试往类中添加一个新的方法，方法SEL是原有的方法名，但是其实现函数入口为新的IMP，这是所需要交换的方法可能不是由当前类实现，而是由其父类实现并继承下来。</p>
+<p>[2] 如果在第[1]步添加成功，则利用<code>class_replaceMethod</code>来进行方法交换，也就是说将新的SEL对应原有的实现函数IMP，这样就完成了方法交换。</p>
+<p>[3] 如果在第[1]步没有成功，那么就说明这个所需要交换的方法已经在当前类中有了实现，所以直接利用<code>method_exchangeImplementations</code>来经行方法交换达到目的。</p>
+<blockquote>
+<p>值得注意的是，我们往往会在<code>+load</code>方法中，并利用<code>dispatch_once</code>实现Method Swizzle。由于method swizzling会影响到类的全局状态，因此要尽量避免在并发处理中出现竞争的情况。<code>+load</code>能保证在类的初始化过程中被加载，并保证这种改变应用级别的行为的一致性；<code>dispatch_once</code>能确保代码在多线程环境下只执行一次。</p>
+</blockquote>
+
+      
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/programming/">开发</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/note/">note</a></li></ul>
+    </div>
+
       
       <div class="clearfix"></div>
     </div>
@@ -549,84 +622,6 @@
       
         <p class="article-more-link">
           <a  href="/iOS-Runtime-Object.html/#more">More >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-sandbox" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/sandbox.html/" class="article-date">
-      <time datetime="2016-09-24T03:09:00.000Z" itemprop="datePublished">2016-09-24</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/sandbox.html/">iOS应用的沙盒目录结构</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <p><br></p>
-<h2 id="总览"><a href="#总览" class="headerlink" title="总览"></a>总览</h2><p>出于安全，iOS系统的沙盒机制规定每个应用都只能访问当前沙盒目录下的文件（也有例外，比如通讯录可以授权给其他应用访问）。</p>
-<blockquote>
-<p>lldb中敲入<code>NSHomeDirectory()</code>可以显示当前沙盒目录路径</p>
-</blockquote>
-<p>每个沙盒目录包括下面的结构目录：</p>
-<ul>
-<li>.app</li>
-<li>Documents</li>
-<li>Library</li>
-<li>tmp</li>
-</ul>
-          
-      
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/programming/">开发</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a  href="/sandbox.html/#more">More >></a>
         </p>
       
       <div class="clearfix"></div>
