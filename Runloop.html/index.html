@@ -3,19 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Runloop | Simon’s Home</title>
+  <title>RunLoop | Simon’s Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="以前对Runloop的认知一直是停留在非常模糊的阶段，只是知道其与线程相关，维持线程的运转不退出，趁现在任务不紧，花点时间研究下Runloop的源码，看其作用以及是如何实现的。">
+  <meta name="description" content="以前对RunLoop的认知一直是停留在非常模糊的阶段，只是知道其与线程相关，维持线程的运转不退出，趁现在任务不紧，花点时间研究下RunLoop的源码，看其作用以及是如何实现的。  概念一个线程一般只执行完一个任务后就退出，但是RunLoop能执行这么一种机制：让线程可以随时处理事件且处于不退出的状态，处理完成后线程处于休眠状态，当有事件的时候会被唤醒。 RunLoop本身是不能够直接来创建的，除了">
 <meta name="keywords" content="iOS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Runloop">
+<meta property="og:title" content="RunLoop">
 <meta property="og:url" content="http://simonchen.club/Runloop.html/index.html">
 <meta property="og:site_name" content="Simon’s Home">
-<meta property="og:description" content="以前对Runloop的认知一直是停留在非常模糊的阶段，只是知道其与线程相关，维持线程的运转不退出，趁现在任务不紧，花点时间研究下Runloop的源码，看其作用以及是如何实现的。">
-<meta property="og:updated_time" content="2017-05-06T08:35:59.000Z">
+<meta property="og:description" content="以前对RunLoop的认知一直是停留在非常模糊的阶段，只是知道其与线程相关，维持线程的运转不退出，趁现在任务不紧，花点时间研究下RunLoop的源码，看其作用以及是如何实现的。  概念一个线程一般只执行完一个任务后就退出，但是RunLoop能执行这么一种机制：让线程可以随时处理事件且处于不退出的状态，处理完成后线程处于休眠状态，当有事件的时候会被唤醒。 RunLoop本身是不能够直接来创建的，除了">
+<meta property="og:updated_time" content="2017-05-06T09:18:07.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Runloop">
-<meta name="twitter:description" content="以前对Runloop的认知一直是停留在非常模糊的阶段，只是知道其与线程相关，维持线程的运转不退出，趁现在任务不紧，花点时间研究下Runloop的源码，看其作用以及是如何实现的。">
+<meta name="twitter:title" content="RunLoop">
+<meta name="twitter:description" content="以前对RunLoop的认知一直是停留在非常模糊的阶段，只是知道其与线程相关，维持线程的运转不退出，趁现在任务不紧，花点时间研究下RunLoop的源码，看其作用以及是如何实现的。  概念一个线程一般只执行完一个任务后就退出，但是RunLoop能执行这么一种机制：让线程可以随时处理事件且处于不退出的状态，处理完成后线程处于休眠状态，当有事件的时候会被唤醒。 RunLoop本身是不能够直接来创建的，除了">
   
     <link rel="alternative" href="/atom.xml" title="Simon’s Home" type="application/atom+xml">
   
@@ -156,7 +156,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Runloop
+      RunLoop
     </h1>
   
 
@@ -181,10 +181,24 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>以前对Runloop的认知一直是停留在非常模糊的阶段，只是知道其与线程相关，维持线程的运转不退出，趁现在任务不紧，花点时间研究下Runloop的源码，看其作用以及是如何实现的。</p>
+        <p>以前对RunLoop的认知一直是停留在非常模糊的阶段，只是知道其与线程相关，维持线程的运转不退出，趁现在任务不紧，花点时间研究下RunLoop的源码，看其作用以及是如何实现的。</p>
+<p><br></p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>一个线程一般只执行完一个任务后就退出，但是RunLoop能执行这么一种机制：让线程可以随时处理事件且处于不退出的状态，处理完成后线程处于休眠状态，当有事件的时候会被唤醒。</p>
+<p>RunLoop本身是不能够直接来创建的，除了主线程的RunLoop，其他线程默认是不开启的，只有在获取当前线程的RunLoop才会被创建，如果不主动获取，那么它一直都不会有。可以通过下面两套机制来获取当前线程的RunLoop，其中NSRunLoop实际上是对CFRunLoop的封装。</p>
+<p><br></p>
+<h3 id="NSRunLoop"><a href="#NSRunLoop" class="headerlink" title="NSRunLoop"></a>NSRunLoop</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">NSRunLoop</span> currentRunLoop]; <span class="comment">// 获得当前线程的RunLoop对象</span></div><div class="line">[<span class="built_in">NSRunLoop</span> mainRunLoop]; <span class="comment">// 获得主线程的RunLoop对象</span></div></pre></td></tr></table></figure>
+<p><br></p>
+<h3 id="CFRunLoopRef"><a href="#CFRunLoopRef" class="headerlink" title="CFRunLoopRef"></a>CFRunLoopRef</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">CFRunLoopGetCurrent</span>(); <span class="comment">// 获得当前线程的RunLoop对象</span></div><div class="line"><span class="built_in">CFRunLoopGetMain</span>(); <span class="comment">// 获得主线程的RunLoop对象</span></div></pre></td></tr></table></figure>
 <a id="more"></a>
 <p><br></p>
-<h2 id="Method-Swizzle"><a href="#Method-Swizzle" class="headerlink" title="Method Swizzle"></a>Method Swizzle</h2>
+<h2 id="RunLoopMode"><a href="#RunLoopMode" class="headerlink" title="RunLoopMode"></a>RunLoopMode</h2><p>一个RunLoop内部包含了多个RunLoopMode，RunLoop同一时间只能且必须在一种特定的Mode下运行</p>
+<ul>
+<li>NSDefaultRunLoopMode</li>
+<li>UITrackingRunLoopMode</li>
+<li>UIInitializetionRunLoopMode</li>
+<li>NSRunLoopCommonModes</li>
+</ul>
+
       
       
     </div>
@@ -193,12 +207,12 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/Runloop.html/">Runloop</a></p>
+        <p><span>本文标题:</span><a href="/Runloop.html/">RunLoop</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
         <p><span>发布时间:</span>2016年11月21日 - 16时31分</p>
-        <p><span>最后更新:</span>2017年05月06日 - 16时35分</p>
+        <p><span>最后更新:</span>2017年05月06日 - 17时18分</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/Runloop.html/" title="Runloop">http://simonchen.club/Runloop.html/</a>
+            <span>原始链接:</span><a class="post-url" href="/Runloop.html/" title="RunLoop">http://simonchen.club/Runloop.html/</a>
             <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/Runloop.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script src="/js/clipboard.min.js"></script>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
@@ -229,7 +243,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Method-Swizzle"><span class="toc-number">1.</span> <span class="toc-text">Method Swizzle</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概念"><span class="toc-number">1.</span> <span class="toc-text">概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NSRunLoop"><span class="toc-number">1.1.</span> <span class="toc-text">NSRunLoop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CFRunLoopRef"><span class="toc-number">1.2.</span> <span class="toc-text">CFRunLoopRef</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RunLoopMode"><span class="toc-number">2.</span> <span class="toc-text">RunLoopMode</span></a></li></ol>
 </div>
 <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
 
@@ -295,7 +309,7 @@
             <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
     </div>
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/Runloop.html/">Runloop</a></li><li class="post-list-item"><a class="post-list-link" href="/FBKVOController Source Code analysis.html/">FBKVOController源码阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/KVC and KVO.html/">KVC与KVO</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Rutime-Assotiated Object.html/">iOS Runtime 运行时笔记(四)</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Swizzle.html/">iOS Runtime 运行时笔记(三)</a></li><li class="post-list-item"><a class="post-list-link" href="/multiSSHKey.html/">多GitHub账号的SSH配置</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Method.html/">iOS Runtime 运行时笔记(二)</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Object.html/">iOS Runtime 运行时笔记(一)</a></li><li class="post-list-item"><a class="post-list-link" href="/sandbox.html/">iOS应用的沙盒目录结构</a></li><li class="post-list-item"><a class="post-list-link" href="/make-a-static-library.html/">静态库的制作过程</a></li></ul>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/Runloop.html/">RunLoop</a></li><li class="post-list-item"><a class="post-list-link" href="/FBKVOController Source Code analysis.html/">FBKVOController源码阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/KVC and KVO.html/">KVC与KVO</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Rutime-Assotiated Object.html/">iOS Runtime 运行时笔记(四)</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Swizzle.html/">iOS Runtime 运行时笔记(三)</a></li><li class="post-list-item"><a class="post-list-link" href="/multiSSHKey.html/">多GitHub账号的SSH配置</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Method.html/">iOS Runtime 运行时笔记(二)</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Object.html/">iOS Runtime 运行时笔记(一)</a></li><li class="post-list-item"><a class="post-list-link" href="/sandbox.html/">iOS应用的沙盒目录结构</a></li><li class="post-list-item"><a class="post-list-link" href="/make-a-static-library.html/">静态库的制作过程</a></li></ul>
     <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
     <script>
         $(".post-list").addClass("toc-article");
