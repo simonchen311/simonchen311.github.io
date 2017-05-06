@@ -5,14 +5,17 @@
   
   <title>SDWebImage源码阅读 | Simon’s Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="keywords" content="iOS,Source Code">
+  <meta name="description" content="SDWebImage这套开源库可以说是开发必备品了，于是写这篇文章对其内部主要源码的实现好好理顺一下。 入口我们在使用SDWebImage时，经常是利用它提供的接口直接在UIImageView或者UIButton上设置URL来下载图片并且显示出来 1234567891011121314151617- (void)sd_setImageWithURL:(nullable NSURL *)url pl">
+<meta name="keywords" content="iOS,Source Code">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SDWebImage源码阅读">
 <meta property="og:url" content="http://simonchen.club/SDWebImage-Souce-Code-Analysis.html/index.html">
 <meta property="og:site_name" content="Simon’s Home">
-<meta property="og:updated_time" content="2017-05-06T10:35:55.000Z">
+<meta property="og:description" content="SDWebImage这套开源库可以说是开发必备品了，于是写这篇文章对其内部主要源码的实现好好理顺一下。 入口我们在使用SDWebImage时，经常是利用它提供的接口直接在UIImageView或者UIButton上设置URL来下载图片并且显示出来 1234567891011121314151617- (void)sd_setImageWithURL:(nullable NSURL *)url pl">
+<meta property="og:updated_time" content="2017-05-06T10:49:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SDWebImage源码阅读">
+<meta name="twitter:description" content="SDWebImage这套开源库可以说是开发必备品了，于是写这篇文章对其内部主要源码的实现好好理顺一下。 入口我们在使用SDWebImage时，经常是利用它提供的接口直接在UIImageView或者UIButton上设置URL来下载图片并且显示出来 1234567891011121314151617- (void)sd_setImageWithURL:(nullable NSURL *)url pl">
   
     <link rel="alternative" href="/atom.xml" title="Simon’s Home" type="application/atom+xml">
   
@@ -178,7 +181,10 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        
+        <p>SDWebImage这套开源库可以说是开发必备品了，于是写这篇文章对其内部主要源码的实现好好理顺一下。</p>
+<h2 id="入口"><a href="#入口" class="headerlink" title="入口"></a>入口</h2><p>我们在使用SDWebImage时，经常是利用它提供的接口直接在UIImageView或者UIButton上设置URL来下载图片并且显示出来</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)sd_setImageWithURL:(<span class="keyword">nullable</span> <span class="built_in">NSURL</span> *)url placeholderImage:(<span class="keyword">nullable</span> <span class="built_in">UIImage</span> *)placeholder options:(SDWebImageOptions)options completed:(<span class="keyword">nullable</span> SDExternalCompletionBlock)completedBlock &#123;</div><div class="line">    [<span class="keyword">self</span> sd_setImageWithURL:url placeholderImage:placeholder options:options progress:<span class="literal">nil</span> completed:completedBlock];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)sd_setImageWithURL:(<span class="keyword">nullable</span> <span class="built_in">NSURL</span> *)url</div><div class="line">          placeholderImage:(<span class="keyword">nullable</span> <span class="built_in">UIImage</span> *)placeholder</div><div class="line">                   options:(SDWebImageOptions)options</div><div class="line">                  progress:(<span class="keyword">nullable</span> SDWebImageDownloaderProgressBlock)progressBlock</div><div class="line">                 completed:(<span class="keyword">nullable</span> SDExternalCompletionBlock)completedBlock &#123;</div><div class="line">    [<span class="keyword">self</span> sd_internalSetImageWithURL:url</div><div class="line">                    placeholderImage:placeholder</div><div class="line">                             options:options</div><div class="line">                        operationKey:<span class="literal">nil</span></div><div class="line">                       setImageBlock:<span class="literal">nil</span></div><div class="line">                            progress:progressBlock</div><div class="line">                           completed:completedBlock];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
       
       
     </div>
@@ -190,7 +196,7 @@
         <p><span>本文标题:</span><a href="/SDWebImage-Souce-Code-Analysis.html/">SDWebImage源码阅读</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
         <p><span>发布时间:</span>2016年12月05日 - 18时34分</p>
-        <p><span>最后更新:</span>2017年05月06日 - 18时35分</p>
+        <p><span>最后更新:</span>2017年05月06日 - 18时49分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/SDWebImage-Souce-Code-Analysis.html/" title="SDWebImage源码阅读">http://simonchen.club/SDWebImage-Souce-Code-Analysis.html/</a>
             <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/SDWebImage-Souce-Code-Analysis.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
@@ -223,7 +229,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#入口"><span class="toc-number">1.</span> <span class="toc-text">入口</span></a></li></ol>
 </div>
 <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
 
