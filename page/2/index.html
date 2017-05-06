@@ -139,6 +139,75 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-iOS-Runtime-Swizzle" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/iOS-Runtime-Swizzle.html/" class="article-date">
+      <time datetime="2016-10-22T07:47:26.000Z" itemprop="datePublished">2016-10-22</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/iOS-Runtime-Swizzle.html/">iOS Runtime 运行时笔记(三)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <p><br> </p>
+<h2 id="Method-Swizzle"><a href="#Method-Swizzle" class="headerlink" title="Method Swizzle"></a>Method Swizzle</h2><p>Runtime下的方法都是由SEL和IMP组成的结构体，两者之间构成了一种映射关系，而Method Swizzle是一种可以在运行时动态改变方法的IMP的技术，改变了两者的映射关系。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">+ (<span class="keyword">void</span>)load </div><div class="line">&#123;</div><div class="line">    <span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken;</div><div class="line">    <span class="built_in">dispatch_once</span>(&amp;onceToken, ^&#123;</div><div class="line"></div><div class="line">         SEL originalSelector = <span class="keyword">@selector</span>(selector1);</div><div class="line">         SEL swizzledSelector = <span class="keyword">@selector</span>(selector2);</div><div class="line"></div><div class="line">         Method originalMethod = class_getInstanceMethod(<span class="keyword">class</span>, originalSelector);</div><div class="line">         Method swizzledMethod = class_getInstanceMethod(<span class="keyword">class</span>, swizzledSelector);</div><div class="line"></div><div class="line">         <span class="comment">// [1]</span></div><div class="line">         <span class="built_in">BOOL</span> didAddMethod = class_addMethod([<span class="keyword">self</span> <span class="keyword">class</span>], originalSelector,  method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (didAddMethod)</div><div class="line">        &#123;</div><div class="line">           <span class="comment">// [2]</span></div><div class="line">           class_replaceMethod(<span class="keyword">class</span>, swizzledSelector, method_getImplementation(originalMethod),  method_getTypeEncoding(originalMethod));</div><div class="line">        &#125; </div><div class="line">        <span class="keyword">else</span> </div><div class="line">        &#123;</div><div class="line">          <span class="comment">// [3]</span></div><div class="line">          method_exchangeImplementations(originalMethod, swizzledMethod);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+          
+      
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/programming/">开发</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mechanism/">Mechanism</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Runtime/">Runtime</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a  href="/iOS-Runtime-Swizzle.html/#more">More >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-multiSSHKey" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
