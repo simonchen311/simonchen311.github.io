@@ -192,6 +192,7 @@
 </blockquote>
 <p>之后在真机上运行App，并在iTunes上查看，就可以共享文件给App或者导出App中的文件了。</p>
 <p><img src="/programming-jottings-character-1.html/-Application supports iTunes file sharing.png" alt="sharing"></p>
+<a id="more"></a>
 <h2 id="UITextView文字换行"><a href="#UITextView文字换行" class="headerlink" title="UITextView文字换行"></a>UITextView文字换行</h2><p>UITextView默认的是按word来换行，和UILabel一样，这时候我们需要更改其lineBreakMode属性值，来更改其显示效果。但是UITextView直接设置lineBreakMode值可能更改没有效果。</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//没有效果</span></div><div class="line">_titleTextView.textContainer.lineBreakMode = <span class="built_in">NSLineBreakByCharWrapping</span>;</div></pre></td></tr></table></figure>
 <p><img src="/programming-jottings-character-1.html/textView1.png" alt="2"></p>

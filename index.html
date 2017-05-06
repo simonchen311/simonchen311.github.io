@@ -166,27 +166,14 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h2 id="给App增加iTunes文件共享功能"><a href="#给App增加iTunes文件共享功能" class="headerlink" title="给App增加iTunes文件共享功能"></a>给App增加iTunes文件共享功能</h2><p>从升级到IOS8.3后，发现使用iTools等第三方工具，已经不能使用其打开应用文档的功能进行文件导入/导出了，查询了网上，发现是IOS8.3版本以后已经关闭了对应用文件的访问权限。</p>
+              <h2 id="给App增加iTunes文件共享功能"><a href="#给App增加iTunes文件共享功能" class="headerlink" title="给App增加iTunes文件共享功能"></a>给App增加iTunes文件共享功能</h2><p>从升级到IOS8.3后，发现使用iTools等第三方工具，已经不能使用其打开应用文档的功能进行文件导入/导出了，查询了网上，发现是IOS8.3版本以后已经关闭了对应用文件的访问权限。</p>
 <p>可是手头的项目要测试，需要提取出应用中的文档，于是只能使用iTunes的文件共享功能来提取了，这需要进行一步简单的设置：</p>
 <blockquote>
 <p>在Xcode中，在plist配置文件中增加“Application supports iTunes file sharing”，并将这一项的值设置为YES即可。</p>
 </blockquote>
 <p>之后在真机上运行App，并在iTunes上查看，就可以共享文件给App或者导出App中的文件了。</p>
 <p><img src="/programming-jottings-character-1.html/-Application supports iTunes file sharing.png" alt="sharing"></p>
-<h2 id="UITextView文字换行"><a href="#UITextView文字换行" class="headerlink" title="UITextView文字换行"></a>UITextView文字换行</h2><p>UITextView默认的是按word来换行，和UILabel一样，这时候我们需要更改其lineBreakMode属性值，来更改其显示效果。但是UITextView直接设置lineBreakMode值可能更改没有效果。</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//没有效果</span></div><div class="line">_titleTextView.textContainer.lineBreakMode = <span class="built_in">NSLineBreakByCharWrapping</span>;</div></pre></td></tr></table></figure>
-<p><img src="/programming-jottings-character-1.html/textView1.png" alt="2"></p>
-<p>需要按照如下方式进行修改</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSMutableParagraphStyle</span>* linebreak = [[<span class="built_in">NSMutableParagraphStyle</span> alloc] init];</div><div class="line">linebreak.lineBreakMode = <span class="built_in">NSLineBreakByCharWrapping</span>;</div><div class="line"></div><div class="line"><span class="built_in">NSDictionary</span> *attributedDictionary = @&#123;<span class="built_in">NSParagraphStyleAttributeName</span> : linebreak,</div><div class="line"><span class="built_in">NSFontAttributeName</span> : SemiboldSystemFont(<span class="number">19</span>),</div><div class="line"><span class="built_in">NSForegroundColorAttributeName</span>: [<span class="built_in">UIColor</span> colorFromHexCode:<span class="string">@"333"</span>]&#125;;</div><div class="line"></div><div class="line"><span class="built_in">NSString</span> *customTitle = (title.length == <span class="number">0</span>) ? [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"&lt;%@&gt;"</span>,Localized(<span class="string">@"NoSubject"</span>)]: title;</div><div class="line"><span class="built_in">NSMutableAttributedString</span> *attributedTitle = [[<span class="built_in">NSMutableAttributedString</span> alloc] initWithString:customTitle attributes:attributedDictionary];</div><div class="line"></div><div class="line">_titleTextView.attributedText = attributedTitle;</div></pre></td></tr></table></figure>
-<p><img src="/programming-jottings-character-1.html/textView2.png" alt="3"></p>
-<h2 id="全局修改BackBarButtonItem"><a href="#全局修改BackBarButtonItem" class="headerlink" title="全局修改BackBarButtonItem"></a>全局修改BackBarButtonItem</h2><p>iOS默认导航栏的返回按钮为箭头+文字显示，但是项目中要求不现实文字，只需要显示箭头，如果在父类控制器中进行修改需要按照如下的代码编写</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">self</span>.navigationItem.backBarButtonItem  = [[<span class="built_in">UIBarButtonItem</span> alloc] initWithTitle:<span class="string">@""</span> style:<span class="built_in">UIBarButtonItemStyleBordered</span> target:<span class="literal">nil</span> action:<span class="literal">NULL</span>];</div></pre></td></tr></table></figure>
-<p>但是这么做要求对所有的视图控制器进行修改，直接做么做会改到想哭……</p>
-<blockquote>
-<p>vc的navigationItem.backBarButtonItem默认是nil的，而且只有在nil的时候，系统才会把vc的title当作后退文字来使用</p>
-</blockquote>
-<p>解决方法是通过<code>Method Swizzle</code>轻松解决：</p>
-
+          
       
       
     </div>
@@ -204,6 +191,10 @@
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Skill/">Skill</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
     </div>
 
+      
+        <p class="article-more-link">
+          <a  href="/programming-jottings-character-1.html/#more">More >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
