@@ -17,7 +17,7 @@
 <meta property="og:image" content="http://simonchen.club/make-a-static-library.html/3.jpg">
 <meta property="og:image" content="http://simonchen.club/make-a-static-library.html/4.jpg">
 <meta property="og:image" content="http://simonchen.club/make-a-static-library.html/5.jpg">
-<meta property="og:updated_time" content="2017-05-06T02:45:17.000Z">
+<meta property="og:updated_time" content="2017-05-06T02:47:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="静态库的制作过程">
 <meta name="twitter:description" content="起因今天由于项目的需要，需要制作一份iOS静态库，所以在此记录下其制作过程。">
@@ -207,8 +207,10 @@
 <p><br></p>
 <h3 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h3><p>关闭窗口，command+B重新编译程序，可以发现Products中的libmyFramework.a由红色变成黑色，右键点击库，选择Show in Finder就能找到.a静态库了，在Release-iphoneos文件夹下的.a库只能在真机上运行，而Release-iphonesimulator文件夹下的.a库只能在模拟器上运行，将其和头文件一起拷贝出来，就可以给其他工程用了，这就意味着一份静态库制作好了！</p>
 <p><img src="/make-a-static-library.html/4.jpg" alt="描述"></p>
+<p><br></p>
 <h3 id="合并"><a href="#合并" class="headerlink" title="合并"></a>合并</h3><p>现在需要将真机和模拟器下的.a文件合并成一个文件，这样就可以制作在真机和模拟器上都可以使用的库了。打开终端，输入以下指令就可以合并两个静态库了：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lipo -create 路径1/yourlib.a  路径2/yourlib.a -output 路径3/yourlib.a</div></pre></td></tr></table></figure>
+<p><br></p>
 <h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>这次制作库是为了考证，对于两份完全相同的库，调用其中的函数到底是调用哪个库的，经过测试找出了结论：在一个工程中引用了两份完全相同的库（存储在不同的文件夹下），调用其中的函数，是根据Library Search Paths的顺序来调用的，后面相同的库中的函数则不会再去调用。如下图所示，调用相同库中的函数，只会调用在路径$(PROJECT_DIR)/framework下的库中的函数，另一份库则不会去调用。</p>
 <p><img src="/make-a-static-library.html/5.jpg" alt="描述"></p>
 
@@ -223,7 +225,7 @@
         <p><span>本文标题:</span><a href="/make-a-static-library.html/">静态库的制作过程</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
         <p><span>发布时间:</span>2016年09月12日 - 10时32分</p>
-        <p><span>最后更新:</span>2017年05月06日 - 10时45分</p>
+        <p><span>最后更新:</span>2017年05月06日 - 10时47分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/make-a-static-library.html/" title="静态库的制作过程">http://simonchen.club/make-a-static-library.html/</a>
             <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/make-a-static-library.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
