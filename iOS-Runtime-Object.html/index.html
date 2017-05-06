@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>iOS Runtime 运行时笔记(一) | Simon’s Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言Objective-C（下简称 OC）是一门动态性语言， 它把尽可能多的决策从编译、链接时期推迟到运行时期。这意味着 OC 不仅需要编译器，还需要一个执行编译代码的运行时系统（runtime system）。Runtime system 对于 OC 而言就像一个操作系统，让它能正常工作，实际上它是一个基本上用C和汇编写的库，这个库使得C语言有了面向对象的能力。  这次我看的是objc4-706">
+<meta name="keywords" content="iOS,notes">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS Runtime 运行时笔记(一)">
+<meta property="og:url" content="http://simonchen.club/iOS-Runtime-Object.html/index.html">
+<meta property="og:site_name" content="Simon’s Home">
+<meta property="og:description" content="前言Objective-C（下简称 OC）是一门动态性语言， 它把尽可能多的决策从编译、链接时期推迟到运行时期。这意味着 OC 不仅需要编译器，还需要一个执行编译代码的运行时系统（runtime system）。Runtime system 对于 OC 而言就像一个操作系统，让它能正常工作，实际上它是一个基本上用C和汇编写的库，这个库使得C语言有了面向对象的能力。  这次我看的是objc4-706">
+<meta property="og:updated_time" content="2017-05-06T06:37:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS Runtime 运行时笔记(一)">
+<meta name="twitter:description" content="前言Objective-C（下简称 OC）是一门动态性语言， 它把尽可能多的决策从编译、链接时期推迟到运行时期。这意味着 OC 不仅需要编译器，还需要一个执行编译代码的运行时系统（runtime system）。Runtime system 对于 OC 而言就像一个操作系统，让它能正常工作，实际上它是一个基本上用C和汇编写的库，这个库使得C语言有了面向对象的能力。  这次我看的是objc4-706">
+  
+    <link rel="alternative" href="/atom.xml" title="Simon’s Home" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/head.jpg">
+  
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+  <!-- 加载特效 -->
+    <script src="/js/pace.js"></script>
+    <link href="/css/pace/pace-theme-flash.css" rel="stylesheet" />
+  <script>
+      var yiliaConfig = {
+          rootUrl: '/',
+          fancybox: true,
+          animate: false,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false
+      }
+  </script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            
+            <img src="/img/head.jpg" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+            
+        </a>
+
+        <hgroup>
+          <h1 class="header-author"><a href="/" title="Hi Mate">Simon Chen</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">凡配称为理想的事物，就必带有善美的本质</p>
+        
+        
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">首页</a></li>
+                        
+                            <li><a href="/archives">归档</a></li>
+                        
+                            <li><a href="/tags">类别</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                
+                
+
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="Me">Simon Chen</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                
+                    <img src="/img/head.jpg" class="js-avatar" style="width: 100%; height: 100%; opacity: 1;">
+                
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="Me">Simon Chen</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">凡配称为理想的事物，就必带有善美的本质</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">首页</a></li>
+                
+                    <li><a href="/archives">归档</a></li>
+                
+                    <li><a href="/tags">类别</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                </div>
+            </nav>
+        </header>                
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-iOS-Runtime-Object" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/iOS-Runtime-Object.html/" class="article-date">
+      <time datetime="2016-09-24T03:09:00.000Z" itemprop="datePublished">2016-09-24</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      iOS Runtime 运行时笔记(一)
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/programming/">开发</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/notes/">notes</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Objective-C（下简称 OC）是一门动态性语言， 它把尽可能多的决策从编译、链接时期推迟到运行时期。这意味着 OC 不仅需要编译器，还需要一个执行编译代码的运行时系统（runtime system）。Runtime system 对于 OC 而言就像一个操作系统，让它能正常工作，实际上它是一个基本上用C和汇编写的库，这个库使得C语言有了面向对象的能力。</p>
+<blockquote>
+<p>这次我看的是<code>objc4-706</code>版本，下面的源码也是基于这个版本来的。</p>
+</blockquote>
+<a id="more"></a>
+<p><br></p>
+<h2 id="Object"><a href="#Object" class="headerlink" title="Object"></a>Object</h2><p>Objective-C里的对象实际上是一个指向<code>objc_object</code>结构体的指针，从源码中可以看出，该结构体下只有一个成员，其源码如下：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/// Represents an instance of a class.</span></div><div class="line"><span class="keyword">struct</span> objc_object &#123;</div><div class="line">    Class isa  OBJC_ISA_AVAILABILITY;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">/// A pointer to an instance of a class.</span></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> objc_object *<span class="keyword">id</span>;</div></pre></td></tr></table></figure>
+<p><code>isa</code>：对象里的isa指针指向的是对象所属的类，而在Runtime下类是什么，这个在后面会有分析。</p>
+<p><code>id</code>：同时，可以在源码中看到id对象的定义，其实质上同样是一个指向objc_object结构体的指针，通过isa指针类获取到其所属的类对象。</p>
+<p><br></p>
+<h3 id="相关引申"><a href="#相关引申" class="headerlink" title="相关引申"></a>相关引申</h3><p>我们可以利用如下两个写法来获取到当前对象所属的类：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// [1] </span></div><div class="line">Class statedClass = <span class="keyword">self</span>.class;</div><div class="line">    </div><div class="line"><span class="comment">// [2]</span></div><div class="line">Class baseClass = object_getClass(<span class="keyword">self</span>);</div></pre></td></tr></table></figure>
+<p>[1] 如果说当前self是一个实例对象，那么statedClass就是实例对象的isa指针指向的类，如果self本身是一个类对象，那么他直接就是返回自身了，这点从源码中就可以知道：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">+ (Class)<span class="keyword">class</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (Class)<span class="keyword">class</span> &#123;</div><div class="line">    <span class="keyword">return</span> object_getClass(<span class="keyword">self</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>[2] Runtime下的方法<code>object_getClass</code>则会顺着isa的指向链找到对应的类，这个类可以是类或者元类</p>
+<p>知道了这2点就不难理解为什么有时候通过上面两个方法获取类为什么会不一样了。</p>
+<p><br></p>
+<h2 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h2><p>Objective-C里的类实际上也是一个对象，它是一个指向<code>objc_class</code>结构体的指针，其定义如下：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> objc_class *Class;</div><div class="line"></div><div class="line"><span class="comment">///类结构体</span></div><div class="line"><span class="keyword">struct</span> objc_class &#123;</div><div class="line">    </div><div class="line">    <span class="comment">//因为类也是一个对象，所以它有isa的指针，指向的是其元类metaClass</span></div><div class="line">    Class isa  OBJC_ISA_AVAILABILITY;</div><div class="line"></div><div class="line"><span class="meta">#if !__OBJC2__</span></div><div class="line">    </div><div class="line">    <span class="comment">//父类,如果是继承连的顶层，那么这个指针的NULL</span></div><div class="line">    Class super_class                                        OBJC2_UNAVAILABLE;</div><div class="line">    </div><div class="line">    <span class="comment">//类名</span></div><div class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *name                                         OBJC2_UNAVAILABLE;</div><div class="line">    </div><div class="line">    <span class="comment">//类版本，默认为0</span></div><div class="line">    <span class="comment">//这对于对象的序列化非常有用，它可是让我们识别出不同类定义版本中实例变量布局的改变</span></div><div class="line">    <span class="keyword">long</span> version                                             OBJC2_UNAVAILABLE;</div><div class="line">    </div><div class="line">    <span class="comment">//类信息，提供运行期使用的一些位标识</span></div><div class="line">    <span class="keyword">long</span> info                                                OBJC2_UNAVAILABLE;</div><div class="line">    </div><div class="line">    <span class="comment">//该类的实体变量的大小</span></div><div class="line">    <span class="keyword">long</span> instance_size                                       OBJC2_UNAVAILABLE;</div><div class="line">    </div><div class="line">    <span class="comment">//类实例变量（成员变量）列表</span></div><div class="line">    <span class="keyword">struct</span> objc_ivar_list *ivars                             OBJC2_UNAVAILABLE;</div><div class="line">    </div><div class="line">    <span class="comment">//类的实体方法链表</span></div><div class="line">    <span class="keyword">struct</span> objc_method_list **methodLists                    OBJC2_UNAVAILABLE;</div><div class="line">    </div><div class="line">    <span class="comment">//缓存的方法</span></div><div class="line">    <span class="keyword">struct</span> objc_cache *cache                                 OBJC2_UNAVAILABLE;</div><div class="line">    </div><div class="line">    <span class="comment">//协议列表</span></div><div class="line">    <span class="keyword">struct</span> objc_protocol_list *protocols                     OBJC2_UNAVAILABLE;</div><div class="line"><span class="meta">#endif</span></div><div class="line"></div><div class="line">&#125; OBJC2_UNAVAILABLE;</div></pre></td></tr></table></figure>
+<p>结构体中的主要成员如下：</p>
+<p><code>isa</code>：类对象本身也有一个isa指针，这个指针指向的是它的mataClass。</p>
+<p><code>super_class</code>：指向的是当前类的父类，如果这个类已经是顶层的根类，比如NSObject，那么它的值为NULL。</p>
+<p><code>ivars</code>：是一个数组，每一个元素是指向ivar的指针，对象所有的成员变量和属性信息就是方法ivars中的。</p>
+<p><code>methodLists</code>：是实例方法列表。</p>
+<p><code>cache</code>：方法缓存，用来存放最近使用的方法。</p>
+<p><code>protocols</code>：协议列表。</p>
+<p><br></p>
+<h3 id="Ivar"><a href="#Ivar" class="headerlink" title="Ivar"></a>Ivar</h3><p>实例变量实际上是一个指向objc_ivar的指针，其定义可以在runtime.h头文件下找到：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/// An opaque type that represents an instance variable.</span></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> objc_ivar *Ivar;</div><div class="line"></div><div class="line"><span class="keyword">struct</span> objc_ivar &#123;</div><div class="line"></div><div class="line"><span class="comment">//变量名</span></div><div class="line"><span class="keyword">char</span> *ivar_name OBJC2_UNAVAILABLE;</div><div class="line"></div><div class="line"><span class="comment">//变量类型</span></div><div class="line"><span class="keyword">char</span> *ivar_type OBJC2_UNAVAILABLE;</div><div class="line"></div><div class="line"><span class="comment">//基地址偏移字节</span></div><div class="line"><span class="keyword">int</span> ivar_offset OBJC2_UNAVAILABLE;</div><div class="line"><span class="meta">#ifdef __LP64__</span></div><div class="line"><span class="keyword">int</span> space OBJC2_UNAVAILABLE;</div><div class="line"><span class="meta">#endif</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Runtime库内提供了一些对实例变量的操作函数，但是Objective-C并不支持对以编译后的类中添加实例变量，也就是说无法动态的添加成员变量，要这么做只能在运行时动态的创建一个类，然后使用<code>class_addIvar</code>函数来往类中添加成员变量了。</p>
+<p><br></p>
+<h3 id="cache"><a href="#cache" class="headerlink" title="cache"></a>cache</h3><p>每当一个对象接收到一个消息时，它会根据isa指针去查找这个对象所属的类。因为在类对象中存放着这个对象所有的实例方法。但是在实际上，这个对象只有一部分方法是常用的，很多方法其实很少用或者根本用不上。如果每次接受消息都是往methodLists中遍历一遍所有方法，势必其性能会不高。为了提高查找效率，cache就派上用场了。在每次调用过一个方法后，这个方法就会被缓存到cache列表中，下次调用的时候Runtime就会优先去cache中查找，如果cache没有，才去methodLists中查找方法。</p>
+<p>cache是一个指向<code>Objc_cache</code>结构体指针，具体定义在runtime.h头文件下面：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> objc_cache *Cache OBJC2_UNAVAILABLE;</div><div class="line"></div><div class="line"><span class="comment">// 方法缓存结构体</span></div><div class="line"><span class="keyword">struct</span> objc_cache &#123;</div><div class="line"></div><div class="line"><span class="comment">//指向方法selector的指针与该字段做一个AND位操作(index = (mask &amp; selector))。这可以作为一个简单的hash散列算法</span></div><div class="line"></div><div class="line"><span class="comment">//指定分配的缓存bucket总数，runtime使用这个字段来确定开始线性查找数组的索引位置</span></div><div class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> mask <span class="comment">/* total = mask + 1 */</span> OBJC2_UNAVAILABLE;</div><div class="line"></div><div class="line"><span class="comment">//指定实际占用的缓存bucket的总数</span></div><div class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> occupied OBJC2_UNAVAILABLE;</div><div class="line"></div><div class="line"><span class="comment">//指向Method数据结构指针的数组，这个数组包含不超过mask+1个元素，可能是NULL。另外bucket可能是不连续的</span></div><div class="line">Method buckets[<span class="number">1</span>] OBJC2_UNAVAILABLE;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//generate class pair with new name</span></div><div class="line"> <span class="comment">//class pair创建两个class，一个就是newClass，另外一个是其meta-Class，orignalClass是newClass的父类</span></div><div class="line"><span class="comment">//返回的是newClassUIRefreshControl</span></div><div class="line">subClass = objc_allocateClassPair(originalClass, [newClassName cStringUsingEncoding:<span class="built_in">NSUTF8StringEncoding</span>], <span class="number">0</span>);</div><div class="line">        </div><div class="line"><span class="comment">//add set content inset override</span></div><div class="line">&#123;</div><div class="line">     IMP contentInsetIMP = (IMP)setContentInset;</div><div class="line">     SEL contentInsetSelector = sel_registerName(<span class="string">"setContentInset:"</span>);</div><div class="line">            </div><div class="line">      <span class="comment">//第三个参数是types：一个定义该函数返回值类型和参数类型的字符串</span></div><div class="line">      <span class="comment">//v 是void      无返回类型</span></div><div class="line">      <span class="comment">//@ 是id(self)  对象</span></div><div class="line">      <span class="comment">//: 是SEL(_cmd) 方法名称</span></div><div class="line">      <span class="comment">//&#123;UIEdgeInsets=dddd&#125; 参数</span></div><div class="line">     class_addMethod(subClass, contentInsetSelector, contentInsetIMP, <span class="string">"v@:&#123;UIEdgeInsets=dddd&#125;"</span>);</div><div class="line">&#125;</div><div class="line">          </div><div class="line"><span class="comment">//reginster class</span></div><div class="line">objc_registerClassPair(subClass);</div></pre></td></tr></table></figure>
+<p>这段代码里使用<code>objc_allocateClassPair</code>和<code>objc_registerClassPair</code>动态的创建了一个类，并为</p>
+
+      
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/iOS-Runtime-Object.html/">iOS Runtime 运行时笔记(一)</a></p>
+        <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
+        <p><span>发布时间:</span>2016年09月24日 - 11时09分</p>
+        <p><span>最后更新:</span>2017年05月06日 - 14时37分</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/iOS-Runtime-Object.html/" title="iOS Runtime 运行时笔记(一)">http://simonchen.club/iOS-Runtime-Object.html/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/iOS-Runtime-Object.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script src="/js/clipboard.min.js"></script>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+<nav id="article-nav">
+  
+    <a href="/make-a-static-library.html/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          静态库的制作过程
+        
+      </div>
+    </a>
+  
+  
+    <a href="/sandbox.html/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">iOS应用的沙盒目录结构</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Object"><span class="toc-number">2.</span> <span class="toc-text">Object</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#相关引申"><span class="toc-number">2.1.</span> <span class="toc-text">相关引申</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Class"><span class="toc-number">3.</span> <span class="toc-text">Class</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Ivar"><span class="toc-number">3.1.</span> <span class="toc-text">Ivar</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cache"><span class="toc-number">3.2.</span> <span class="toc-text">cache</span></a></li></ol></li></ol>
+</div>
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+        }
+    })
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+    }
+</script>
+
+
+
+
+
+<div class="bdsharebuttonbox">
+	<a href="#" class="fx fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+	<a href="#" class="fx fa-weixin bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+	<a href="#" class="fx fa-qq bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+	<a href="#" class="fx fa-facebook-official bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+	<a href="#" class="fx fa-twitter bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+	<a href="#" class="fx fa-linkedin bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+	<a href="#" class="fx fa-files-o bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+</div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+
+
+
+    
+        <section class="youyan" id="comments">
+  <div id="uyan_frame"></div>
+  <script src="http://v2.uyan.cc/code/uyan.js?uid=2132200"></script>
+</section>
+
+    
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/make-a-static-library.html/" title="上一篇: 静态库的制作过程">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+        
+            <a href="/sandbox.html/" title="下一篇: iOS应用的沙盒目录结构">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/FBKVOController Source Code analysis.html/">FBKVOController源码阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/KVC and KVO.html/">KVC与KVO</a></li><li class="post-list-item"><a class="post-list-link" href="/Assotiated Object.html/">关联对象</a></li><li class="post-list-item"><a class="post-list-link" href="/multiSSHKey.html/">多GitHub账号的SSH配置</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Object.html/">iOS Runtime 运行时笔记(一)</a></li><li class="post-list-item"><a class="post-list-link" href="/sandbox.html/">iOS应用的沙盒目录结构</a></li><li class="post-list-item"><a class="post-list-link" href="/make-a-static-library.html/">静态库的制作过程</a></li></ul>
+    <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+    <script>
+        $(".post-list").addClass("toc-article");
+        $(".post-list-item a").attr("target","_blank");
+        $("#post-nav-button > a:nth-child(2)").click(function() {
+            $(".fa-bars, .fa-times").toggle();
+            $(".post-list").toggle(300);
+            if ($(".toc").length > 0) {
+                $("#toc, #tocButton").toggle(200, function() {
+                    if ($(".switch-area").is(":visible")) {
+                        $("#tocButton").attr("value", valueHide);
+                        }
+                    })
+            }
+            else {
+            }
+        })
+    </script>
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                &copy; 2017 Simon Chen
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/luuman/hexo-theme-spfk" target="_blank">spfk</a> by luuman
+            </div>
+        </div>
+        
+    </div>
+</footer>
+
+    </div>
+    <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var backgroundnum = 24;
+            var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+            $("#mobile-nav").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+            $(".left-col").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+        })
+    </script>
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    $(document).ready(function() {
+        if ($("#comments").length < 1) {
+            $("#scroll > a:nth-child(2)").hide();
+        };
+    })
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+  </div>
+</body>
+</html>
