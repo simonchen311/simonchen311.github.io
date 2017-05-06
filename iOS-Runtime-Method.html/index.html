@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="Simon’s Home">
 <meta property="og:description" content="前言在上一篇学习了Runtime下的对象与类的实现，这一篇开始了解在Runtime下的消息机制。">
 <meta property="og:image" content="http://simonchen.club/iOS-Runtime-Method.html/messag%20passing.jpg">
-<meta property="og:updated_time" content="2017-05-06T07:16:53.000Z">
+<meta property="og:updated_time" content="2017-05-06T07:22:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS Runtime 运行时笔记(二)">
 <meta name="twitter:description" content="前言在上一篇学习了Runtime下的对象与类的实现，这一篇开始了解在Runtime下的消息机制。">
@@ -198,9 +198,11 @@
 <p><br> </p>
 <h2 id="消息传递"><a href="#消息传递" class="headerlink" title="消息传递"></a>消息传递</h2><p>在Objective-C中，消息直到运行时才绑定到方法实现上。编译器会将消息表达式<code>[receiver message]</code>转化为一个消息函数的调用，即<code>objc_msgSend</code>:</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">objc_msgSend(receiver, selector, arg1, arg2, ...);</div></pre></td></tr></table></figure>
-<p><code>receiver</code>：消息接收对象</p>
-<p><code>selector</code>：方法名</p>
-<p><code>arg1，arg2，…</code>：方法参数</p>
+<ul>
+<li><code>receiver</code>：消息接收对象</li>
+<li><code>selector</code>：方法名</li>
+<li><code>arg1，arg2，…</code>：方法参数</li>
+</ul>
 <blockquote>
 <p>receiver和selector作为隐藏参数，是在编译期被插入实现代码的</p>
 </blockquote>
@@ -208,7 +210,20 @@
 <p><img src="/iOS-Runtime-Method.html/messag passing.jpg" alt="消息传递"></p>
 <p>这是在运行时消息传递的机制，即面向对象编程术语中的“方法被动态绑定到消息”。</p>
 <p><br> </p>
-<p>###</p>
+<h3 id="Super"><a href="#Super" class="headerlink" title="Super"></a>Super</h3><p>super与self不同：</p>
+<p>self是类的一个隐藏参数，每个方法的实现的第一个参数即为self。</p>
+<p>super并不是隐藏参数，它实际上只是一个<font color="red">编译器标示符</font>，它负责告诉编译器，当调用某个方法时，去调用父类的方法，而不是本类中的方法。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> objc_super &#123; <span class="keyword">id</span> receiver; Class superClass; &#125;;</div></pre></td></tr></table></figure>
+<p>这个结构体有两个成员：</p>
+<ul>
+<li><code>receiver</code>：即消息的实际接收者</li>
+<li><code>superClass</code>：指针当前类的父类</li>
+</ul>
+<p>当我们使用super来接收消息时，编译器会生成一个<code>objc_super</code>结构体。这个结构体的receiver实际上就是就是self；superClass指向其父类。</p>
+<p>发送消息时，会通过<code>objc_msgSendSuper</code>函数进行消息传递：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">id</span> objc_msgSendSuper ( <span class="keyword">struct</span> objc_super *<span class="keyword">super</span>, SEL op, ... );</div></pre></td></tr></table></figure>
+<p>该函数实际的操作是：从<code>objc_super</code>结构体指向的superClass的方法列表开始查找selector，找到后以objc-&gt;receiver去调用这个selector，而此时的操作流程就是消息传递流程了:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">objc_msgSend(objc_super-&gt;receiver, <span class="keyword">@selector</span>(XXX))</div></pre></td></tr></table></figure>
 <p><br> </p>
 <p>###</p>
 
@@ -223,7 +238,7 @@
         <p><span>本文标题:</span><a href="/iOS-Runtime-Method.html/">iOS Runtime 运行时笔记(二)</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
         <p><span>发布时间:</span>2016年10月08日 - 14时54分</p>
-        <p><span>最后更新:</span>2017年05月06日 - 15时16分</p>
+        <p><span>最后更新:</span>2017年05月06日 - 15时22分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/iOS-Runtime-Method.html/" title="iOS Runtime 运行时笔记(二)">http://simonchen.club/iOS-Runtime-Method.html/</a>
             <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/iOS-Runtime-Method.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
@@ -261,7 +276,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Method"><span class="toc-number">2.</span> <span class="toc-text">Method</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SEL"><span class="toc-number">2.1.</span> <span class="toc-text">SEL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IMP"><span class="toc-number">2.2.</span> <span class="toc-text">IMP</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#消息传递"><span class="toc-number">3.</span> <span class="toc-text">消息传递</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Method"><span class="toc-number">2.</span> <span class="toc-text">Method</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SEL"><span class="toc-number">2.1.</span> <span class="toc-text">SEL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IMP"><span class="toc-number">2.2.</span> <span class="toc-text">IMP</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#消息传递"><span class="toc-number">3.</span> <span class="toc-text">消息传递</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Super"><span class="toc-number">3.1.</span> <span class="toc-text">Super</span></a></li></ol></li></ol>
 </div>
 <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
 
