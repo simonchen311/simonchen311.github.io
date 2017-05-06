@@ -14,7 +14,7 @@
 <meta property="og:description" content="今天在项目运行时出现EXC_BAD_ACESS错误，导致程序崩溃，在开发时遇到EXC_BAD_ACESS这种错误不容易找到原因，但通常是由于内存管理问题而引起的，查询其解决方法，有如下几种办法可以来帮助查询出错的地方。">
 <meta property="og:image" content="http://simonchen.club/EXC-BAD-ACESS-Debug.html/D5F9A994-0481-4438-AD0C-6CDDF5931D13.png">
 <meta property="og:image" content="http://simonchen.club/EXC-BAD-ACESS-Debug.html/-屏幕快照%202015-05-25%2021.50.39.jpg">
-<meta property="og:updated_time" content="2017-05-06T15:53:51.000Z">
+<meta property="og:updated_time" content="2017-05-06T15:57:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="小技巧：EXC_BAD_ACESS的调试">
 <meta name="twitter:description" content="今天在项目运行时出现EXC_BAD_ACESS错误，导致程序崩溃，在开发时遇到EXC_BAD_ACESS这种错误不容易找到原因，但通常是由于内存管理问题而引起的，查询其解决方法，有如下几种办法可以来帮助查询出错的地方。">
@@ -191,7 +191,9 @@
 <p>设置好后，每当程序有异常抛出的时候，调试器就会中止程序运行并指向有问题的代码行。</p>
 <h2 id="NSZombieEnabled"><a href="#NSZombieEnabled" class="headerlink" title="NSZombieEnabled"></a>NSZombieEnabled</h2><p>在Xcode中的菜单栏中选择 Product -&gt; Scheme -&gt; Edit Scheme，打开窗口，设置<code>MallocStackLogging</code>和<code>NSZombieEnabled</code>两个环境变量查看错误来源。</p>
 <p><img src="/EXC-BAD-ACESS-Debug.html/-屏幕快照 2015-05-25 21.50.39.jpg" alt="NSZombieEnabled"></p>
+<blockquote>
 <p>最后记得把环境变量NSZombieEnabled，MallocStackLogging删除或设置为NO，因为它们会使得内存不会被释放。</p>
+</blockquote>
 <h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSString</span>* hello = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"Hello world"</span>]; <span class="built_in">NSLog</span>(<span class="string">@"What you say is %@"</span>,hello); </div><div class="line">[hello release];</div></pre></td></tr></table></figure>
 <p>设置环境变量后重新运行项目至崩溃点，此时程序会打印额外的关于内存的日志：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">BadAccess[596:207] * -[CFString release]: message sent to deallocated instance 0x5f3ef80</div></pre></td></tr></table></figure>
@@ -210,7 +212,7 @@
         <p><span>本文标题:</span><a href="/EXC-BAD-ACESS-Debug.html/">小技巧：EXC_BAD_ACESS的调试</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
         <p><span>发布时间:</span>2016年12月06日 - 23时39分</p>
-        <p><span>最后更新:</span>2017年05月06日 - 23时53分</p>
+        <p><span>最后更新:</span>2017年05月06日 - 23时57分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/EXC-BAD-ACESS-Debug.html/" title="小技巧：EXC_BAD_ACESS的调试">http://simonchen.club/EXC-BAD-ACESS-Debug.html/</a>
             <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/EXC-BAD-ACESS-Debug.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
