@@ -5,17 +5,17 @@
   
   <title>关联对象 | Simon’s Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="定义关联对象是指两个对象关联起来，其中一个对象作为另一个对象的一部分；它允许开发者为任何对象附着键值数据。 可以给某对象关联许多其他对象，这些对象通过“键”来区分。存储对象值的时候，可以指明“存储策略”，用以维护相应的“内存管理语义”。 设置关联对象用的键是个“不透明的指针”，即所指向的数据结构不局限于某种特定类型的指针。再设置关联对象值时，若想令两个键匹配到同一个值，则二者必须时完全相同的指针才">
+  <meta name="description" content="定义关联对象是指两个对象关联起来，其中一个对象作为另一个对象的一部分；它允许开发者为任何对象附着键值数据。 可以给某对象关联许多其他对象，这些对象通过“键”来区分。存储对象值的时候，可以指明“存储策略”，用以维护相应的“内存管理语义”。设置关联对象用的键是个“不透明的指针”，即所指向的数据结构不局限于某种特定类型的指针。">
 <meta name="keywords" content="iOS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关联对象">
 <meta property="og:url" content="http://simonchen.club/Assotiated Object.html/index.html">
 <meta property="og:site_name" content="Simon’s Home">
-<meta property="og:description" content="定义关联对象是指两个对象关联起来，其中一个对象作为另一个对象的一部分；它允许开发者为任何对象附着键值数据。 可以给某对象关联许多其他对象，这些对象通过“键”来区分。存储对象值的时候，可以指明“存储策略”，用以维护相应的“内存管理语义”。 设置关联对象用的键是个“不透明的指针”，即所指向的数据结构不局限于某种特定类型的指针。再设置关联对象值时，若想令两个键匹配到同一个值，则二者必须时完全相同的指针才">
-<meta property="og:updated_time" content="2016-11-10T04:03:00.000Z">
+<meta property="og:description" content="定义关联对象是指两个对象关联起来，其中一个对象作为另一个对象的一部分；它允许开发者为任何对象附着键值数据。 可以给某对象关联许多其他对象，这些对象通过“键”来区分。存储对象值的时候，可以指明“存储策略”，用以维护相应的“内存管理语义”。设置关联对象用的键是个“不透明的指针”，即所指向的数据结构不局限于某种特定类型的指针。">
+<meta property="og:updated_time" content="2016-10-30T04:03:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关联对象">
-<meta name="twitter:description" content="定义关联对象是指两个对象关联起来，其中一个对象作为另一个对象的一部分；它允许开发者为任何对象附着键值数据。 可以给某对象关联许多其他对象，这些对象通过“键”来区分。存储对象值的时候，可以指明“存储策略”，用以维护相应的“内存管理语义”。 设置关联对象用的键是个“不透明的指针”，即所指向的数据结构不局限于某种特定类型的指针。再设置关联对象值时，若想令两个键匹配到同一个值，则二者必须时完全相同的指针才">
+<meta name="twitter:description" content="定义关联对象是指两个对象关联起来，其中一个对象作为另一个对象的一部分；它允许开发者为任何对象附着键值数据。 可以给某对象关联许多其他对象，这些对象通过“键”来区分。存储对象值的时候，可以指明“存储策略”，用以维护相应的“内存管理语义”。设置关联对象用的键是个“不透明的指针”，即所指向的数据结构不局限于某种特定类型的指针。">
   
     <link rel="alternative" href="/atom.xml" title="Simon’s Home" type="application/atom+xml">
   
@@ -143,7 +143,7 @@
   
     <div class="article-meta">
       <a href="/Assotiated Object.html/" class="article-date">
-      <time datetime="2016-11-10T04:03:00.000Z" itemprop="datePublished">2016-11-10</time>
+      <time datetime="2016-10-30T04:03:00.000Z" itemprop="datePublished">2016-10-30</time>
 </a>
     </div>
   
@@ -182,8 +182,7 @@
       
           
         <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>关联对象是指两个对象关联起来，其中一个对象作为另一个对象的一部分；它允许开发者为任何对象附着键值数据。</p>
-<p>可以给某对象关联许多其他对象，这些对象通过“键”来区分。存储对象值的时候，可以指明“存储策略”，用以维护相应的“内存管理语义”。</p>
-<p>设置关联对象用的键是个“不透明的指针”，即所指向的数据结构不局限于某种特定类型的指针。再设置关联对象值时，若想令两个键匹配到同一个值，则二者必须时完全相同的指针才行。故设置关联对象值时，通常使用静态全局变量做键。</p>
+<p>可以给某对象关联许多其他对象，这些对象通过“键”来区分。存储对象值的时候，可以指明“存储策略”，用以维护相应的“内存管理语义”。设置关联对象用的键是个“不透明的指针”，即所指向的数据结构不局限于某种特定类型的指针。</p>
 <a id="more"></a>
 <p>下列方法可以管理关联对象：</p>
 <p>（1）以给定的键和策略为某对象设置关联对象值</p>
@@ -229,16 +228,14 @@
 </tbody>
 </table>
 <h2 id="使用例子"><a href="#使用例子" class="headerlink" title="使用例子"></a>使用例子</h2><p>（1）在分类中添加属性</p>
+<p>由于分类中添加的属性并不会自动合成实例变量和其存储方法，所以需要手动添加通过关联对象可以实现。</p>
 <p><code>.h文件</code></p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">UIView</span>(<span class="title">AddVariables</span>)</span></div><div class="line">	</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">retain</span>) <span class="built_in">NSString</span> *viewName;</div><div class="line">	</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
 <p><code>.m文件</code></p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#import <span class="meta-string">&lt;objc/runtime.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="comment">//定义存取的Key</span></div><div class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">void</span> *viewNameKey = <span class="string">"key"</span>;</div><div class="line">	</div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">UIView</span>(<span class="title">AddVariables</span>)</span></div><div class="line">	</div><div class="line">-(<span class="built_in">NSString</span> *)viewName</div><div class="line">&#123;</div><div class="line">	<span class="keyword">return</span> (<span class="built_in">NSString</span> *)objc_getAssociatedObject(<span class="keyword">self</span>, viewNameKey);</div><div class="line">&#125;	</div><div class="line">	 </div><div class="line">-(<span class="keyword">void</span>)setViewName:(<span class="built_in">NSString</span> *)newViewNameKey</div><div class="line">&#123;</div><div class="line">	objc_setAssociatedObject(<span class="keyword">self</span>, viewNameKey, newViewNameKey, OBJC_ASSOCIATION_RETAIN_NONATOMIC);</div><div class="line">&#125;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
 <p>（2）调试使用</p>
-<p>当相关对象被销毁时，关联对象会被释放，这个事实意味着可以用关联对象来追踪另一个对象何时销毁。</p>
+<p>当宿主对象被销毁时，关联对象会被释放，这个事实意味着可以用关联对象来追踪另一个对象何时销毁。</p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#import <span class="meta-string">&lt;objc/runtime.h&gt;</span></span></div><div class="line">	</div><div class="line"><span class="comment">//定义存取的Key</span></div><div class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">void</span> *viewNameKey = <span class="string">"key"</span>;</div><div class="line">	</div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">Watcher</span>(<span class="title">AddVariables</span>)</span></div><div class="line">	</div><div class="line">-(<span class="keyword">void</span>)dealloc</div><div class="line">&#123;</div><div class="line">	<span class="built_in">NSLog</span>(<span class="string">@"Hey!The thing I was watching is going away!"</span>);</div><div class="line">&#125;	</div><div class="line">	</div><div class="line"><span class="keyword">@end</span></div><div class="line">	</div><div class="line">...</div><div class="line"></div><div class="line"><span class="built_in">NSObject</span> *something = [<span class="built_in">NSObject</span> new];		</div><div class="line">objc_setAssociatedObject(something, viewNameKey, [Watcher new], OBJC_ASSOCIATION_RETAIN);</div></pre></td></tr></table></figure>
-<p>（3）警告视图处理</p>
-<p>在同一个类里处理多个警告信息视图，那么就必须在delegate方法中检查传入的alertView参数，并据此选用响应的逻辑，要是能在创建警告视图的时候直接把处理每个按钮的逻辑整理好，那就简单多了！</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">void</span> *MyAlertViewKey = <span class="string">"key"</span>;  </div><div class="line">	</div><div class="line">- (<span class="keyword">void</span>) askUserQuestion  </div><div class="line">&#123;  </div><div class="line">	<span class="built_in">UIAlertView</span> *alert = [[<span class="built_in">UIAlertView</span> alloc] initWithTitle:@“Question” message:@“What?” delegate:<span class="keyword">self</span> cancelButtonTitle:@“cancel” otherButtonTitles:@“Continue”,<span class="literal">nil</span>];  </div><div class="line">	  </div><div class="line">	<span class="keyword">void</span> (^block)(<span class="built_in">NSInteger</span>) = ^(<span class="built_in">NSInteger</span> buttonIndex)</div><div class="line">	&#123;  </div><div class="line">	    <span class="keyword">if</span>(buttonIndex == <span class="number">0</span>)</div><div class="line">	    &#123;  </div><div class="line">	        [<span class="keyword">self</span> doCancel];  </div><div class="line">	    &#125; </div><div class="line">	    <span class="keyword">else</span> </div><div class="line">	    &#123;  </div><div class="line">	        [<span class="keyword">self</span> doContinue];  </div><div class="line">	     &#125;  </div><div class="line">	&#125;;  </div><div class="line">	       </div><div class="line">	objc_setAssociatedObject(alert, MyAlertViewKey, block, BJC_ASSOCIATION_COPY);  </div><div class="line">	[alert show];  </div><div class="line">&#125;  </div><div class="line">	  </div><div class="line">- (<span class="keyword">void</span>)alertView:(<span class="built_in">UIAlertView</span>*)alertView clickedButtonAtIndex:(<span class="built_in">NSInteger</span>)buttonIndex  </div><div class="line">&#123;  </div><div class="line">	<span class="keyword">void</span> (^block)(<span class="built_in">NSInteger</span>) = objc_getAssociatedObject (alertView, MyAlertViewKey);  </div><div class="line">	block(buttonIndex);  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
       
       
@@ -250,8 +247,8 @@
     <div class="copyright">
         <p><span>本文标题:</span><a href="/Assotiated Object.html/">关联对象</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
-        <p><span>发布时间:</span>2016年11月10日 - 12时03分</p>
-        <p><span>最后更新:</span>2016年11月10日 - 12时03分</p>
+        <p><span>发布时间:</span>2016年10月30日 - 12时03分</p>
+        <p><span>最后更新:</span>2016年10月30日 - 12时03分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/Assotiated Object.html/" title="关联对象">http://simonchen.club/Assotiated Object.html/</a>
             <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/Assotiated Object.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
@@ -267,18 +264,9 @@
 
 <nav id="article-nav">
   
-    <a href="/KVC and KVO.html/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          KVC与KVO
-        
-      </div>
-    </a>
   
-  
-    <a href="/FBKVOController Source Code analysis.html/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">FBKVOController源码阅读</div>
+    <a href="/KVC and KVO.html/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">KVC与KVO</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -346,18 +334,16 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/KVC and KVO.html/" title="上一篇: KVC与KVO">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
         
-            <a href="/FBKVOController Source Code analysis.html/" title="下一篇: FBKVOController源码阅读">
+            <a href="/KVC and KVO.html/" title="下一篇: KVC与KVO">
                 <i class="fa fa-angle-right"></i>
             </a>
         
     </div>
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/multiSSHKey.html/">多GitHub账号的SSH配置</a></li><li class="post-list-item"><a class="post-list-link" href="/FBKVOController Source Code analysis.html/">FBKVOController源码阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/Assotiated Object.html/">关联对象</a></li><li class="post-list-item"><a class="post-list-link" href="/KVC and KVO.html/">KVC与KVO</a></li></ul>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/multiSSHKey.html/">多GitHub账号的SSH配置</a></li><li class="post-list-item"><a class="post-list-link" href="/FBKVOController Source Code analysis.html/">FBKVOController源码阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/KVC and KVO.html/">KVC与KVO</a></li><li class="post-list-item"><a class="post-list-link" href="/Assotiated Object.html/">关联对象</a></li></ul>
     <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
     <script>
         $(".post-list").addClass("toc-article");
