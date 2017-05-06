@@ -199,26 +199,19 @@
 </blockquote>
 <p><br></p>
 <h2 id="使用KVC"><a href="#使用KVC" class="headerlink" title="使用KVC"></a>使用KVC</h2><h3 id="获取值"><a href="#获取值" class="headerlink" title="获取值"></a>获取值</h3><ul>
-<li><p>+(id)valueForKey:(NSString *)key</p>
-</li>
-<li><p>-(id)valueForKeyPath:(NSString *)keyPath</p>
-</li>
-<li><p>-(id)valueForUndefinedKey:(NSString *)key    </p>
-</li>
+<li>+(id)valueForKey:(NSString *)key</li>
+<li>-(id)valueForKeyPath:(NSString *)keyPath</li>
+<li>-(id)valueForUndefinedKey:(NSString *)key    </li>
 </ul>
 <blockquote>
 <p>当键没有对应的存取器或者实例变量的时候，接收对象会向自己发送valueForUndefinedKey：这个消息，它的默认实现是抛出异常NSUndefinedKeyException，可以重写这个函数做错误处理。</p>
 </blockquote>
 <p><br></p>
 <h3 id="修改值"><a href="#修改值" class="headerlink" title="修改值"></a>修改值</h3><ul>
-<li><p>+(void)setValue:(id)anObject forKey:(NSString *)key</p>
-</li>
-<li><p>-(void)setValue:(id)value forKeyPath:(NSString *)keyPath</p>
-</li>
-<li><p>-(void)setValue:(id)value forUndefinedKey:(NSString *)key</p>
-</li>
-<li><p>-(void)setNilValueForKey:(NSString *)key    </p>
-</li>
+<li>+(void)setValue:(id)anObject forKey:(NSString *)key</li>
+<li>-(void)setValue:(id)value forKeyPath:(NSString *)keyPath</li>
+<li>-(void)setValue:(id)value forUndefinedKey:(NSString *)key</li>
+<li>-(void)setNilValueForKey:(NSString *)key    </li>
 </ul>
 <blockquote>
 <p>当对非类对象属性设置nil时被调用，默认抛出异常。</p>
@@ -226,7 +219,7 @@
 <p><br></p>
 <h3 id="一对多关系成员的情况"><a href="#一对多关系成员的情况" class="headerlink" title="一对多关系成员的情况"></a>一对多关系成员的情况</h3><p><code>有序一对多关系成员  NSArray</code></p>
 <ul>
-<li>-(NSMutableArray <em>)mutableArrayValueForKey:(NSString </em>)key    </li>
+<li>-(NSMutableArray <em>)mutableArrayValueForKey:(NSString </em>)key</li>
 <li>-(NSMutableArray <em>)mutableArrayValueForKeyPath:(NSString </em>)keyPath</li>
 </ul>
 <p><code>无序一对多关系成员  NSSet</code></p>
@@ -263,12 +256,9 @@
 <p><br></p>
 <h3 id="无序集合"><a href="#无序集合" class="headerlink" title="无序集合"></a>无序集合</h3><p>对于不可改变的无序集合，需要实现如下方法：</p>
 <ul>
-<li><p><strong><code>-countOf&lt;Key&gt;</code></strong>    必须实现， 类似于 NSSet 的<code>count</code>方法。</p>
-</li>
-<li><p><strong><code>-enumeratorOf&lt;Key&gt;</code></strong>     必须实现    ，类似于NSSet的        <code>objectEnumerator</code>方法。</p>
-</li>
-<li><p><strong><code>-memberOf&lt;Key&gt;</code></strong>    必须实现, 它等价于 NSSet 的<code>member</code>方法。</p>
-</li>
+<li><strong><code>-countOf&lt;Key&gt;</code></strong>    必须实现， 类似于 NSSet 的<code>count</code>方法。</li>
+<li><strong><code>-enumeratorOf&lt;Key&gt;</code></strong>     必须实现    ，类似于NSSet的        <code>objectEnumerator</code>方法。</li>
+<li><strong><code>-memberOf&lt;Key&gt;</code></strong>    必须实现, 它等价于 NSSet 的<code>member</code>方法。</li>
 </ul>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">NSUInteger</span>)countOfTransactions &#123;</div><div class="line">    <span class="keyword">return</span> [<span class="keyword">self</span>.transactions count];</div><div class="line">&#125;</div><div class="line"> </div><div class="line">- (<span class="built_in">NSEnumerator</span> *)enumeratorOfTransactions &#123;</div><div class="line">    <span class="keyword">return</span> [<span class="keyword">self</span>.transactions objectEnumerator];</div><div class="line">&#125;</div><div class="line"> </div><div class="line">- (Transaction *)memberOfTransactions:(Transaction *)anObject &#123;</div><div class="line">    <span class="keyword">return</span> [<span class="keyword">self</span>.transactions member:anObject];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p><br></p>
