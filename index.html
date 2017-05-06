@@ -387,17 +387,10 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p><br> </p>
+              <p><br> </p>
 <h2 id="Method-Swizzle"><a href="#Method-Swizzle" class="headerlink" title="Method Swizzle"></a>Method Swizzle</h2><p>Runtime下的方法都是由SEL和IMP组成的结构体，两者之间构成了一种映射关系，而Method Swizzle是一种可以在运行时动态改变方法的IMP的技术，改变了两者的映射关系。</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">+ (<span class="keyword">void</span>)load </div><div class="line">&#123;</div><div class="line">    <span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken;</div><div class="line">    <span class="built_in">dispatch_once</span>(&amp;onceToken, ^&#123;</div><div class="line"></div><div class="line">         SEL originalSelector = <span class="keyword">@selector</span>(selector1);</div><div class="line">         SEL swizzledSelector = <span class="keyword">@selector</span>(selector2);</div><div class="line"></div><div class="line">         Method originalMethod = class_getInstanceMethod(<span class="keyword">class</span>, originalSelector);</div><div class="line">         Method swizzledMethod = class_getInstanceMethod(<span class="keyword">class</span>, swizzledSelector);</div><div class="line"></div><div class="line">         <span class="comment">// [1]</span></div><div class="line">         <span class="built_in">BOOL</span> didAddMethod = class_addMethod([<span class="keyword">self</span> <span class="keyword">class</span>], originalSelector,  method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (didAddMethod)</div><div class="line">        &#123;</div><div class="line">           <span class="comment">// [2]</span></div><div class="line">           class_replaceMethod(<span class="keyword">class</span>, swizzledSelector, method_getImplementation(originalMethod),  method_getTypeEncoding(originalMethod));</div><div class="line">        &#125; </div><div class="line">        <span class="keyword">else</span> </div><div class="line">        &#123;</div><div class="line">          <span class="comment">// [3]</span></div><div class="line">          method_exchangeImplementations(originalMethod, swizzledMethod);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>Method Swizzle的实现如上所示，</p>
-<p>[1] 首先利用<code>class_addMethod</code>尝试往类中添加一个新的方法，方法SEL是原有的方法名，但是其实现函数入口为新的IMP，这是所需要交换的方法可能不是由当前类实现，而是由其父类实现并继承下来。</p>
-<p>[2] 如果在第[1]步添加成功，则利用<code>class_replaceMethod</code>来进行方法交换，也就是说将新的SEL对应原有的实现函数IMP，这样就完成了方法交换。</p>
-<p>[3] 如果在第[1]步没有成功，那么就说明这个所需要交换的方法已经在当前类中有了实现，所以直接利用<code>method_exchangeImplementations</code>来经行方法交换达到目的。</p>
-<blockquote>
-<p>值得注意的是，我们往往会在<code>+load</code>方法中，并利用<code>dispatch_once</code>实现Method Swizzle。由于method swizzling会影响到类的全局状态，因此要尽量避免在并发处理中出现竞争的情况。<code>+load</code>能保证在类的初始化过程中被加载，并保证这种改变应用级别的行为的一致性；<code>dispatch_once</code>能确保代码在多线程环境下只执行一次。</p>
-</blockquote>
-
+          
       
       
     </div>
@@ -415,6 +408,10 @@
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/note/">note</a></li></ul>
     </div>
 
+      
+        <p class="article-more-link">
+          <a  href="/iOS-Runtime-Swizzle.html/#more">More >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>

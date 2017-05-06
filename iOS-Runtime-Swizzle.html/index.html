@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://simonchen.club/iOS-Runtime-Swizzle.html/index.html">
 <meta property="og:site_name" content="Simon’s Home">
 <meta property="og:description" content="Method SwizzleRuntime下的方法都是由SEL和IMP组成的结构体，两者之间构成了一种映射关系，而Method Swizzle是一种可以在运行时动态改变方法的IMP的技术，改变了两者的映射关系。 1234567891011121314151617181920212223242526+ (void)load &amp;#123;    static dispatch_once_t onc">
-<meta property="og:updated_time" content="2017-05-06T08:25:41.000Z">
+<meta property="og:updated_time" content="2017-05-06T08:27:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS Runtime 运行时笔记(三)">
 <meta name="twitter:description" content="Method SwizzleRuntime下的方法都是由SEL和IMP组成的结构体，两者之间构成了一种映射关系，而Method Swizzle是一种可以在运行时动态改变方法的IMP的技术，改变了两者的映射关系。 1234567891011121314151617181920212223242526+ (void)load &amp;#123;    static dispatch_once_t onc">
@@ -184,6 +184,7 @@
         <p><br> </p>
 <h2 id="Method-Swizzle"><a href="#Method-Swizzle" class="headerlink" title="Method Swizzle"></a>Method Swizzle</h2><p>Runtime下的方法都是由SEL和IMP组成的结构体，两者之间构成了一种映射关系，而Method Swizzle是一种可以在运行时动态改变方法的IMP的技术，改变了两者的映射关系。</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">+ (<span class="keyword">void</span>)load </div><div class="line">&#123;</div><div class="line">    <span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken;</div><div class="line">    <span class="built_in">dispatch_once</span>(&amp;onceToken, ^&#123;</div><div class="line"></div><div class="line">         SEL originalSelector = <span class="keyword">@selector</span>(selector1);</div><div class="line">         SEL swizzledSelector = <span class="keyword">@selector</span>(selector2);</div><div class="line"></div><div class="line">         Method originalMethod = class_getInstanceMethod(<span class="keyword">class</span>, originalSelector);</div><div class="line">         Method swizzledMethod = class_getInstanceMethod(<span class="keyword">class</span>, swizzledSelector);</div><div class="line"></div><div class="line">         <span class="comment">// [1]</span></div><div class="line">         <span class="built_in">BOOL</span> didAddMethod = class_addMethod([<span class="keyword">self</span> <span class="keyword">class</span>], originalSelector,  method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (didAddMethod)</div><div class="line">        &#123;</div><div class="line">           <span class="comment">// [2]</span></div><div class="line">           class_replaceMethod(<span class="keyword">class</span>, swizzledSelector, method_getImplementation(originalMethod),  method_getTypeEncoding(originalMethod));</div><div class="line">        &#125; </div><div class="line">        <span class="keyword">else</span> </div><div class="line">        &#123;</div><div class="line">          <span class="comment">// [3]</span></div><div class="line">          method_exchangeImplementations(originalMethod, swizzledMethod);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<a id="more"></a>
 <p>Method Swizzle的实现如上所示，</p>
 <p>[1] 首先利用<code>class_addMethod</code>尝试往类中添加一个新的方法，方法SEL是原有的方法名，但是其实现函数入口为新的IMP，这是所需要交换的方法可能不是由当前类实现，而是由其父类实现并继承下来。</p>
 <p>[2] 如果在第[1]步添加成功，则利用<code>class_replaceMethod</code>来进行方法交换，也就是说将新的SEL对应原有的实现函数IMP，这样就完成了方法交换。</p>
@@ -203,7 +204,7 @@
         <p><span>本文标题:</span><a href="/iOS-Runtime-Swizzle.html/">iOS Runtime 运行时笔记(三)</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
         <p><span>发布时间:</span>2016年10月22日 - 15时47分</p>
-        <p><span>最后更新:</span>2017年05月06日 - 16时25分</p>
+        <p><span>最后更新:</span>2017年05月06日 - 16时27分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/iOS-Runtime-Swizzle.html/" title="iOS Runtime 运行时笔记(三)">http://simonchen.club/iOS-Runtime-Swizzle.html/</a>
             <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/iOS-Runtime-Swizzle.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
