@@ -3,19 +3,16 @@
 <head>
   <meta charset="utf-8">
   
-  <title>多GitHub账号的SSH配置 | Simon’s Home</title>
+  <title>make wheel WRKVOController | Simon’s Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。 如果是单账户，很方便，默认拿id_rsa与你的 github服务器的公钥对比；如果是多用户如user1,user2,那么就不能用在user2的身上了，怎么办呢？ 下面详细说明下多github用户配置ssh key。">
-<meta name="keywords" content="git">
+  <meta name="keywords">
 <meta property="og:type" content="article">
-<meta property="og:title" content="多GitHub账号的SSH配置">
-<meta property="og:url" content="http://simonchen.club/multiSSHKey.html/index.html">
+<meta property="og:title" content="make wheel WRKVOController">
+<meta property="og:url" content="http://simonchen.club/make-wheel-WRKVOController-1.html/index.html">
 <meta property="og:site_name" content="Simon’s Home">
-<meta property="og:description" content="github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。 如果是单账户，很方便，默认拿id_rsa与你的 github服务器的公钥对比；如果是多用户如user1,user2,那么就不能用在user2的身上了，怎么办呢？ 下面详细说明下多github用户配置ssh key。">
-<meta property="og:updated_time" content="2017-05-06T01:31:38.000Z">
+<meta property="og:updated_time" content="2017-05-06T02:02:09.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="多GitHub账号的SSH配置">
-<meta name="twitter:description" content="github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。 如果是单账户，很方便，默认拿id_rsa与你的 github服务器的公钥对比；如果是多用户如user1,user2,那么就不能用在user2的身上了，怎么办呢？ 下面详细说明下多github用户配置ssh key。">
+<meta name="twitter:title" content="make wheel WRKVOController">
   
     <link rel="alternative" href="/atom.xml" title="Simon’s Home" type="application/atom+xml">
   
@@ -139,11 +136,11 @@
         </header>                
     </div>
 </nav>
-      <div class="body-wrap"><article id="post-multiSSHKey" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-make-wheel-WRKVOController-1" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/multiSSHKey.html/" class="article-date">
-      <time datetime="2016-10-17T13:29:00.000Z" itemprop="datePublished">2016-10-17</time>
+      <a href="/make-wheel-WRKVOController-1.html/" class="article-date">
+      <time datetime="2017-05-06T02:02:09.000Z" itemprop="datePublished">2017-05-06</time>
 </a>
     </div>
   
@@ -156,7 +153,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      多GitHub账号的SSH配置
+      make wheel WRKVOController
     </h1>
   
 
@@ -164,16 +161,8 @@
       
       <div class="article-info article-info-post">
         
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/programming/">开发</a>
-    </div>
-
 
         
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
-    </div>
-
         <div class="clearfix"></div>
       </div>
       
@@ -181,26 +170,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>github上使用ssh key可以不用每次都输入用户名密码，一定程度上可以提高效率。</p>
-<p>如果是单账户，很方便，默认拿id_rsa与你的 github服务器的公钥对比；如果是多用户如user1,user2,那么就不能用在user2的身上了，怎么办呢？</p>
-<p>下面详细说明下多github用户配置ssh key。</p>
-<a id="more"></a>
-<p><br></p>
-<h2 id="创建key"><a href="#创建key" class="headerlink" title="创建key"></a>创建key</h2><p>利用<code>ssh-keygen -t rsa -C &quot;[email]&quot;</code>创建不同的ssh key，但是不能再一路回车了，需要给文件创建别名，以防止被覆盖：</p>
-<p><code>Enter file in which to save the key (/Users/Sunghao/.ssh/id_rsa): [输入任意的rsa名称]</code></p>
-<p><br></p>
-<h2 id="配置config文件"><a href="#配置config文件" class="headerlink" title="配置config文件"></a>配置config文件</h2><p>我是在mac环境下配置的，如果在./ssh文件夹下没有config文件，则用<code>touch config</code>进行创建，然后打开文件，输入以下文本:</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Host 名称<span class="number">1</span></div><div class="line">HostName github.<span class="keyword">com</span></div><div class="line">PreferredAuthentications publickey</div><div class="line">IdentityFile ~/.ssh/在第一步创建的rsa名称<span class="number">1</span></div><div class="line"></div><div class="line">Host 名称<span class="number">2</span></div><div class="line">HostName github.<span class="keyword">com</span></div><div class="line">PreferredAuthentications publickey</div><div class="line">IdentityFile ~/.ssh/在第一步创建的rsa名称<span class="number">2</span></div></pre></td></tr></table></figure>
-<p><br></p>
-<h2 id="测试ssh是否配置成功"><a href="#测试ssh是否配置成功" class="headerlink" title="测试ssh是否配置成功"></a>测试ssh是否配置成功</h2><p>分别使用<code>ssh -T git@第二步配置的host的名称</code>，如果出现：</p>
-<blockquote>
-<p>Hi xxxx! You’ve successfully authenticated, but GitHub does not provide shell access.</p>
-</blockquote>
-<p>则配置成功。</p>
-<p><br></p>
-<h2 id="clone远程仓库"><a href="#clone远程仓库" class="headerlink" title="clone远程仓库"></a>clone远程仓库</h2><p>在clone的时候需要修改Host名称即可：</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone git@[host名称代替原本的名称]:url</div></pre></td></tr></table></figure>
-
+        
       
       
     </div>
@@ -209,13 +179,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/multiSSHKey.html/">多GitHub账号的SSH配置</a></p>
+        <p><span>本文标题:</span><a href="/make-wheel-WRKVOController-1.html/">make wheel WRKVOController</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
-        <p><span>发布时间:</span>2016年10月17日 - 21时29分</p>
-        <p><span>最后更新:</span>2017年05月06日 - 09时31分</p>
+        <p><span>发布时间:</span>2017年05月06日 - 10时02分</p>
+        <p><span>最后更新:</span>2017年05月06日 - 10时02分</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/multiSSHKey.html/" title="多GitHub账号的SSH配置">http://simonchen.club/multiSSHKey.html/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/multiSSHKey.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/make-wheel-WRKVOController-1.html/" title="make wheel WRKVOController">http://simonchen.club/make-wheel-WRKVOController-1.html/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/make-wheel-WRKVOController-1.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script src="/js/clipboard.min.js"></script>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
@@ -228,11 +198,15 @@
 
 <nav id="article-nav">
   
-  
-    <a href="/Assotiated Object.html/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">关联对象</div>
-      <strong class="article-nav-caption">></strong>
+    <a href="/make-wheel-WRKVOController.html/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          make wheel WRKVOController
+        
+      </div>
     </a>
+  
   
 </nav>
 
@@ -241,7 +215,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建key"><span class="toc-number">1.</span> <span class="toc-text">创建key</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置config文件"><span class="toc-number">2.</span> <span class="toc-text">配置config文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试ssh是否配置成功"><span class="toc-number">3.</span> <span class="toc-text">测试ssh是否配置成功</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#clone远程仓库"><span class="toc-number">4.</span> <span class="toc-text">clone远程仓库</span></a></li></ol>
+    
 </div>
 <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
 
@@ -298,13 +272,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+            <a href="/make-wheel-WRKVOController.html/" title="上一篇: make wheel WRKVOController">
+                <i class="fa fa-angle-left"></i>
+            </a>
         
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
         
-            <a href="/Assotiated Object.html/" title="下一篇: 关联对象">
-                <i class="fa fa-angle-right"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
     </div>
     <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/make-wheel-WRKVOController-1.html/">make wheel WRKVOController</a></li><li class="post-list-item"><a class="post-list-link" href="/make-wheel-WRKVOController.html/">make wheel WRKVOController</a></li><li class="post-list-item"><a class="post-list-link" href="/FBKVOController Source Code analysis.html/">FBKVOController源码阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/KVC and KVO.html/">KVC与KVO</a></li><li class="post-list-item"><a class="post-list-link" href="/Assotiated Object.html/">关联对象</a></li><li class="post-list-item"><a class="post-list-link" href="/multiSSHKey.html/">多GitHub账号的SSH配置</a></li></ul>
