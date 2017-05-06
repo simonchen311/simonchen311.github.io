@@ -166,26 +166,10 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h2 id="nil"><a href="#nil" class="headerlink" title="nil"></a>nil</h2><p><code>Defines the id of a null instance.</code>定义一个实例为空，指向oc中对象的空指针。</p>
+              <h2 id="nil"><a href="#nil" class="headerlink" title="nil"></a>nil</h2><p><code>Defines the id of a null instance.</code>定义一个实例为空，指向oc中对象的空指针。</p>
 <p>示例代码：</p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSString</span> *someString = <span class="literal">nil</span>;</div><div class="line"><span class="built_in">NSURL</span> *someURL = <span class="literal">nil</span>;</div><div class="line"><span class="keyword">id</span> someObject = <span class="literal">nil</span>;</div><div class="line"><span class="keyword">if</span> (anotherObject == <span class="literal">nil</span>) </div><div class="line">&#123;</div><div class="line">	<span class="comment">// do something</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>当对某个对象release的同时最好把他们赋值为nil，这样可以确保安全性，如果不赋值nil，可能导致程序崩溃。</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span> * array = [<span class="built_in">NSArray</span> arrayWithObjects:<span class="string">@"test"</span>,<span class="string">@"test1"</span> ,<span class="literal">nil</span>];</div><div class="line">[array release];</div><div class="line"><span class="keyword">if</span> (array)</div><div class="line">&#123;</div><div class="line">	<span class="comment">//仅仅对数组release，并没有赋值为nil，在程序某个地方如果继续对数组操作，程序直接崩溃</span></div><div class="line">	<span class="built_in">NSString</span> * string = [array objectAtIndex:<span class="number">0</span>];</div><div class="line">	<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,string);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="NULL"><a href="#NULL" class="headerlink" title="NULL"></a>NULL</h2><p><code>These macros define null values for classes and instances.</code>NULL可以用在C语言的各种指针上。</p>
-<p>示例代码：</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> *pointerToInt = <span class="literal">NULL</span>;</div><div class="line"><span class="keyword">char</span> *pointerToChar = <span class="literal">NULL</span>;</div><div class="line"><span class="keyword">struct</span> TreeNode *rootNode = <span class="literal">NULL</span>;</div></pre></td></tr></table></figure>
-<p>在Objective-C里，nil对象被设计来跟NULL空指针关联的。他们的区别就是nil是一个对象，而NULL只是一个值。而且我们对于nil调用方法，不会产生crash或者抛出异常。</p>
-<h2 id="Nil"><a href="#Nil" class="headerlink" title="Nil"></a>Nil</h2><p><code>Defines the id of a null class.</code>定义一个空的类。</p>
-<p>示例代码：</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Class someClass = Nil;</div><div class="line">Class anotherClass = [<span class="built_in">NSString</span> <span class="keyword">class</span>];</div></pre></td></tr></table></figure>
-<h2 id="NSNull"><a href="#NSNull" class="headerlink" title="NSNull"></a>NSNull</h2><p><code>The NSNull class defines a singleton object used to represent null values in collection objects (which don’t allow nil values).</code>NSNull类定义了一个单例对象用于表示集合对象的空值。</p>
-<p>示例代码：</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span> *array = [<span class="built_in">NSArray</span> arrayWithObjects:[[<span class="built_in">NSObject</span> alloc] init], [<span class="built_in">NSNull</span> null],[[<span class="built_in">NSObject</span> alloc] init], [[<span class="built_in">NSObject</span> alloc] init], <span class="literal">nil</span>];</div></pre></td></tr></table></figure>
-<p>集合对象无法包含nil作为其具体值，如NSArray、NSSet和NSDictionary。相应地，nil值用一个特定的对象NSNull来表示。</p>
-<p>如果用nil，就会变成：</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span> *array = [<span class="built_in">NSArray</span> arrayWithObjects:[[<span class="built_in">NSObject</span> alloc] init], <span class="literal">nil</span>,  [[<span class="built_in">NSObject</span> alloc] init], [[<span class="built_in">NSObject</span> alloc] init], <span class="literal">nil</span>];</div></pre></td></tr></table></figure>
-<p>那么数组到第二个位置就会结束。打印<code>[array count]</code>的话会显示1而不是4。所以<code>[NSNull null]</code>通常可以作为一个数组的占位符，从而是数组的count计算准确</p>
-
+          
       
       
     </div>
@@ -203,6 +187,10 @@
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
     </div>
 
+      
+        <p class="article-more-link">
+          <a  href="/The differences of nil，Nil，NULL，NSNULL.html/#more">More >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>

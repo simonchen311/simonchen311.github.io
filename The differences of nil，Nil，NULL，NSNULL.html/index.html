@@ -5,17 +5,17 @@
   
   <title>iOS中nil，Nil，NULL，NSNULL的区别 | Simon’s Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="nilDefines the id of a null instance.定义一个实例为空，指向oc中对象的空指针。 示例代码： 1234567NSString *someString = nil;NSURL *someURL = nil;id someObject = nil;if (anotherObject == nil) &amp;#123;	// do something&amp;#125; 当对某个对">
+  <meta name="description" content="nilDefines the id of a null instance.定义一个实例为空，指向oc中对象的空指针。 示例代码： 1234567NSString *someString = nil;NSURL *someURL = nil;id someObject = nil;if (anotherObject == nil) &amp;#123;	// do something&amp;#125;">
 <meta name="keywords" content="iOS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS中nil，Nil，NULL，NSNULL的区别">
 <meta property="og:url" content="http://simonchen.club/The differences of nil，Nil，NULL，NSNULL.html/index.html">
 <meta property="og:site_name" content="Simon’s Home">
-<meta property="og:description" content="nilDefines the id of a null instance.定义一个实例为空，指向oc中对象的空指针。 示例代码： 1234567NSString *someString = nil;NSURL *someURL = nil;id someObject = nil;if (anotherObject == nil) &amp;#123;	// do something&amp;#125; 当对某个对">
+<meta property="og:description" content="nilDefines the id of a null instance.定义一个实例为空，指向oc中对象的空指针。 示例代码： 1234567NSString *someString = nil;NSURL *someURL = nil;id someObject = nil;if (anotherObject == nil) &amp;#123;	// do something&amp;#125;">
 <meta property="og:updated_time" content="2016-09-05T02:09:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS中nil，Nil，NULL，NSNULL的区别">
-<meta name="twitter:description" content="nilDefines the id of a null instance.定义一个实例为空，指向oc中对象的空指针。 示例代码： 1234567NSString *someString = nil;NSURL *someURL = nil;id someObject = nil;if (anotherObject == nil) &amp;#123;	// do something&amp;#125; 当对某个对">
+<meta name="twitter:description" content="nilDefines the id of a null instance.定义一个实例为空，指向oc中对象的空指针。 示例代码： 1234567NSString *someString = nil;NSURL *someURL = nil;id someObject = nil;if (anotherObject == nil) &amp;#123;	// do something&amp;#125;">
   
     <link rel="alternative" href="/atom.xml" title="Simon’s Home" type="application/atom+xml">
   
@@ -184,6 +184,7 @@
         <h2 id="nil"><a href="#nil" class="headerlink" title="nil"></a>nil</h2><p><code>Defines the id of a null instance.</code>定义一个实例为空，指向oc中对象的空指针。</p>
 <p>示例代码：</p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSString</span> *someString = <span class="literal">nil</span>;</div><div class="line"><span class="built_in">NSURL</span> *someURL = <span class="literal">nil</span>;</div><div class="line"><span class="keyword">id</span> someObject = <span class="literal">nil</span>;</div><div class="line"><span class="keyword">if</span> (anotherObject == <span class="literal">nil</span>) </div><div class="line">&#123;</div><div class="line">	<span class="comment">// do something</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<a id="more"></a>
 <p>当对某个对象release的同时最好把他们赋值为nil，这样可以确保安全性，如果不赋值nil，可能导致程序崩溃。</p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span> * array = [<span class="built_in">NSArray</span> arrayWithObjects:<span class="string">@"test"</span>,<span class="string">@"test1"</span> ,<span class="literal">nil</span>];</div><div class="line">[array release];</div><div class="line"><span class="keyword">if</span> (array)</div><div class="line">&#123;</div><div class="line">	<span class="comment">//仅仅对数组release，并没有赋值为nil，在程序某个地方如果继续对数组操作，程序直接崩溃</span></div><div class="line">	<span class="built_in">NSString</span> * string = [array objectAtIndex:<span class="number">0</span>];</div><div class="line">	<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,string);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="NULL"><a href="#NULL" class="headerlink" title="NULL"></a>NULL</h2><p><code>These macros define null values for classes and instances.</code>NULL可以用在C语言的各种指针上。</p>
