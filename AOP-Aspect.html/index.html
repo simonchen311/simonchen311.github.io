@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://simonchen.club/AOP-Aspect.html/index.html">
 <meta property="og:site_name" content="Simon’s Home">
 <meta property="og:description" content="概念AOP: Aspect Oriented Programming 面向切面编程。利用AOP可以对业务逻辑的各个部分进行隔离，提取模块可能都要重复的部分，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。iOS中利用运行时，动态地将代码切入到类的指定方法、指定位置上的编程思想就是面向切面的编程。 利用AOP，可以将日志记录，性能统计，安全控制，事务处理，异常处理等">
-<meta property="og:updated_time" content="2017-01-08T10:34:48.000Z">
+<meta property="og:updated_time" content="2016-12-06T10:34:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AOP编程 - Aspects源码阅读">
 <meta name="twitter:description" content="概念AOP: Aspect Oriented Programming 面向切面编程。利用AOP可以对业务逻辑的各个部分进行隔离，提取模块可能都要重复的部分，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。iOS中利用运行时，动态地将代码切入到类的指定方法、指定位置上的编程思想就是面向切面的编程。 利用AOP，可以将日志记录，性能统计，安全控制，事务处理，异常处理等">
@@ -143,7 +143,7 @@
   
     <div class="article-meta">
       <a href="/AOP-Aspect.html/" class="article-date">
-      <time datetime="2017-01-08T00:50:54.000Z" itemprop="datePublished">2017-01-08</time>
+      <time datetime="2016-12-06T00:50:54.000Z" itemprop="datePublished">2016-12-06</time>
 </a>
     </div>
   
@@ -183,11 +183,11 @@
           
         <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p><code>AOP:</code> Aspect Oriented Programming 面向切面编程。利用AOP可以对业务逻辑的各个部分进行隔离，提取模块可能都要重复的部分，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。iOS中利用运行时，动态地将代码切入到类的指定方法、指定位置上的编程思想就是面向切面的编程。</p>
 <p>利用AOP，可以将日志记录，性能统计，安全控制，事务处理，异常处理等代码从业务逻辑代码中划分出来，通过对这些行为的分离，我们希望可以将它们独立到非指导业务逻辑的方法中，进而改变这些行为的时候不影响业务逻辑的代码。</p>
-<a id="more"></a>
 <p>Aspects是AOP思想在iOS下的实现，写这篇文章主要是阅读<a href="https://github.com/steipete/Aspects" target="_blank" rel="external">Aspects</a>源码，查看它具体实现过程。</p>
 <h2 id="Aspects库定义"><a href="#Aspects库定义" class="headerlink" title="Aspects库定义"></a>Aspects库定义</h2><p>在分析源码之前，首先看看Aspects文件中定义的一些信息：</p>
 <h3 id="AspectOptions"><a href="#AspectOptions" class="headerlink" title="AspectOptions"></a>AspectOptions</h3><p>AspectOptions是一个枚举类型，用来说明hook的方法的调用时机。</p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="built_in">NS_OPTIONS</span>(<span class="built_in">NSUInteger</span>, AspectOptions) &#123;</div><div class="line">    AspectPositionAfter   = <span class="number">0</span>,            <span class="comment">/// Called after the original implementation (default)</span></div><div class="line">    AspectPositionInstead = <span class="number">1</span>,            <span class="comment">/// Will replace the original implementation.</span></div><div class="line">    AspectPositionBefore  = <span class="number">2</span>,            <span class="comment">/// Called before the original implementation.</span></div><div class="line">    AspectOptionAutomaticRemoval = <span class="number">1</span> &lt;&lt; <span class="number">3</span> <span class="comment">/// Will remove the hook after the first execution.</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<a id="more"></a>
 <h3 id="AspectInfo"><a href="#AspectInfo" class="headerlink" title="AspectInfo"></a>AspectInfo</h3><p>AspectInfo是对NSInvocation的一层包装，内部封装了3个属性，便于直接读取到NSinvocation对象、接收者和参数信息。</p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">AspectInfo</span> : <span class="title">NSObject</span> &lt;<span class="title">AspectInfo</span>&gt;</span></div><div class="line">- (<span class="keyword">id</span>)initWithInstance:(__<span class="keyword">unsafe_unretained</span> <span class="keyword">id</span>)instance invocation:(<span class="built_in">NSInvocation</span> *)invocation;</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">unsafe_unretained</span>, <span class="keyword">readonly</span>) <span class="keyword">id</span> instance;</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>, <span class="keyword">readonly</span>) <span class="built_in">NSArray</span> *arguments;</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>, <span class="keyword">readonly</span>) <span class="built_in">NSInvocation</span> *originalInvocation;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
 <h3 id="AspectIdentifier"><a href="#AspectIdentifier" class="headerlink" title="AspectIdentifier"></a>AspectIdentifier</h3><p>AspectIdentifier代表了一个具体的Aspect内容，包括：被hook的原方法名SEL，hook的block和其签名、以及其调用时机。</p>
@@ -247,8 +247,8 @@
     <div class="copyright">
         <p><span>本文标题:</span><a href="/AOP-Aspect.html/">AOP编程 - Aspects源码阅读</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
-        <p><span>发布时间:</span>2017年01月08日 - 08时50分</p>
-        <p><span>最后更新:</span>2017年01月08日 - 18时34分</p>
+        <p><span>发布时间:</span>2016年12月06日 - 08时50分</p>
+        <p><span>最后更新:</span>2016年12月06日 - 18时34分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/AOP-Aspect.html/" title="AOP编程 - Aspects源码阅读">http://simonchen.club/AOP-Aspect.html/</a>
             <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/AOP-Aspect.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
@@ -264,18 +264,18 @@
 
 <nav id="article-nav">
   
-    <a href="/Runloop.html/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/SDWebImage-Souce-Code-Analysis.html/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          RunLoop探究
+          SDWebImage源码阅读
         
       </div>
     </a>
   
   
-    <a href="/FBKVOController Source Code analysis.html/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Facebook开源代码 - FBKVOController阅读</div>
+    <a href="/EXC-BAD-ACESS-Debug.html/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">小技巧：EXC_BAD_ACESS的调试</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -343,18 +343,18 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/Runloop.html/" title="上一篇: RunLoop探究">
+            <a href="/SDWebImage-Souce-Code-Analysis.html/" title="上一篇: SDWebImage源码阅读">
                 <i class="fa fa-angle-left"></i>
             </a>
         
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
         
-            <a href="/FBKVOController Source Code analysis.html/" title="下一篇: Facebook开源代码 - FBKVOController阅读">
+            <a href="/EXC-BAD-ACESS-Debug.html/" title="下一篇: 小技巧：EXC_BAD_ACESS的调试">
                 <i class="fa fa-angle-right"></i>
             </a>
         
     </div>
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/FBKVOController Source Code analysis.html/">Facebook开源代码 - FBKVOController阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/AOP-Aspect.html/">AOP编程 - Aspects源码阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/Runloop.html/">RunLoop探究</a></li><li class="post-list-item"><a class="post-list-link" href="/programming-jottings-character-1.html/">iOS开发杂记</a></li><li class="post-list-item"><a class="post-list-link" href="/EXC-BAD-ACESS-Debug.html/">小技巧：EXC_BAD_ACESS的调试</a></li><li class="post-list-item"><a class="post-list-link" href="/SDWebImage-Souce-Code-Analysis.html/">SDWebImage源码阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/KVC and KVO.html/">KVC与KVO</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Rutime-Assotiated Object.html/">iOS Runtime 运行时笔记(四)</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Swizzle.html/">iOS Runtime 运行时笔记(三)</a></li><li class="post-list-item"><a class="post-list-link" href="/multiSSHKey.html/">多GitHub账号的SSH配置</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Method.html/">iOS Runtime 运行时笔记(二)</a></li><li class="post-list-item"><a class="post-list-link" href="/Instruction-Set.html/">symbol(s) not found for architecture x86_64 错误</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Object.html/">iOS Runtime 运行时笔记(一)</a></li><li class="post-list-item"><a class="post-list-link" href="/sandbox.html/">iOS应用的沙盒目录结构</a></li><li class="post-list-item"><a class="post-list-link" href="/make-a-static-library.html/">静态库的制作过程</a></li><li class="post-list-item"><a class="post-list-link" href="/The differences of nil，Nil，NULL，NSNULL.html/">iOS中nil，Nil，NULL，NSNULL的区别</a></li></ul>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/FBKVOController Source Code analysis.html/">Facebook开源代码 - FBKVOController阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/Runloop.html/">RunLoop探究</a></li><li class="post-list-item"><a class="post-list-link" href="/programming-jottings-character-1.html/">iOS开发杂记</a></li><li class="post-list-item"><a class="post-list-link" href="/EXC-BAD-ACESS-Debug.html/">小技巧：EXC_BAD_ACESS的调试</a></li><li class="post-list-item"><a class="post-list-link" href="/AOP-Aspect.html/">AOP编程 - Aspects源码阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/SDWebImage-Souce-Code-Analysis.html/">SDWebImage源码阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/KVC and KVO.html/">KVC与KVO</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Rutime-Assotiated Object.html/">iOS Runtime 运行时笔记(四)</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Swizzle.html/">iOS Runtime 运行时笔记(三)</a></li><li class="post-list-item"><a class="post-list-link" href="/multiSSHKey.html/">多GitHub账号的SSH配置</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Method.html/">iOS Runtime 运行时笔记(二)</a></li><li class="post-list-item"><a class="post-list-link" href="/Instruction-Set.html/">symbol(s) not found for architecture x86_64 错误</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Object.html/">iOS Runtime 运行时笔记(一)</a></li><li class="post-list-item"><a class="post-list-link" href="/sandbox.html/">iOS应用的沙盒目录结构</a></li><li class="post-list-item"><a class="post-list-link" href="/make-a-static-library.html/">静态库的制作过程</a></li><li class="post-list-item"><a class="post-list-link" href="/The differences of nil，Nil，NULL，NSNULL.html/">iOS中nil，Nil，NULL，NSNULL的区别</a></li></ul>
     <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
     <script>
         $(".post-list").addClass("toc-article");
