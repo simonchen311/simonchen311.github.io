@@ -402,6 +402,8 @@
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">enum</span> &#123;</div><div class="line"></div><div class="line">   <span class="comment">//更改之前的值</span></div><div class="line">   <span class="built_in">NSKeyValueObservingOptionNew</span> = <span class="number">0x01</span>,</div><div class="line"></div><div class="line">   <span class="comment">//更改之后的值</span></div><div class="line">   <span class="built_in">NSKeyValueObservingOptionOld</span> = <span class="number">0x02</span>,</div><div class="line"></div><div class="line">   <span class="comment">//把初始化的值提供给处理方法，一旦注册，立马就会调用一次。通常它会带有新值，而不会带有旧值。</span></div><div class="line">   <span class="built_in">NSKeyValueObservingOptionInitial</span> = <span class="number">0x04</span>,</div><div class="line"></div><div class="line">   <span class="comment">//2次调用，在值改变前后分别调用一次</span></div><div class="line">   <span class="built_in">NSKeyValueObservingOptionPrior</span> = <span class="number">0x08</span> </div><div class="line">&#125;;</div><div class="line"><span class="keyword">typedef</span> <span class="built_in">NSUInteger</span> <span class="built_in">NSKeyValueObservingOptions</span>;</div></pre></td></tr></table></figure>
 <p><br></p>
 <h3 id="观察容器类"><a href="#观察容器类" class="headerlink" title="观察容器类"></a>观察容器类</h3><p>观察容器类和观察容器里的对象是不同的。如果一个容器包含了A，B和C对象，<code>增加D就改变了容器，而改变A对象则不会改变容器，</code>一般来讲，可以先观察容器，然后在添加对象后观察对象，而在删除对象后停止观察。</p>
+<p>当然也可以通过KVC直接出发KVO通知</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[[<span class="keyword">self</span> mutableArrayValueForKey:<span class="string">@"arr"</span>] addObject:object];<span class="comment">//增加</span></div><div class="line">[[<span class="keyword">self</span> mutableArrayValueForKey:<span class="string">@"arr"</span>] removeObjectAtIndex:object];<span class="comment">//删除</span></div></pre></td></tr></table></figure>
 <p><br></p>
 <h3 id="KVO的实现"><a href="#KVO的实现" class="headerlink" title="KVO的实现"></a>KVO的实现</h3><p>KVO观察通知依赖于<code>NSObject</code>的两个方法，他们自动被调用</p>
 <ul>
@@ -409,7 +411,7 @@
 <li><strong>didChangeValueForKey:</strong>    改变发生后调用，用以记录新值    </li>
 </ul>
 <blockquote>
-<p>调用addObserver之后，会定义一个所观察的属性所属类的子类，subclass里边实现了属性的setter方法，setter方法中实现发动通知的功能（也就是插入了上述两个函数）。然后subclass中重写了class函数，还让返&gt;回属性类的class，再让属性类对象的isa指向subclass，这样就伪装成表面上看还是属性类自己实现的通知功能。</p>
+<p>调用addObserver之后，会定义一个所观察的属性所属类的子类，subclass里边实现了属性的setter方法，setter方法中实现发动通知的功能。然后subclass中重写了class函数，还让返&gt;回属性类的class，再让属性类对象的isa指向subclass，这样就伪装成表面上看还是属性类自己实现的通知功能。</p>
 </blockquote>
 
       
