@@ -3,25 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>静态库的制作过程 | Simon’s Home</title>
+  <title>JSONModel 源码阅读 | Simon’s Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="起因今天由于项目的需要，需要制作一份iOS静态库，所以在此记录下其制作过程。">
-<meta name="keywords" content="iOS">
+  <meta name="description" content="JSONModel是一个解析JSON的开源库，其作用就是将JSON数据直接解析成自定义的Model。 用法使用JSONModel非常简单，只需要将代码中定义的Model继承自JSONModel，而后调用JSONModel中的接口，让其内部自己完成从JSON数据中解析出对应Model中的属性并进行赋值工作。 1234567//定义一个Model@inteface Model : JSONModel@">
+<meta name="keywords" content="iOS,Source Code">
 <meta property="og:type" content="article">
-<meta property="og:title" content="静态库的制作过程">
-<meta property="og:url" content="http://simonchen.club/make-a-static-library.html/index.html">
+<meta property="og:title" content="JSONModel 源码阅读">
+<meta property="og:url" content="http://simonchen.club/JSONModel-Source-Code-Analysis.html/index.html">
 <meta property="og:site_name" content="Simon’s Home">
-<meta property="og:description" content="起因今天由于项目的需要，需要制作一份iOS静态库，所以在此记录下其制作过程。">
-<meta property="og:image" content="http://simonchen.club/make-a-static-library.html/1.jpg">
-<meta property="og:image" content="http://simonchen.club/make-a-static-library.html/2.jpg">
-<meta property="og:image" content="http://simonchen.club/make-a-static-library.html/3.jpg">
-<meta property="og:image" content="http://simonchen.club/make-a-static-library.html/4.jpg">
-<meta property="og:image" content="http://simonchen.club/make-a-static-library.html/5.jpg">
-<meta property="og:updated_time" content="2016-09-12T02:32:57.000Z">
+<meta property="og:description" content="JSONModel是一个解析JSON的开源库，其作用就是将JSON数据直接解析成自定义的Model。 用法使用JSONModel非常简单，只需要将代码中定义的Model继承自JSONModel，而后调用JSONModel中的接口，让其内部自己完成从JSON数据中解析出对应Model中的属性并进行赋值工作。 1234567//定义一个Model@inteface Model : JSONModel@">
+<meta property="og:updated_time" content="2017-01-08T10:34:48.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="静态库的制作过程">
-<meta name="twitter:description" content="起因今天由于项目的需要，需要制作一份iOS静态库，所以在此记录下其制作过程。">
-<meta name="twitter:image" content="http://simonchen.club/make-a-static-library.html/1.jpg">
+<meta name="twitter:title" content="JSONModel 源码阅读">
+<meta name="twitter:description" content="JSONModel是一个解析JSON的开源库，其作用就是将JSON数据直接解析成自定义的Model。 用法使用JSONModel非常简单，只需要将代码中定义的Model继承自JSONModel，而后调用JSONModel中的接口，让其内部自己完成从JSON数据中解析出对应Model中的属性并进行赋值工作。 1234567//定义一个Model@inteface Model : JSONModel@">
   
     <link rel="alternative" href="/atom.xml" title="Simon’s Home" type="application/atom+xml">
   
@@ -145,11 +139,11 @@
         </header>                
     </div>
 </nav>
-      <div class="body-wrap"><article id="post-make-a-static-library" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-JSONModel-Source-Code-Analysis" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/make-a-static-library.html/" class="article-date">
-      <time datetime="2016-09-12T02:32:57.000Z" itemprop="datePublished">2016-09-12</time>
+      <a href="/JSONModel-Source-Code-Analysis.html/" class="article-date">
+      <time datetime="2017-01-08T00:50:54.000Z" itemprop="datePublished">2017-01-08</time>
 </a>
     </div>
   
@@ -162,7 +156,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      静态库的制作过程
+      JSONModel 源码阅读
     </h1>
   
 
@@ -177,7 +171,7 @@
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Source-Code/">Source Code</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -187,33 +181,12 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p><br></p>
-<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>今天由于项目的需要，需要制作一份iOS静态库，所以在此记录下其制作过程。</p>
-<a id="more"></a>
-<p><br></p>
-<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><h3 id="创建工程"><a href="#创建工程" class="headerlink" title="创建工程"></a>创建工程</h3><p>首先打开Xcode新建一个工程，在<code>Framework &amp; Library</code>栏下选择Cocoa Touch Static Library，然后点击Next，输入Product Name。</p>
-<p><img src="/make-a-static-library.html/1.jpg" alt="描述"></p>
-<p><br></p>
-<h3 id="编写代码"><a href="#编写代码" class="headerlink" title="编写代码"></a>编写代码</h3><p>创建.h文件和.m文件，并在其中编写所需要的代码；当然，也可以添加已经写好的文件。（这里写个简单的例子方便参考）</p>
-<p>头文件</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//myFramework.h </span></div><div class="line"><span class="meta">#import <span class="meta-string">&lt;Foundation/Foundation.h&gt;</span> </span></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">myFramework</span> : <span class="title">NSObject</span> </span></div><div class="line">- (<span class="keyword">int</span>)f; </div><div class="line">- <span class="keyword">@end</span></div></pre></td></tr></table></figure>
-<p>实现文件</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// myFramework.m</span></div><div class="line"> <span class="meta">#import <span class="meta-string">"myFramework.h"</span> </span></div><div class="line"> </div><div class="line"> <span class="class"><span class="keyword">@implementation</span> <span class="title">myFramework</span> </span></div><div class="line"> </div><div class="line"> - (<span class="keyword">int</span>)f </div><div class="line"> &#123; </div><div class="line">     <span class="keyword">return</span> <span class="number">200</span>; </div><div class="line"> &#125; </div><div class="line"> </div><div class="line"> <span class="keyword">@end</span></div></pre></td></tr></table></figure>
-<p><br></p>
-<h3 id="修改Scheme"><a href="#修改Scheme" class="headerlink" title="修改Scheme"></a>修改Scheme</h3><p>在导航工具栏中，点击<code>Edit Scheme</code></p>
-<p><img src="/make-a-static-library.html/2.jpg" alt="描述"></p>
-<p>将Build Configuration中Debug修改为release。如果Destination选择iOS Device，那么制作的库只能在真机下运行，如果Destination选择模拟器，那么制作的库只能在模拟器下运行。</p>
-<p><img src="/make-a-static-library.html/3.jpg" alt="描述"></p>
-<p><br></p>
-<h3 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h3><p>关闭窗口，command+B重新编译程序，可以发现Products中的libmyFramework.a由红色变成黑色，右键点击库，选择Show in Finder就能找到.a静态库了，在Release-iphoneos文件夹下的.a库只能在真机上运行，而Release-iphonesimulator文件夹下的.a库只能在模拟器上运行，将其和头文件一起拷贝出来，就可以给其他工程用了，这就意味着一份静态库制作好了！</p>
-<p><img src="/make-a-static-library.html/4.jpg" alt="描述"></p>
-<p><br></p>
-<h3 id="合并"><a href="#合并" class="headerlink" title="合并"></a>合并</h3><p>现在需要将真机和模拟器下的.a文件合并成一个文件，这样就可以制作在真机和模拟器上都可以使用的库了。打开终端，输入以下指令就可以合并两个静态库了：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lipo -create 路径1/yourlib.a  路径2/yourlib.a -output 路径3/yourlib.a</div></pre></td></tr></table></figure>
-<p><br></p>
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>这次制作库是为了考证，对于两份完全相同的库，调用其中的函数到底是调用哪个库的，经过测试找出了结论：在一个工程中引用了两份完全相同的库（存储在不同的文件夹下），调用其中的函数，是根据Library Search Paths的顺序来调用的，后面相同的库中的函数则不会再去调用。如下图所示，调用相同库中的函数，只会调用在路径$(PROJECT_DIR)/framework下的库中的函数，另一份库则不会去调用。</p>
-<p><img src="/make-a-static-library.html/5.jpg" alt="描述"></p>
-
+        <p><a href="https://github.com/jsonmodel/jsonmodel" target="_blank" rel="external">JSONModel</a>是一个解析JSON的开源库，其作用就是将JSON数据直接解析成自定义的Model。</p>
+<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><p>使用JSONModel非常简单，只需要将代码中定义的Model继承自JSONModel，而后调用JSONModel中的接口，让其内部自己完成从JSON数据中解析出对应Model中的属性并进行赋值工作。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//定义一个Model</span></div><div class="line">@inteface Model : JSONModel</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">strong</span>, <span class="keyword">nonatomic</span>) <span class="built_in">NSString</span>* string;</div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="comment">//外部调用接口进行JSON转换成Model工作</span></div><div class="line">Model *model = [[Model alloc] initWithDictionary:dic error:<span class="literal">nil</span>];</div></pre></td></tr></table></figure>
+<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><p>那么JSONModel内部解析的过程是什么样子的呢，这就是写这篇文章的主要目的：探究其实现源码。</p>
+<p>JSONModel提供了多种接口给外部调用，我们可以直接传递NSString，NSData或者NSDictionary让JSONModel进行JSON解析，但是这些接口终究会调用到一个最终的统一接口</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">-(<span class="keyword">id</span>)initWithDictionary:(<span class="built_in">NSDictionary</span>*)dict error:(<span class="built_in">NSError</span>**)err</div><div class="line">&#123;</div><div class="line">    <span class="comment">//check for nil input</span></div><div class="line">    <span class="keyword">if</span> (!dict) &#123;</div><div class="line">        <span class="keyword">if</span> (err) *err = [JSONModelError errorInputIsNil];</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//invalid input, just create empty instance</span></div><div class="line">    <span class="keyword">if</span> (![dict isKindOfClass:[<span class="built_in">NSDictionary</span> <span class="keyword">class</span>]]) &#123;</div><div class="line">        <span class="keyword">if</span> (err) *err = [JSONModelError errorInvalidDataWithMessage:<span class="string">@"Attempt to initialize JSONModel object using initWithDictionary:error: but the dictionary parameter was not an 'NSDictionary'."</span>];</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//create a class instance</span></div><div class="line">    <span class="keyword">self</span> = [<span class="keyword">self</span> init];</div><div class="line">    <span class="keyword">if</span> (!<span class="keyword">self</span>) &#123;</div><div class="line"></div><div class="line">        <span class="comment">//super init didn't succeed</span></div><div class="line">        <span class="keyword">if</span> (err) *err = [JSONModelError errorModelIsInvalid];</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//check incoming data structure</span></div><div class="line">    <span class="comment">//检查当前对象解析出来的必须属性名是不是与传入的JSON对象时包含关系，如果不是则直接返回</span></div><div class="line">    <span class="keyword">if</span> (![<span class="keyword">self</span> __doesDictionary:dict matchModelWithKeyMapper:<span class="keyword">self</span>.__keyMapper error:err]) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//import the data from a dictionary</span></div><div class="line">    <span class="comment">//KVC赋值</span></div><div class="line">    <span class="keyword">if</span> (![<span class="keyword">self</span> __importDictionary:dict withKeyMapper:<span class="keyword">self</span>.__keyMapper validation:<span class="literal">YES</span> error:err]) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//run any custom model validation</span></div><div class="line">    <span class="keyword">if</span> (![<span class="keyword">self</span> validate:err]) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//model is valid! yay!</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
       
       
     </div>
@@ -222,13 +195,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/make-a-static-library.html/">静态库的制作过程</a></p>
+        <p><span>本文标题:</span><a href="/JSONModel-Source-Code-Analysis.html/">JSONModel 源码阅读</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
-        <p><span>发布时间:</span>2016年09月12日 - 10时32分</p>
-        <p><span>最后更新:</span>2016年09月12日 - 10时32分</p>
+        <p><span>发布时间:</span>2017年01月08日 - 08时50分</p>
+        <p><span>最后更新:</span>2017年01月08日 - 18时34分</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/make-a-static-library.html/" title="静态库的制作过程">http://simonchen.club/make-a-static-library.html/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/make-a-static-library.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/JSONModel-Source-Code-Analysis.html/" title="JSONModel 源码阅读">http://simonchen.club/JSONModel-Source-Code-Analysis.html/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/JSONModel-Source-Code-Analysis.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script src="/js/clipboard.min.js"></script>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
@@ -241,18 +214,18 @@
 
 <nav id="article-nav">
   
-    <a href="/The differences of nil，Nil，NULL，NSNULL.html/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/EXC-BAD-ACESS-Debug.html/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          iOS中nil，Nil，NULL，NSNULL的区别
+          小技巧：EXC_BAD_ACESS的调试
         
       </div>
     </a>
   
   
-    <a href="/sandbox.html/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">iOS应用的沙盒目录结构</div>
+    <a href="/programming-jottings-character-1.html/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">iOS开发杂记</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -263,7 +236,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#起因"><span class="toc-number">1.</span> <span class="toc-text">起因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#流程"><span class="toc-number">2.</span> <span class="toc-text">流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建工程"><span class="toc-number">2.1.</span> <span class="toc-text">创建工程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编写代码"><span class="toc-number">2.2.</span> <span class="toc-text">编写代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改Scheme"><span class="toc-number">2.3.</span> <span class="toc-text">修改Scheme</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编译"><span class="toc-number">2.4.</span> <span class="toc-text">编译</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#合并"><span class="toc-number">2.5.</span> <span class="toc-text">合并</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后记"><span class="toc-number">3.</span> <span class="toc-text">后记</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#用法"><span class="toc-number">1.</span> <span class="toc-text">用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#源码"><span class="toc-number">2.</span> <span class="toc-text">源码</span></a></li></ol>
 </div>
 <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
 
@@ -320,13 +293,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/The differences of nil，Nil，NULL，NSNULL.html/" title="上一篇: iOS中nil，Nil，NULL，NSNULL的区别">
+            <a href="/EXC-BAD-ACESS-Debug.html/" title="上一篇: 小技巧：EXC_BAD_ACESS的调试">
                 <i class="fa fa-angle-left"></i>
             </a>
         
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
         
-            <a href="/sandbox.html/" title="下一篇: iOS应用的沙盒目录结构">
+            <a href="/programming-jottings-character-1.html/" title="下一篇: iOS开发杂记">
                 <i class="fa fa-angle-right"></i>
             </a>
         
