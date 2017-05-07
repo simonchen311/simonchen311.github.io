@@ -139,11 +139,78 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-JSONModel-Source-Code-Analysis" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/JSONModel-Source-Code-Analysis.html/" class="article-date">
+      <time datetime="2017-01-08T00:50:54.000Z" itemprop="datePublished">2017-01-08</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/JSONModel-Source-Code-Analysis.html/">JSONModel 源码阅读</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p><a href="https://github.com/jsonmodel/jsonmodel" target="_blank" rel="external">JSONModel</a>是一个解析JSON的开源库，其作用就是将JSON数据直接解析成自定义的Model。</p>
+<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><p>使用JSONModel非常简单，只需要将代码中定义的Model继承自JSONModel，而后调用JSONModel中的接口，让其内部自己完成从JSON数据中解析出对应Model中的属性并进行赋值工作。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//定义一个Model</span></div><div class="line">@inteface Model : JSONModel</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">strong</span>, <span class="keyword">nonatomic</span>) <span class="built_in">NSString</span>* string;</div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="comment">//外部调用接口进行JSON转换成Model工作</span></div><div class="line">Model *model = [[Model alloc] initWithDictionary:dic error:<span class="literal">nil</span>];</div></pre></td></tr></table></figure>
+<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><p>那么JSONModel内部解析的过程是什么样子的呢，这就是写这篇文章的主要目的：探究其实现源码。</p>
+<p>JSONModel提供了多种接口给外部调用，我们可以直接传递NSString，NSData或者NSDictionary让JSONModel进行JSON解析，但是这些接口终究会调用到一个最终的统一接口</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">-(<span class="keyword">id</span>)initWithDictionary:(<span class="built_in">NSDictionary</span>*)dict error:(<span class="built_in">NSError</span>**)err</div><div class="line">&#123;</div><div class="line">    <span class="comment">//check for nil input</span></div><div class="line">    <span class="keyword">if</span> (!dict) &#123;</div><div class="line">        <span class="keyword">if</span> (err) *err = [JSONModelError errorInputIsNil];</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//invalid input, just create empty instance</span></div><div class="line">    <span class="keyword">if</span> (![dict isKindOfClass:[<span class="built_in">NSDictionary</span> <span class="keyword">class</span>]]) &#123;</div><div class="line">        <span class="keyword">if</span> (err) *err = [JSONModelError errorInvalidDataWithMessage:<span class="string">@"Attempt to initialize JSONModel object using initWithDictionary:error: but the dictionary parameter was not an 'NSDictionary'."</span>];</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//create a class instance</span></div><div class="line">    <span class="keyword">self</span> = [<span class="keyword">self</span> init];</div><div class="line">    <span class="keyword">if</span> (!<span class="keyword">self</span>) &#123;</div><div class="line"></div><div class="line">        <span class="comment">//super init didn't succeed</span></div><div class="line">        <span class="keyword">if</span> (err) *err = [JSONModelError errorModelIsInvalid];</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//check incoming data structure</span></div><div class="line">    <span class="comment">//检查当前对象解析出来的必须属性名是不是与传入的JSON对象时包含关系，如果不是则直接返回</span></div><div class="line">    <span class="keyword">if</span> (![<span class="keyword">self</span> __doesDictionary:dict matchModelWithKeyMapper:<span class="keyword">self</span>.__keyMapper error:err]) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//import the data from a dictionary</span></div><div class="line">    <span class="comment">//KVC赋值</span></div><div class="line">    <span class="keyword">if</span> (![<span class="keyword">self</span> __importDictionary:dict withKeyMapper:<span class="keyword">self</span>.__keyMapper validation:<span class="literal">YES</span> error:err]) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//run any custom model validation</span></div><div class="line">    <span class="keyword">if</span> (![<span class="keyword">self</span> validate:err]) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//model is valid! yay!</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+      
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/programming/">开发</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Source-Code/">Source Code</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-programming-jottings-character-1" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/programming-jottings-character-1.html/" class="article-date">
-      <time datetime="2017-12-26T11:28:17.000Z" itemprop="datePublished">2017-12-26</time>
+      <time datetime="2016-12-26T11:28:17.000Z" itemprop="datePublished">2016-12-26</time>
 </a>
     </div>
   
@@ -195,73 +262,6 @@
         <p class="article-more-link">
           <a  href="/programming-jottings-character-1.html/#more">More >></a>
         </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-JSONModel-Source-Code-Analysis" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/JSONModel-Source-Code-Analysis.html/" class="article-date">
-      <time datetime="2017-01-08T00:50:54.000Z" itemprop="datePublished">2017-01-08</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/JSONModel-Source-Code-Analysis.html/">JSONModel 源码阅读</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p><a href="https://github.com/jsonmodel/jsonmodel" target="_blank" rel="external">JSONModel</a>是一个解析JSON的开源库，其作用就是将JSON数据直接解析成自定义的Model。</p>
-<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><p>使用JSONModel非常简单，只需要将代码中定义的Model继承自JSONModel，而后调用JSONModel中的接口，让其内部自己完成从JSON数据中解析出对应Model中的属性并进行赋值工作。</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//定义一个Model</span></div><div class="line">@inteface Model : JSONModel</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">strong</span>, <span class="keyword">nonatomic</span>) <span class="built_in">NSString</span>* string;</div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="comment">//外部调用接口进行JSON转换成Model工作</span></div><div class="line">Model *model = [[Model alloc] initWithDictionary:dic error:<span class="literal">nil</span>];</div></pre></td></tr></table></figure>
-<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><p>那么JSONModel内部解析的过程是什么样子的呢，这就是写这篇文章的主要目的：探究其实现源码。</p>
-<p>JSONModel提供了多种接口给外部调用，我们可以直接传递NSString，NSData或者NSDictionary让JSONModel进行JSON解析，但是这些接口终究会调用到一个最终的统一接口</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">-(<span class="keyword">id</span>)initWithDictionary:(<span class="built_in">NSDictionary</span>*)dict error:(<span class="built_in">NSError</span>**)err</div><div class="line">&#123;</div><div class="line">    <span class="comment">//check for nil input</span></div><div class="line">    <span class="keyword">if</span> (!dict) &#123;</div><div class="line">        <span class="keyword">if</span> (err) *err = [JSONModelError errorInputIsNil];</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//invalid input, just create empty instance</span></div><div class="line">    <span class="keyword">if</span> (![dict isKindOfClass:[<span class="built_in">NSDictionary</span> <span class="keyword">class</span>]]) &#123;</div><div class="line">        <span class="keyword">if</span> (err) *err = [JSONModelError errorInvalidDataWithMessage:<span class="string">@"Attempt to initialize JSONModel object using initWithDictionary:error: but the dictionary parameter was not an 'NSDictionary'."</span>];</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//create a class instance</span></div><div class="line">    <span class="keyword">self</span> = [<span class="keyword">self</span> init];</div><div class="line">    <span class="keyword">if</span> (!<span class="keyword">self</span>) &#123;</div><div class="line"></div><div class="line">        <span class="comment">//super init didn't succeed</span></div><div class="line">        <span class="keyword">if</span> (err) *err = [JSONModelError errorModelIsInvalid];</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//check incoming data structure</span></div><div class="line">    <span class="comment">//检查当前对象解析出来的必须属性名是不是与传入的JSON对象时包含关系，如果不是则直接返回</span></div><div class="line">    <span class="keyword">if</span> (![<span class="keyword">self</span> __doesDictionary:dict matchModelWithKeyMapper:<span class="keyword">self</span>.__keyMapper error:err]) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//import the data from a dictionary</span></div><div class="line">    <span class="comment">//KVC赋值</span></div><div class="line">    <span class="keyword">if</span> (![<span class="keyword">self</span> __importDictionary:dict withKeyMapper:<span class="keyword">self</span>.__keyMapper validation:<span class="literal">YES</span> error:err]) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//run any custom model validation</span></div><div class="line">    <span class="keyword">if</span> (![<span class="keyword">self</span> validate:err]) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//model is valid! yay!</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-      
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/programming/">开发</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Source-Code/">Source Code</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-    </div>
-
       
       <div class="clearfix"></div>
     </div>
