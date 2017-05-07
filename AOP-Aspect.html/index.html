@@ -3,14 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Simon’s Home</title>
+  <title>AOP编程 - Aspect源码阅读 | Simon’s Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Simon’s Home">
-<meta property="og:url" content="http://simonchen.club/index.html">
+  <meta name="description" content="概念AOP: Aspect Oriented Programming 面向切面编程。利用AOP可以对业务逻辑的各个部分进行隔离，提取模块可能都要重复的部分，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。iOS中利用运行时，动态地将代码切入到类的指定方法、指定位置上的编程思想就是面向切面的编程。 利用AOP，可以将日志记录，性能统计，安全控制，事务处理，异常处理等">
+<meta name="keywords" content="iOS,Source Code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AOP编程 - Aspect源码阅读">
+<meta property="og:url" content="http://simonchen.club/AOP-Aspect.html/index.html">
 <meta property="og:site_name" content="Simon’s Home">
+<meta property="og:description" content="概念AOP: Aspect Oriented Programming 面向切面编程。利用AOP可以对业务逻辑的各个部分进行隔离，提取模块可能都要重复的部分，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。iOS中利用运行时，动态地将代码切入到类的指定方法、指定位置上的编程思想就是面向切面的编程。 利用AOP，可以将日志记录，性能统计，安全控制，事务处理，异常处理等">
+<meta property="og:updated_time" content="2017-01-08T10:34:48.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Simon’s Home">
+<meta name="twitter:title" content="AOP编程 - Aspect源码阅读">
+<meta name="twitter:description" content="概念AOP: Aspect Oriented Programming 面向切面编程。利用AOP可以对业务逻辑的各个部分进行隔离，提取模块可能都要重复的部分，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。iOS中利用运行时，动态地将代码切入到类的指定方法、指定位置上的编程思想就是面向切面的编程。 利用AOP，可以将日志记录，性能统计，安全控制，事务处理，异常处理等">
   
     <link rel="alternative" href="/atom.xml" title="Simon’s Home" type="application/atom+xml">
   
@@ -21,9 +26,6 @@
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  
-    
-    
   
   
       <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
@@ -36,8 +38,8 @@
           rootUrl: '/',
           fancybox: true,
           animate: false,
-          isHome: true,
-          isPost: false,
+          isHome: false,
+          isPost: true,
           isArchive: false,
           isTag: false,
           isCategory: false,
@@ -137,9 +139,7 @@
         </header>                
     </div>
 </nav>
-      <div class="body-wrap">
-  
-    <article id="post-AOP-Aspect" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-AOP-Aspect" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/AOP-Aspect.html/" class="article-date">
@@ -155,12 +155,27 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/AOP-Aspect.html/">AOP编程 - Aspect源码阅读</a>
+    <h1 class="article-title" itemprop="name">
+      AOP编程 - Aspect源码阅读
     </h1>
   
 
       </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/programming/">开发</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Source-Code/">Source Code</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
       
     
     <div class="article-entry" itemprop="articleBody">
@@ -200,476 +215,137 @@
       
     </div>
     
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/programming/">开发</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Source-Code/">Source Code</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
   </div>
   
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-programming-jottings-character-1" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/programming-jottings-character-1.html/" class="article-date">
-      <time datetime="2016-12-26T11:28:17.000Z" itemprop="datePublished">2016-12-26</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
     
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/programming-jottings-character-1.html/">iOS开发杂记</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h2 id="给App增加iTunes文件共享功能"><a href="#给App增加iTunes文件共享功能" class="headerlink" title="给App增加iTunes文件共享功能"></a>给App增加iTunes文件共享功能</h2><p>从升级到IOS8.3后，发现使用iTools等第三方工具，已经不能使用其打开应用文档的功能进行文件导入/导出了，查询了网上，发现是IOS8.3版本以后已经关闭了对应用文件的访问权限。</p>
-<p>可是手头的项目要测试，需要提取出应用中的文档，于是只能使用iTunes的文件共享功能来提取了，这需要进行一步简单的设置：</p>
-<blockquote>
-<p>在Xcode中，在plist配置文件中增加“Application supports iTunes file sharing”，并将这一项的值设置为YES即可。</p>
-</blockquote>
-<p>之后在真机上运行App，并在iTunes上查看，就可以共享文件给App或者导出App中的文件了。</p>
-<p><img src="/programming-jottings-character-1.html/-Application supports iTunes file sharing.png" alt="sharing"></p>
-          
-      
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/programming/">开发</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Skill/">Skill</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a  href="/programming-jottings-character-1.html/#more">More >></a>
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/AOP-Aspect.html/">AOP编程 - Aspect源码阅读</a></p>
+        <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
+        <p><span>发布时间:</span>2017年01月08日 - 08时50分</p>
+        <p><span>最后更新:</span>2017年01月08日 - 18时34分</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/AOP-Aspect.html/" title="AOP编程 - Aspect源码阅读">http://simonchen.club/AOP-Aspect.html/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/AOP-Aspect.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script src="/js/clipboard.min.js"></script>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-EXC-BAD-ACESS-Debug" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/EXC-BAD-ACESS-Debug.html/" class="article-date">
-      <time datetime="2016-12-06T15:39:36.000Z" itemprop="datePublished">2016-12-06</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/EXC-BAD-ACESS-Debug.html/">小技巧：EXC_BAD_ACESS的调试</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <p>今天在项目运行时出现EXC_BAD_ACESS错误，导致程序崩溃，在开发时遇到EXC_BAD_ACESS这种错误不容易找到原因，但通常是由于内存管理问题而引起的，查询其解决方法，有如下几种办法可以来帮助查询出错的地方。</p>
-          
-      
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/programming/">开发</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Skill/">Skill</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a  href="/EXC-BAD-ACESS-Debug.html/#more">More >></a>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
         </p>
-      
-      <div class="clearfix"></div>
     </div>
-    
-  </div>
+
+
+
+<nav id="article-nav">
   
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-SDWebImage-Souce-Code-Analysis" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/SDWebImage-Souce-Code-Analysis.html/" class="article-date">
-      <time datetime="2016-12-05T10:34:48.000Z" itemprop="datePublished">2016-12-05</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+    <a href="/programming-jottings-character-1.html/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/SDWebImage-Souce-Code-Analysis.html/">SDWebImage源码阅读</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <p>SDWebImage这套开源库可以说是开发必备品了，于是写这篇文章对其内部主要源码的实现整体理顺一下。</p>
-<h2 id="UIImageView入口"><a href="#UIImageView入口" class="headerlink" title="UIImageView入口"></a>UIImageView入口</h2><p>我们在使用SDWebImage时，经常是利用它提供的接口直接在UIImageView或者UIButton上设置URL来下载图片并且显示出来</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)sd_setImageWithURL:(<span class="keyword">nullable</span> <span class="built_in">NSURL</span> *)url placeholderImage:(<span class="keyword">nullable</span> <span class="built_in">UIImage</span> *)placeholder options:(SDWebImageOptions)options completed:(<span class="keyword">nullable</span> SDExternalCompletionBlock)completedBlock &#123;</div><div class="line">    [<span class="keyword">self</span> sd_setImageWithURL:url placeholderImage:placeholder options:options progress:<span class="literal">nil</span> completed:completedBlock];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)sd_setImageWithURL:(<span class="keyword">nullable</span> <span class="built_in">NSURL</span> *)url</div><div class="line">          placeholderImage:(<span class="keyword">nullable</span> <span class="built_in">UIImage</span> *)placeholder</div><div class="line">                   options:(SDWebImageOptions)options</div><div class="line">                  progress:(<span class="keyword">nullable</span> SDWebImageDownloaderProgressBlock)progressBlock</div><div class="line">                 completed:(<span class="keyword">nullable</span> SDExternalCompletionBlock)completedBlock &#123;</div><div class="line">    [<span class="keyword">self</span> sd_internalSetImageWithURL:url</div><div class="line">                    placeholderImage:placeholder</div><div class="line">                             options:options</div><div class="line">                        operationKey:<span class="literal">nil</span></div><div class="line">                       setImageBlock:<span class="literal">nil</span></div><div class="line">                            progress:progressBlock</div><div class="line">                           completed:completedBlock];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-          
-      
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/programming/">开发</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Source-Code/">Source Code</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a  href="/SDWebImage-Souce-Code-Analysis.html/#more">More >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Runloop" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/Runloop.html/" class="article-date">
-      <time datetime="2016-11-21T08:31:02.000Z" itemprop="datePublished">2016-11-21</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+          iOS开发杂记
         
+      </div>
+    </a>
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/Runloop.html/">RunLoop</a>
-    </h1>
   
+</nav>
 
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <p>以前对RunLoop的认知一直是停留在非常模糊的阶段，只是知道其与线程相关，维持线程的运转不退出，趁现在任务不紧，花点时间研究下RunLoop的源码，看其作用以及是如何实现的。</p>
-<p><br></p>
-<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>一个线程一般只执行完一个任务后就退出，但是RunLoop能执行这么一种机制：让线程可以随时处理事件且处于不退出的状态，处理完成后线程处于休眠状态，当有事件的时候会被唤醒。</p>
-<p>RunLoop本身是不能够直接来创建的，除了主线程的RunLoop，其他线程默认是不开启的，只有在获取当前线程的RunLoop才会被创建，如果不主动获取，那么它一直都不会有。可以通过下面两套机制来获取当前线程的RunLoop，其中NSRunLoop实际上是对CFRunLoop的封装。</p>
-<p><br></p>
-<h3 id="NSRunLoop"><a href="#NSRunLoop" class="headerlink" title="NSRunLoop"></a>NSRunLoop</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">NSRunLoop</span> currentRunLoop]; <span class="comment">// 获得当前线程的RunLoop对象</span></div><div class="line">[<span class="built_in">NSRunLoop</span> mainRunLoop]; <span class="comment">// 获得主线程的RunLoop对象</span></div></pre></td></tr></table></figure>
-<p><br></p>
-<h3 id="CFRunLoopRef"><a href="#CFRunLoopRef" class="headerlink" title="CFRunLoopRef"></a>CFRunLoopRef</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">CFRunLoopGetCurrent</span>(); <span class="comment">// 获得当前线程的RunLoop对象</span></div><div class="line"><span class="built_in">CFRunLoopGetMain</span>(); <span class="comment">// 获得主线程的RunLoop对象</span></div></pre></td></tr></table></figure>
-          
-      
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/programming/">开发</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mechanism/">Mechanism</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a  href="/Runloop.html/#more">More >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
   
 </article>
 
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概念"><span class="toc-number">1.</span> <span class="toc-text">概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Aspects库定义"><span class="toc-number">2.</span> <span class="toc-text">Aspects库定义</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#AspectOptions"><span class="toc-number">2.1.</span> <span class="toc-text">AspectOptions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AspectInfo"><span class="toc-number">2.2.</span> <span class="toc-text">AspectInfo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AspectIdentifier"><span class="toc-number">2.3.</span> <span class="toc-text">AspectIdentifier</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AspectContainer"><span class="toc-number">2.4.</span> <span class="toc-text">AspectContainer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AspectTracker"><span class="toc-number">2.5.</span> <span class="toc-text">AspectTracker</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Aspects库实现流程"><span class="toc-number">3.</span> <span class="toc-text">Aspects库实现流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Aspect线程安全性"><span class="toc-number">3.1.</span> <span class="toc-text">Aspect线程安全性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参数检查"><span class="toc-number">3.2.</span> <span class="toc-text">参数检查</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#行为总结"><span class="toc-number">4.</span> <span class="toc-text">行为总结</span></a></li></ol>
+</div>
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+        }
+    })
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+    }
+</script>
 
 
 
 
 
+<div class="bdsharebuttonbox">
+	<a href="#" class="fx fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+	<a href="#" class="fx fa-weixin bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+	<a href="#" class="fx fa-qq bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+	<a href="#" class="fx fa-facebook-official bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+	<a href="#" class="fx fa-twitter bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+	<a href="#" class="fx fa-linkedin bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+	<a href="#" class="fx fa-files-o bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+</div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
 
 
 
-  
-    <article id="post-FBKVOController Source Code analysis" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/FBKVOController Source Code analysis.html/" class="article-date">
-      <time datetime="2016-11-13T12:42:00.000Z" itemprop="datePublished">2016-11-13</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
+
     
-      <input type="hidden" class="isFancy" />
+        <section class="youyan" id="comments">
+  <div id="uyan_frame"></div>
+  <script src="http://v2.uyan.cc/code/uyan.js?uid=2132200"></script>
+</section>
+
     
-    
-      <header class="article-header">
+
+
+
+    <div class="scroll" id="post-nav-button">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/FBKVOController Source Code analysis.html/">FBKVOController源码阅读</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <p><br></p>
-<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>键值观察(KVO)在苹果的官方文档中是这么定义的：它是一种允许观察者对象在所观察其他对象的属性发生改变时可以获得这些改变的通知这样一种机制。</p>
-<p>但是原生的KVO在实现上存在着这么一些问题：</p>
-<ul>
-<li>KVO在添加观察者后，在不再需要继续观察的时候应该将其移除。</li>
-<li>添加和移除需要成对出现，我们在开发的时候往往可能会由于疏忽导致代码里忘记在不需要使用的时候去释放掉观察者，那么这样就会埋下程序会crash的隐患。</li>
-<li>KVO的所有获取改变通知有着统一的回调函数进行处理，如果观察者同时观察了多个属性的变化，那么这个回调可能会变得非常复杂。</li>
-</ul>
-<p><a href="https://github.com/facebook/KVOController">FBKVOController</a>是Facebook开源的一套基于KVO再封装的解决方案，相比较原生的KVO，它有如下这些优点：</p>
-<ul>
-<li>在注册观察者的时候提供了多种形式处理回调：block或者指定一个处理回调方法等等，从而达到了分散回调处理方法的目的。</li>
-<li>不再需要手动移除观察者了，FBKVOController会在内部自动在观察者controller释放掉的时候进行移除处理。</li>
-<li>在多线程环境下安全。</li>
-</ul>
-<p>下面针对FBKVOController这个开源解决方案来继续的阅读其源码，看看其是如何实现这些改进的。</p>
-          
-      
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/programming/">开发</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Source-Code/">Source Code</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a  href="/FBKVOController Source Code analysis.html/#more">More >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-KVC and KVO" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/KVC and KVO.html/" class="article-date">
-      <time datetime="2016-11-03T07:22:00.000Z" itemprop="datePublished">2016-11-03</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+            <a href="/programming-jottings-character-1.html/" title="上一篇: iOS开发杂记">
+                <i class="fa fa-angle-left"></i>
+            </a>
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/KVC and KVO.html/">KVC与KVO</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <p><br></p>
-<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>KVC是一种通过字符串名称间接访问对象属性的方法。其方法在NSKeyValueCoding中被声明，默认的实现方法由NSObject提供。<code>非对象参数和返回类型</code>会被识别自动封装、解封。</p>
-<blockquote>
-<p>通过KVC这种间接访问方法，开发者就能在<strong>运行时</strong>确定属性的绑定，而不是在编译时。</p>
-</blockquote>
-          
-      
-      
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
     </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/programming/">开发</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a  href="/KVC and KVO.html/#more">More >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/AOP-Aspect.html/">AOP编程 - Aspect源码阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/programming-jottings-character-1.html/">iOS开发杂记</a></li><li class="post-list-item"><a class="post-list-link" href="/EXC-BAD-ACESS-Debug.html/">小技巧：EXC_BAD_ACESS的调试</a></li><li class="post-list-item"><a class="post-list-link" href="/SDWebImage-Souce-Code-Analysis.html/">SDWebImage源码阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/Runloop.html/">RunLoop</a></li><li class="post-list-item"><a class="post-list-link" href="/FBKVOController Source Code analysis.html/">FBKVOController源码阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/KVC and KVO.html/">KVC与KVO</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Rutime-Assotiated Object.html/">iOS Runtime 运行时笔记(四)</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Swizzle.html/">iOS Runtime 运行时笔记(三)</a></li><li class="post-list-item"><a class="post-list-link" href="/multiSSHKey.html/">多GitHub账号的SSH配置</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Method.html/">iOS Runtime 运行时笔记(二)</a></li><li class="post-list-item"><a class="post-list-link" href="/Instruction-Set.html/">symbol(s) not found for architecture x86_64 错误</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Object.html/">iOS Runtime 运行时笔记(一)</a></li><li class="post-list-item"><a class="post-list-link" href="/sandbox.html/">iOS应用的沙盒目录结构</a></li><li class="post-list-item"><a class="post-list-link" href="/make-a-static-library.html/">静态库的制作过程</a></li><li class="post-list-item"><a class="post-list-link" href="/The differences of nil，Nil，NULL，NSNULL.html/">iOS中nil，Nil，NULL，NSNULL的区别</a></li></ul>
+    <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+    <script>
+        $(".post-list").addClass("toc-article");
+        $(".post-list-item a").attr("target","_blank");
+        $("#post-nav-button > a:nth-child(2)").click(function() {
+            $(".fa-bars, .fa-times").toggle();
+            $(".post-list").toggle(300);
+            if ($(".toc").length > 0) {
+                $("#toc, #tocButton").toggle(200, function() {
+                    if ($(".switch-area").is(":visible")) {
+                        $("#tocButton").attr("value", valueHide);
+                        }
+                    })
+            }
+            else {
+            }
+        })
+    </script>
 
 
 
-
-
-
-
-
-
-  
-  
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
-    </nav>
-  
+    <script>
+        
+    </script>
 </div>
       <footer id="footer">
     <div class="outer">
