@@ -166,8 +166,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <p><br></p>
-<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>键值观察(KVO)在苹果的官方文档中是这么定义的：它是一种允许观察者对象在所观察其他对象的属性发生改变时可以获得这些改变的通知这样一种机制。</p>
+              <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>键值观察(KVO)在苹果的官方文档中是这么定义的：它是一种允许观察者对象在所观察其他对象的属性发生改变时可以获得这些改变的通知这样一种机制。</p>
 <p>但是原生的KVO在实现上存在着这么一些问题：</p>
 <ul>
 <li>KVO在添加观察者后，在不再需要继续观察的时候应该将其移除。</li>
@@ -181,13 +180,11 @@
 <li>在多线程环境下安全。</li>
 </ul>
 <p>下面针对FBKVOController这个开源解决方案来继续的阅读其源码，看看其是如何实现这些改进的。</p>
-<p><br></p>
 <h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><p>FBKVOController的结构很简单，其核心代码包括如下几个类：</p>
 <ul>
 <li>FBKVOController</li>
 <li>NSObject+FBKVOController</li>
 </ul>
-<p><br></p>
 <h3 id="NSObject-FBKVOController"><a href="#NSObject-FBKVOController" class="headerlink" title="NSObject+FBKVOController"></a>NSObject+FBKVOController</h3><p>NSObject+FBKVOController.m是一个分类。通过<a href="http://simonchen.club/iOS-Rutime-Assotiated Object.html">关联对象</a>给NSObject提供一个Retain和nonRetain的KVOController。</p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">- (FBKVOController *)KVOController</div><div class="line">&#123;</div><div class="line">  <span class="keyword">id</span> controller = objc_getAssociatedObject(<span class="keyword">self</span>, <span class="built_in">NSObjectKVOControllerKey</span>);</div><div class="line">  </div><div class="line">  <span class="comment">// lazily create the KVOController</span></div><div class="line">  <span class="keyword">if</span> (<span class="literal">nil</span> == controller) &#123;</div><div class="line">    controller = [FBKVOController controllerWithObserver:<span class="keyword">self</span>];</div><div class="line">    <span class="keyword">self</span>.KVOController = controller;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="keyword">return</span> controller;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (FBKVOController *)KVOControllerNonRetaining</div><div class="line">&#123;</div><div class="line">  <span class="keyword">id</span> controller = objc_getAssociatedObject(<span class="keyword">self</span>, <span class="built_in">NSObjectKVOControllerNonRetainingKey</span>);</div><div class="line">  </div><div class="line">  <span class="keyword">if</span> (<span class="literal">nil</span> == controller) &#123;</div><div class="line">    controller = [[FBKVOController alloc] initWithObserver:<span class="keyword">self</span> retainObserved:<span class="literal">NO</span>];</div><div class="line">    <span class="keyword">self</span>.KVOControllerNonRetaining = controller;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="keyword">return</span> controller;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
           
