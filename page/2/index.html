@@ -237,6 +237,9 @@
           
               <p><br> </p>
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在<a href="http://simonchen.club/iOS-Runtime-Object.html/">上一篇</a>学习了Runtime下的对象与类的实现，这一篇开始了解在Runtime下的消息机制。</p>
+<p><br> </p>
+<h2 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h2><p>Method表示类中定义的方法，实际上是一个指向<code>objc_method</code>结构体的指针，结构体由SEL和IMP组成，两者之间做了一个映射：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> objc_method *Method;</div><div class="line"><span class="keyword">struct</span> objc_method &#123;</div><div class="line">SEL method_name OBJC2_UNAVAILABLE; <span class="comment">// 方法名</span></div><div class="line"><span class="keyword">char</span> *method_types OBJC2_UNAVAILABLE;</div><div class="line">IMP method_imp OBJC2_UNAVAILABLE; <span class="comment">// 方法实现</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
           
       
       
