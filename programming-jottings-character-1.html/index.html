@@ -5,20 +5,20 @@
   
   <title>iOS开发杂记 | Simon’s Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="给App增加iTunes文件共享功能从升级到IOS8.3后，发现使用iTools等第三方工具，已经不能使用其打开应用文档的功能进行文件导入/导出了，查询了网上，发现是IOS8.3版本以后已经关闭了对应用文件的访问权限。 可是手头的项目要测试，需要提取出应用中的文档，于是只能使用iTunes的文件共享功能来提取了，这需要进行一步简单的设置：  在Xcode中，在plist配置文件中增加“Applic">
+  <meta name="description" content="给App增加iTunes文件共享功能从升级到iOS8.3以及之后的版本，使用iTools等第三方工具，已经不能使用其打开应用文档的功能进行文件导入/导出的功能了，因为从iOS8.3版本以后Apple已经关闭了对应用文件的访问权限。 可是手头的项目要测试，需要提取出应用中的文档，于是只能使用iTunes的文件共享功能来提取了，这需要进行一步简单的设置：  在Xcode中，在plist配置文件中增加“">
 <meta name="keywords" content="iOS,Skill">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS开发杂记">
 <meta property="og:url" content="http://simonchen.club/programming-jottings-character-1.html/index.html">
 <meta property="og:site_name" content="Simon’s Home">
-<meta property="og:description" content="给App增加iTunes文件共享功能从升级到IOS8.3后，发现使用iTools等第三方工具，已经不能使用其打开应用文档的功能进行文件导入/导出了，查询了网上，发现是IOS8.3版本以后已经关闭了对应用文件的访问权限。 可是手头的项目要测试，需要提取出应用中的文档，于是只能使用iTunes的文件共享功能来提取了，这需要进行一步简单的设置：  在Xcode中，在plist配置文件中增加“Applic">
+<meta property="og:description" content="给App增加iTunes文件共享功能从升级到iOS8.3以及之后的版本，使用iTools等第三方工具，已经不能使用其打开应用文档的功能进行文件导入/导出的功能了，因为从iOS8.3版本以后Apple已经关闭了对应用文件的访问权限。 可是手头的项目要测试，需要提取出应用中的文档，于是只能使用iTunes的文件共享功能来提取了，这需要进行一步简单的设置：  在Xcode中，在plist配置文件中增加“">
 <meta property="og:image" content="http://simonchen.club/programming-jottings-character-1.html/-Application%20supports%20iTunes%20file%20sharing.png">
 <meta property="og:image" content="http://simonchen.club/programming-jottings-character-1.html/textView1.png">
 <meta property="og:image" content="http://simonchen.club/programming-jottings-character-1.html/textView2.png">
 <meta property="og:updated_time" content="2016-12-26T11:28:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS开发杂记">
-<meta name="twitter:description" content="给App增加iTunes文件共享功能从升级到IOS8.3后，发现使用iTools等第三方工具，已经不能使用其打开应用文档的功能进行文件导入/导出了，查询了网上，发现是IOS8.3版本以后已经关闭了对应用文件的访问权限。 可是手头的项目要测试，需要提取出应用中的文档，于是只能使用iTunes的文件共享功能来提取了，这需要进行一步简单的设置：  在Xcode中，在plist配置文件中增加“Applic">
+<meta name="twitter:description" content="给App增加iTunes文件共享功能从升级到iOS8.3以及之后的版本，使用iTools等第三方工具，已经不能使用其打开应用文档的功能进行文件导入/导出的功能了，因为从iOS8.3版本以后Apple已经关闭了对应用文件的访问权限。 可是手头的项目要测试，需要提取出应用中的文档，于是只能使用iTunes的文件共享功能来提取了，这需要进行一步简单的设置：  在Xcode中，在plist配置文件中增加“">
 <meta name="twitter:image" content="http://simonchen.club/programming-jottings-character-1.html/-Application%20supports%20iTunes%20file%20sharing.png">
   
     <link rel="alternative" href="/atom.xml" title="Simon’s Home" type="application/atom+xml">
@@ -185,7 +185,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h2 id="给App增加iTunes文件共享功能"><a href="#给App增加iTunes文件共享功能" class="headerlink" title="给App增加iTunes文件共享功能"></a>给App增加iTunes文件共享功能</h2><p>从升级到IOS8.3后，发现使用iTools等第三方工具，已经不能使用其打开应用文档的功能进行文件导入/导出了，查询了网上，发现是IOS8.3版本以后已经关闭了对应用文件的访问权限。</p>
+        <h2 id="给App增加iTunes文件共享功能"><a href="#给App增加iTunes文件共享功能" class="headerlink" title="给App增加iTunes文件共享功能"></a>给App增加iTunes文件共享功能</h2><p>从升级到iOS8.3以及之后的版本，使用iTools等第三方工具，已经不能使用其打开应用文档的功能进行文件导入/导出的功能了，因为从iOS8.3版本以后Apple已经关闭了对应用文件的访问权限。</p>
 <p>可是手头的项目要测试，需要提取出应用中的文档，于是只能使用iTunes的文件共享功能来提取了，这需要进行一步简单的设置：</p>
 <blockquote>
 <p>在Xcode中，在plist配置文件中增加“Application supports iTunes file sharing”，并将这一项的值设置为YES即可。</p>
