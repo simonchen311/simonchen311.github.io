@@ -5,17 +5,17 @@
   
   <title>RunLoop探究 | Simon’s Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="以前对RunLoop的认知一直是停留在非常模糊的阶段，只是知道其与线程相关，维持线程的运转不退出，趁现在任务不紧，花点时间研究下RunLoop的源码，看其作用以及是如何实现的。 概念一个线程一般只执行完一个任务后就退出，但是RunLoop能执行这么一种机制：让线程可以随时处理事件且处于不退出的状态，处理完成后线程处于休眠状态，当有事件的时候会被唤醒。 RunLoop本身是不能够直接来创建的，除了主">
+  <meta name="description" content="概念一个线程一般只执行完一个任务后就退出，但是RunLoop能执行这么一种机制：让线程可以随时处理事件且处于不退出的状态，处理完成后线程处于休眠状态，当有事件的时候会被唤醒。 RunLoop本身是不能够直接来创建的，除了主线程的RunLoop，其他线程默认是不开启的，只有在获取当前线程的RunLoop才会被创建，如果不主动获取，那么它一直都不会有。可以通过下面两套机制来获取当前线程的RunLoop">
 <meta name="keywords" content="iOS,Mechanism">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RunLoop探究">
 <meta property="og:url" content="http://simonchen.club/Runloop.html/index.html">
 <meta property="og:site_name" content="Simon’s Home">
-<meta property="og:description" content="以前对RunLoop的认知一直是停留在非常模糊的阶段，只是知道其与线程相关，维持线程的运转不退出，趁现在任务不紧，花点时间研究下RunLoop的源码，看其作用以及是如何实现的。 概念一个线程一般只执行完一个任务后就退出，但是RunLoop能执行这么一种机制：让线程可以随时处理事件且处于不退出的状态，处理完成后线程处于休眠状态，当有事件的时候会被唤醒。 RunLoop本身是不能够直接来创建的，除了主">
+<meta property="og:description" content="概念一个线程一般只执行完一个任务后就退出，但是RunLoop能执行这么一种机制：让线程可以随时处理事件且处于不退出的状态，处理完成后线程处于休眠状态，当有事件的时候会被唤醒。 RunLoop本身是不能够直接来创建的，除了主线程的RunLoop，其他线程默认是不开启的，只有在获取当前线程的RunLoop才会被创建，如果不主动获取，那么它一直都不会有。可以通过下面两套机制来获取当前线程的RunLoop">
 <meta property="og:updated_time" content="2017-01-07T08:31:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RunLoop探究">
-<meta name="twitter:description" content="以前对RunLoop的认知一直是停留在非常模糊的阶段，只是知道其与线程相关，维持线程的运转不退出，趁现在任务不紧，花点时间研究下RunLoop的源码，看其作用以及是如何实现的。 概念一个线程一般只执行完一个任务后就退出，但是RunLoop能执行这么一种机制：让线程可以随时处理事件且处于不退出的状态，处理完成后线程处于休眠状态，当有事件的时候会被唤醒。 RunLoop本身是不能够直接来创建的，除了主">
+<meta name="twitter:description" content="概念一个线程一般只执行完一个任务后就退出，但是RunLoop能执行这么一种机制：让线程可以随时处理事件且处于不退出的状态，处理完成后线程处于休眠状态，当有事件的时候会被唤醒。 RunLoop本身是不能够直接来创建的，除了主线程的RunLoop，其他线程默认是不开启的，只有在获取当前线程的RunLoop才会被创建，如果不主动获取，那么它一直都不会有。可以通过下面两套机制来获取当前线程的RunLoop">
   
     <link rel="alternative" href="/atom.xml" title="Simon’s Home" type="application/atom+xml">
   
@@ -181,8 +181,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>以前对RunLoop的认知一直是停留在非常模糊的阶段，只是知道其与线程相关，维持线程的运转不退出，趁现在任务不紧，花点时间研究下RunLoop的源码，看其作用以及是如何实现的。</p>
-<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>一个线程一般只执行完一个任务后就退出，但是RunLoop能执行这么一种机制：让线程可以随时处理事件且处于不退出的状态，处理完成后线程处于休眠状态，当有事件的时候会被唤醒。</p>
+        <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>一个线程一般只执行完一个任务后就退出，但是RunLoop能执行这么一种机制：让线程可以随时处理事件且处于不退出的状态，处理完成后线程处于休眠状态，当有事件的时候会被唤醒。</p>
 <p>RunLoop本身是不能够直接来创建的，除了主线程的RunLoop，其他线程默认是不开启的，只有在获取当前线程的RunLoop才会被创建，如果不主动获取，那么它一直都不会有。可以通过下面两套机制来获取当前线程的RunLoop，其中NSRunLoop实际上是对CFRunLoop的封装。</p>
 <h3 id="NSRunLoop"><a href="#NSRunLoop" class="headerlink" title="NSRunLoop"></a>NSRunLoop</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">NSRunLoop</span> currentRunLoop]; <span class="comment">// 获得当前线程的RunLoop对象</span></div><div class="line">[<span class="built_in">NSRunLoop</span> mainRunLoop]; <span class="comment">// 获得主线程的RunLoop对象</span></div></pre></td></tr></table></figure>
 <h3 id="CFRunLoopRef"><a href="#CFRunLoopRef" class="headerlink" title="CFRunLoopRef"></a>CFRunLoopRef</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">CFRunLoopGetCurrent</span>(); <span class="comment">// 获得当前线程的RunLoop对象</span></div><div class="line"><span class="built_in">CFRunLoopGetMain</span>(); <span class="comment">// 获得主线程的RunLoop对象</span></div></pre></td></tr></table></figure>
