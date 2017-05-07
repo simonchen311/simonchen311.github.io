@@ -3,21 +3,21 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Facebook开源代码 - FBKVOController阅读 | Simon 个人站</title>
+  <title>Facebook开源代码 - FBKVOController阅读 | Simon’s Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="定义键值观察(KVO)在苹果的官方文档中是这么定义的：它是一种允许观察者对象在所观察其他对象的属性发生改变时可以获得这些改变的通知这样一种机制。 但是原生的KVO在实现上存在着这么一些问题：  KVO在添加观察者后，在不再需要继续观察的时候应该将其移除。 添加和移除需要成对出现，我们在开发的时候往往可能会由于疏忽导致代码里忘记在不需要使用的时候去释放掉观察者，那么这样就会埋下程序会crash的隐患">
 <meta name="keywords" content="iOS,Source Code">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Facebook开源代码 - FBKVOController阅读">
 <meta property="og:url" content="http://simonchen.club/FBKVOController Source Code analysis.html/index.html">
-<meta property="og:site_name" content="Simon 个人站">
+<meta property="og:site_name" content="Simon’s Home">
 <meta property="og:description" content="定义键值观察(KVO)在苹果的官方文档中是这么定义的：它是一种允许观察者对象在所观察其他对象的属性发生改变时可以获得这些改变的通知这样一种机制。 但是原生的KVO在实现上存在着这么一些问题：  KVO在添加观察者后，在不再需要继续观察的时候应该将其移除。 添加和移除需要成对出现，我们在开发的时候往往可能会由于疏忽导致代码里忘记在不需要使用的时候去释放掉观察者，那么这样就会埋下程序会crash的隐患">
 <meta property="og:updated_time" content="2017-02-14T16:03:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Facebook开源代码 - FBKVOController阅读">
 <meta name="twitter:description" content="定义键值观察(KVO)在苹果的官方文档中是这么定义的：它是一种允许观察者对象在所观察其他对象的属性发生改变时可以获得这些改变的通知这样一种机制。 但是原生的KVO在实现上存在着这么一些问题：  KVO在添加观察者后，在不再需要继续观察的时候应该将其移除。 添加和移除需要成对出现，我们在开发的时候往往可能会由于疏忽导致代码里忘记在不需要使用的时候去释放掉观察者，那么这样就会埋下程序会crash的隐患">
   
-    <link rel="alternative" href="/atom.xml" title="Simon 个人站" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="Simon’s Home" type="application/atom+xml">
   
   
     <link rel="icon" href="/img/head.jpg">
