@@ -3,21 +3,21 @@
 <head>
   <meta charset="utf-8">
   
-  <title>AOP编程 - Aspects源码阅读 | Simon’s Home</title>
+  <title>AOP编程 - Aspects源码阅读 | Simon’s Homepage</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="概念AOP: Aspect Oriented Programming 面向切面编程。利用AOP可以对业务逻辑的各个部分进行隔离，提取模块可能都要重复的部分，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。iOS中利用运行时，动态地将代码切入到类的指定方法、指定位置上的编程思想就是面向切面的编程。 利用AOP，可以将日志记录，性能统计，安全控制，事务处理，异常处理等">
 <meta name="keywords" content="iOS,Source Code">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AOP编程 - Aspects源码阅读">
 <meta property="og:url" content="http://simonchen.club/AOP-Aspect.html/index.html">
-<meta property="og:site_name" content="Simon’s Home">
+<meta property="og:site_name" content="Simon’s Homepage">
 <meta property="og:description" content="概念AOP: Aspect Oriented Programming 面向切面编程。利用AOP可以对业务逻辑的各个部分进行隔离，提取模块可能都要重复的部分，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。iOS中利用运行时，动态地将代码切入到类的指定方法、指定位置上的编程思想就是面向切面的编程。 利用AOP，可以将日志记录，性能统计，安全控制，事务处理，异常处理等">
 <meta property="og:updated_time" content="2016-12-06T10:34:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AOP编程 - Aspects源码阅读">
 <meta name="twitter:description" content="概念AOP: Aspect Oriented Programming 面向切面编程。利用AOP可以对业务逻辑的各个部分进行隔离，提取模块可能都要重复的部分，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。iOS中利用运行时，动态地将代码切入到类的指定方法、指定位置上的编程思想就是面向切面的编程。 利用AOP，可以将日志记录，性能统计，安全控制，事务处理，异常处理等">
   
-    <link rel="alternative" href="/atom.xml" title="Simon’s Home" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="Simon’s Homepage" type="application/atom+xml">
   
   
     <link rel="icon" href="/img/head.jpg">
@@ -60,7 +60,7 @@
         </a>
 
         <hgroup>
-          <h1 class="header-author"><a href="/" title="Hi Mate">陈晟豪</a></h1>
+          <h1 class="header-author"><a href="/" title="Hi Mate">null</a></h1>
         </hgroup>
 
         
@@ -104,7 +104,7 @@
       <nav id="mobile-nav">
       <div class="overlay">
           <div class="slider-trigger"></div>
-          <h1 class="header-author js-mobile-header hide"><a href="/" title="Me">陈晟豪</a></h1>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="Me">null</a></h1>
       </div>
     <div class="intrude-less">
         <header id="header" class="inner">
@@ -114,7 +114,7 @@
                 
             </a>
             <hgroup>
-              <h1 class="header-author"><a href="/" title="Me">陈晟豪</a></h1>
+              <h1 class="header-author"><a href="/" title="Me">null</a></h1>
             </hgroup>
             
             <p class="header-subtitle">凡配称为理想的事物，就必带有善美的本质</p>
@@ -246,12 +246,12 @@
     
     <div class="copyright">
         <p><span>本文标题:</span><a href="/AOP-Aspect.html/">AOP编程 - Aspects源码阅读</a></p>
-        <p><span>文章作者:</span><a href="/" title="访问 陈晟豪 的个人博客">陈晟豪</a></p>
+        <p><span>文章作者:</span><a href="/" title="访问 null 的个人博客">null</a></p>
         <p><span>发布时间:</span>2016年12月06日 - 08时50分</p>
         <p><span>最后更新:</span>2016年12月06日 - 18时34分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/AOP-Aspect.html/" title="AOP编程 - Aspects源码阅读">http://simonchen.club/AOP-Aspect.html/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/AOP-Aspect.html/　　作者: 陈晟豪" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/AOP-Aspect.html/　　作者: null" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script src="/js/clipboard.min.js"></script>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
@@ -384,7 +384,7 @@
     <div class="outer">
         <div id="footer-info">
             <div class="footer-left">
-                &copy; 2017 陈晟豪
+                &copy; 2017 Simon’s Homepage
             </div>
             <div class="footer-right">
                 <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/luuman/hexo-theme-spfk" target="_blank">spfk</a> by luuman
