@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   
-  <title>iOS Runtime 运行时笔记(二) | Simon’s Home</title>
+  <title>iOS Runtime 运行时笔记(二) | Simon 个人站</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="前言在上一篇学习了Runtime下的对象与类的实现，这一篇开始了解在Runtime下的消息机制。   MethodMethod表示类中定义的方法，实际上是一个指向objc_method结构体的指针，结构体由SEL和IMP组成，两者之间做了一个映射： 123456typedef struct objc_method *Method;struct objc_method &amp;#123;SEL met">
 <meta name="keywords" content="iOS,Mechanism,Runtime">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS Runtime 运行时笔记(二)">
 <meta property="og:url" content="http://simonchen.club/iOS-Runtime-Method.html/index.html">
-<meta property="og:site_name" content="Simon’s Home">
+<meta property="og:site_name" content="Simon 个人站">
 <meta property="og:description" content="前言在上一篇学习了Runtime下的对象与类的实现，这一篇开始了解在Runtime下的消息机制。   MethodMethod表示类中定义的方法，实际上是一个指向objc_method结构体的指针，结构体由SEL和IMP组成，两者之间做了一个映射： 123456typedef struct objc_method *Method;struct objc_method &amp;#123;SEL met">
 <meta property="og:image" content="http://simonchen.club/iOS-Runtime-Method.html/messag%20passing.jpg">
 <meta property="og:updated_time" content="2016-10-08T06:54:00.000Z">
@@ -19,7 +19,7 @@
 <meta name="twitter:description" content="前言在上一篇学习了Runtime下的对象与类的实现，这一篇开始了解在Runtime下的消息机制。   MethodMethod表示类中定义的方法，实际上是一个指向objc_method结构体的指针，结构体由SEL和IMP组成，两者之间做了一个映射： 123456typedef struct objc_method *Method;struct objc_method &amp;#123;SEL met">
 <meta name="twitter:image" content="http://simonchen.club/iOS-Runtime-Method.html/messag%20passing.jpg">
   
-    <link rel="alternative" href="/atom.xml" title="Simon’s Home" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="Simon 个人站" type="application/atom+xml">
   
   
     <link rel="icon" href="/img/head.jpg">
