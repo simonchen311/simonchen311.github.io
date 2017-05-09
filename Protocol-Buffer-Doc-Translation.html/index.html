@@ -6,7 +6,7 @@
   <title>Protocol Buffer2 官方文档译文 | Simon’s Homepage</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="这篇文章是对Google的Protocol Buffer2官方文档的翻译，写这篇文章并不会对全文所有的内容全部翻译，那些我认为不太重要的内容会被直接略过了。水平有限，有些可能无法翻译的准确，所以我会将原文和翻译都写出来。如果需要可以查看官方文档的详细内容，文章最后提供了原文的链接，当然翻墙是必须的…… ##定义一个消息类型  First let’s look at a very simple ex">
-<meta name="keywords" content="iOS,ProtoBuf，Translation">
+<meta name="keywords" content="iOS,ProtoBuf,Translation">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Protocol Buffer2 官方文档译文">
 <meta property="og:url" content="http://simonchen.club/Protocol-Buffer-Doc-Translation.html/index.html">
@@ -173,7 +173,7 @@
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ProtoBuf，Translation/">ProtoBuf，Translation</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ProtoBuf/">ProtoBuf</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Translation/">Translation</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -228,8 +228,8 @@
 <figure class="highlight protobuf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">repeated</span> <span class="built_in">int32</span> samples = <span class="number">4</span> [packed=<span class="literal">true</span>];</div></pre></td></tr></table></figure>
 <blockquote>
 <p>Required Is Forever You should be very careful about marking fields as required. If at some point you wish to stop writing or sending a required field, it will be problematic to change the field to an optional field – old readers will consider messages without this field to be incomplete and may reject or drop them unintentionally. You should consider writing application-specific custom validation routines for your buffers instead. Some engineers at Google have come to the conclusion that using required does more harm than good; they prefer to use only optional and repeated. However, this view is not universal.</p>
-<p>required是永久性的，你应该特别小心地使用required字段。如果在某些情况下你不想写入或者发送一个required字段，而将这个字段改为optional来修饰，那么这可能会遇到一些问题 —— 旧版本会认为没有这个字段的消息是不完整的，从而可能会拒绝对消息的解析。你应该考虑为应用程序实现验证protocol buffer消息有效性的校验函数。Google的一些工程师认为使用required弊大于利；他们更愿意使用optional和repeated字段而不是required字段。当然，这个观点并不具有普遍性。</p>
 </blockquote>
+<p>required是永久性的，你应该特别小心地使用required字段。如果在某些情况下你不想写入或者发送一个required字段，而将这个字段改为optional来修饰，那么这可能会遇到一些问题 —— 旧版本会认为没有这个字段的消息是不完整的，从而可能会拒绝对消息的解析。你应该考虑为应用程序实现验证protocol buffer消息有效性的校验函数。Google的一些工程师认为使用required弊大于利；他们更愿意使用optional和repeated字段而不是required字段。当然，这个观点并不具有普遍性。</p>
 <h2 id="添加更多消息类型"><a href="#添加更多消息类型" class="headerlink" title="添加更多消息类型"></a>添加更多消息类型</h2><blockquote>
 <p>Multiple message types can be defined in a single .proto file. This is useful if you are defining multiple related messages – so, for example, if you wanted to define the reply message format that corresponds to your SearchResponse message type, you could add it to the same .proto:</p>
 </blockquote>
