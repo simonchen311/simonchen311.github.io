@@ -139,6 +139,68 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-JLRoutes" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/JLRoutes.html/" class="article-date">
+      <time datetime="2017-07-31T15:08:55.000Z" itemprop="datePublished">2017-07-31</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/JLRoutes.html/">JLRoutes源码分析</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        
+      
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/programming/">开发</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Source-Code/">Source Code</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-FBKVOController Source Code analysis" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -258,7 +320,7 @@
 <p>First let’s look at a very simple example. Let’s say you want to define a search request message format, where each search request has a query string, the particular page of results you are interested in, and a number of results per page. Here’s the .proto file you use to define the message type.</p>
 </blockquote>
 <p>首先让我们来看一个非常简单的例子。如果你想要定义一个搜索请求的消息格式，每一个搜索请求中都包含着一个查询字符串，你想要查询的页码和每一页包含着多少条查询结果。你可以使用.proto文件来定义如下的消息格式。</p>
-<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">message</span> <span class="title">SearchRequest</span> </span>&#123;</div><div class="line">  <span class="keyword">required</span> <span class="built_in">string</span> query = <span class="number">1</span>;</div><div class="line">  <span class="keyword">optional</span> <span class="built_in">int32</span> page_number = <span class="number">2</span>;</div><div class="line">  <span class="keyword">optional</span> <span class="built_in">int32</span> result_per_page = <span class="number">3</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">message SearchRequest &#123;</div><div class="line">  required string query = 1;</div><div class="line">  optional int32 page_number = 2;</div><div class="line">  optional int32 result_per_page = 3;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
           
       
       
@@ -376,79 +438,6 @@
 
 
   
-    <article id="post-programming-jottings-character-1" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/programming-jottings-character-1.html/" class="article-date">
-      <time datetime="2016-12-26T11:28:17.000Z" itemprop="datePublished">2016-12-26</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/programming-jottings-character-1.html/">iOS开发杂记</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h2 id="给App增加iTunes文件共享功能"><a href="#给App增加iTunes文件共享功能" class="headerlink" title="给App增加iTunes文件共享功能"></a>给App增加iTunes文件共享功能</h2><p>从升级到iOS8.3以及之后的版本，使用iTools等第三方工具，已经不能使用其打开应用文档的功能进行文件导入/导出的功能了，因为从iOS8.3版本以后Apple已经关闭了对应用文件的访问权限。</p>
-<p>可是手头的项目要测试，需要提取出应用中的文档，于是只能使用iTunes的文件共享功能来提取了，这需要进行一步简单的设置：</p>
-<blockquote>
-<p>在Xcode中，在plist配置文件中增加“Application supports iTunes file sharing”，并将这一项的值设置为YES即可。</p>
-</blockquote>
-<p>之后在真机上运行App，并在iTunes上查看，就可以共享文件给App或者导出App中的文件了。</p>
-<p><img src="/programming-jottings-character-1.html/-Application supports iTunes file sharing.png" alt="sharing"></p>
-          
-      
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/programming/">开发</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Skill/">Skill</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a  href="/programming-jottings-character-1.html/#more">More >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
     <article id="post-AOP-Aspect" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -503,86 +492,6 @@
       
         <p class="article-more-link">
           <a  href="/AOP-Aspect.html/#more">More >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-KVC and KVO" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/KVC and KVO.html/" class="article-date">
-      <time datetime="2016-11-25T07:22:00.000Z" itemprop="datePublished">2016-11-25</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/KVC and KVO.html/">KVC与KVO</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <p><br></p>
-<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>KVC是一种通过字符串名称间接访问对象属性的方法。其方法在NSKeyValueCoding中被声明，默认的实现方法由NSObject提供。<code>非对象参数和返回类型</code>会被识别自动封装、解封。</p>
-<blockquote>
-<p>通过KVC这种间接访问方法，开发者就能在<strong>运行时</strong>确定属性的绑定，而不是在编译时。</p>
-</blockquote>
-<p><br></p>
-<h2 id="键和键路径"><a href="#键和键路径" class="headerlink" title="键和键路径"></a>键和键路径</h2><ul>
-<li><strong>key：</strong> 键是一个标识了对象某个属性的字符串。通常在接收的对象中，一个键对应的是一个访问方法或者实例变量的名称。</li>
-<li><strong>keyPath：</strong> 键路径由一个或多个键组成，以点做分隔符，用于指定一个对象属性遍历序列。</li>
-</ul>
-<blockquote>
-<p> <strong>注意：</strong>objectivec中的点语法是调用属性的存取方法，而键路径中的点是用以界定元素。</p>
-</blockquote>
-<p><br></p>
-          
-      
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/programming/">开发</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a  href="/KVC and KVO.html/#more">More >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -670,9 +579,78 @@
 
 
   
+    <article id="post-iOS-Runtime-Swizzle" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/iOS-Runtime-Swizzle.html/" class="article-date">
+      <time datetime="2016-11-08T07:47:26.000Z" itemprop="datePublished">2016-11-08</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/iOS-Runtime-Swizzle.html/">iOS Runtime 运行时笔记(三)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <p><br> </p>
+<h2 id="Method-Swizzle"><a href="#Method-Swizzle" class="headerlink" title="Method Swizzle"></a>Method Swizzle</h2><p>Runtime下的方法都是由SEL和IMP组成的结构体，两者之间构成了一种映射关系，而Method Swizzle是一种可以在运行时动态改变方法的IMP的技术，改变了两者的映射关系。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">+ (<span class="keyword">void</span>)load </div><div class="line">&#123;</div><div class="line">    <span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken;</div><div class="line">    <span class="built_in">dispatch_once</span>(&amp;onceToken, ^&#123;</div><div class="line"></div><div class="line">         SEL originalSelector = <span class="keyword">@selector</span>(selector1);</div><div class="line">         SEL swizzledSelector = <span class="keyword">@selector</span>(selector2);</div><div class="line"></div><div class="line">         Method originalMethod = class_getInstanceMethod(<span class="keyword">class</span>, originalSelector);</div><div class="line">         Method swizzledMethod = class_getInstanceMethod(<span class="keyword">class</span>, swizzledSelector);</div><div class="line"></div><div class="line">         <span class="comment">// [1]</span></div><div class="line">         <span class="built_in">BOOL</span> didAddMethod = class_addMethod([<span class="keyword">self</span> <span class="keyword">class</span>], originalSelector,  method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (didAddMethod)</div><div class="line">        &#123;</div><div class="line">           <span class="comment">// [2]</span></div><div class="line">           class_replaceMethod(<span class="keyword">class</span>, swizzledSelector, method_getImplementation(originalMethod),  method_getTypeEncoding(originalMethod));</div><div class="line">        &#125; </div><div class="line">        <span class="keyword">else</span> </div><div class="line">        &#123;</div><div class="line">          <span class="comment">// [3]</span></div><div class="line">          method_exchangeImplementations(originalMethod, swizzledMethod);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+          
+      
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/programming/">开发</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mechanism/">Mechanism</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Runtime/">Runtime</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a  href="/iOS-Runtime-Swizzle.html/#more">More >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 </div>
