@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="Simon’s Homepage">
 <meta property="og:description" content="问题的引出在团队开发中，一个产品往往会分割为许多不同的模块，交给不同的开发人员，而模块之间如果有交互需求的话，必然会需要了解其他模块所暴露的调用接口，传参方式等等，从而引入其他模块头文件，当产品越来越庞大，所依赖模块不断增多的情况下，外部模块如果发生一些变动很有可能会导致需要跟着它的变化修改大量代码，这不符合开发中“高内聚，低耦合”的基本原则。 设计一个路由层是可以用来解决这个问题的，其目的就是解">
 <meta property="og:image" content="http://simonchen.club/summary-of-some-routers-solution.html/router%20dictionary.png">
-<meta property="og:updated_time" content="2017-08-01T14:13:35.000Z">
+<meta property="og:updated_time" content="2017-08-01T14:15:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS开源路由技术总结">
 <meta name="twitter:description" content="问题的引出在团队开发中，一个产品往往会分割为许多不同的模块，交给不同的开发人员，而模块之间如果有交互需求的话，必然会需要了解其他模块所暴露的调用接口，传参方式等等，从而引入其他模块头文件，当产品越来越庞大，所依赖模块不断增多的情况下，外部模块如果发生一些变动很有可能会导致需要跟着它的变化修改大量代码，这不符合开发中“高内聚，低耦合”的基本原则。 设计一个路由层是可以用来解决这个问题的，其目的就是解">
@@ -186,8 +186,9 @@
         <h2 id="问题的引出"><a href="#问题的引出" class="headerlink" title="问题的引出"></a>问题的引出</h2><p>在团队开发中，一个产品往往会分割为许多不同的模块，交给不同的开发人员，而模块之间如果有交互需求的话，必然会需要了解其他模块所暴露的调用接口，传参方式等等，从而引入其他模块头文件，当产品越来越庞大，所依赖模块不断增多的情况下，外部模块如果发生一些变动很有可能会导致需要跟着它的变化修改大量代<br>码，这不符合开发中“高内聚，低耦合”的基本原则。</p>
 <p>设计一个路由层是可以用来解决这个问题的，其目的就是解决各模块之间的交互需要引入其他模块的头文件，通过路由中转来解除模块间的相互依赖。</p>
 <p>目前已经有了一些开源的路由解决方案，本次我选取了在Github上几个典型的开源路由： HHRouter、Routeble-iOS、JLRoutes、MGJRouter、CTMediator，阅读源码并总结学习这些路由方案是如何实现的。</p>
-<h2 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h2><p>大部分的路由解决方案都是通过URL Scheme调用方式进行的，通过先前约定好的URL格式来利用路由进行模块间的调用。而一个完整的URL组成部分如下所示：</p>
+<p>大部分的路由解决方案都是通过URL Scheme调用方式进行的，通过先前约定好的URL格式来利用路由进行模块间的调用。而一个完整的URL组成部分如下所示：</p>
 <p><code>Scheme://username:password@hostname[:port]/path/[;parameters][?query]#fragment</code></p>
+<a id="more"></a>
 <h2 id="HHRouter"><a href="#HHRouter" class="headerlink" title="HHRouter"></a>HHRouter</h2><p>HHRouter提供了一个类方法用来获取单例对象，其内部成员只维护了一个routes字典作为路由表，利用其进行规则匹配</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@interface HHRouter ()</div><div class="line">@property (strong, nonatomic) NSMutableDictionary *routes;</div><div class="line">@end</div></pre></td></tr></table></figure>
 <p>HHRouter提供了两个map接口，来进行路由规则的设置：其中第一个map方法以viewController的Class为参数来进行路由规则设置，第二个方法以Block为参数来设置路由规则，往后如果有匹配的路由路径可以直接可以用来取出对应的结果进行页面跳转或者闭包调用：</p>
@@ -227,7 +228,7 @@
         <p><span>本文标题:</span><a href="/summary-of-some-routers-solution.html/">iOS开源路由技术总结</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
         <p><span>发布时间:</span>2017年08月01日 - 15时32分</p>
-        <p><span>最后更新:</span>2017年08月01日 - 22时13分</p>
+        <p><span>最后更新:</span>2017年08月01日 - 22时15分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/summary-of-some-routers-solution.html/" title="iOS开源路由技术总结">http://simonchen.club/summary-of-some-routers-solution.html/</a>
             <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/summary-of-some-routers-solution.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
@@ -260,7 +261,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题的引出"><span class="toc-number">1.</span> <span class="toc-text">问题的引出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#预备知识"><span class="toc-number">2.</span> <span class="toc-text">预备知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HHRouter"><span class="toc-number">3.</span> <span class="toc-text">HHRouter</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题的引出"><span class="toc-number">1.</span> <span class="toc-text">问题的引出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HHRouter"><span class="toc-number">2.</span> <span class="toc-text">HHRouter</span></a></li></ol>
 </div>
 <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
 
