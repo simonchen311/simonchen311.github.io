@@ -166,15 +166,12 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>###问题的引出</p>
-<p>在团队开发中，一个产品往往会分割为许多不同的模块，交给不同的开发人员，而模块之间如果有交互需求的话，必然会需要了解其他模块所暴露的调用接口，传参方式等等，从而引入其他模块头文件，当产品越来越庞大，所依赖模块不断增多的情况下，外部模块如果发生一些变动很有可能会导致需要跟着它的变化修改大量代<br>码，这不符合开发中“高内聚，低耦合”的基本原则。</p>
+        <h2 id="问题的引出"><a href="#问题的引出" class="headerlink" title="问题的引出"></a>问题的引出</h2><p>在团队开发中，一个产品往往会分割为许多不同的模块，交给不同的开发人员，而模块之间如果有交互需求的话，必然会需要了解其他模块所暴露的调用接口，传参方式等等，从而引入其他模块头文件，当产品越来越庞大，所依赖模块不断增多的情况下，外部模块如果发生一些变动很有可能会导致需要跟着它的变化修改大量代<br>码，这不符合开发中“高内聚，低耦合”的基本原则。</p>
 <p>设计一个路由层是可以用来解决这个问题的，其目的就是解决各模块之间的交互需要引入其他模块的头文件，通过路由中转来解除模块间的相互依赖。</p>
 <p>目前已经有了一些开源的路由解决方案，本次我选取了在Github上几个典型的开源路由： HHRouter、Routeble-iOS、JLRoutes、MGJRouter、CTMediator，阅读源码并总结学习这些路由方案是如何实现的。</p>
-<p>###预备知识</p>
-<p>大部分的路由解决方案都是通过URL Scheme调用方式进行的，通过先前约定好的URL格式来利用路由进行模块间的调用。而一个完整的URL组成部分如下所示：</p>
+<h2 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h2><p>大部分的路由解决方案都是通过URL Scheme调用方式进行的，通过先前约定好的URL格式来利用路由进行模块间的调用。而一个完整的URL组成部分如下所示：</p>
 <p><code>Scheme://username:password@hostname[:port]/path/[;parameters][?query]#fragment</code></p>
-<p>###HHRouter</p>
-<p>HHRouter提供了一个类方法用来获取单例对象，其内部成员只维护了一个routes字典作为路由表，利用其进行规则匹配</p>
+<h2 id="HHRouter"><a href="#HHRouter" class="headerlink" title="HHRouter"></a>HHRouter</h2><p>HHRouter提供了一个类方法用来获取单例对象，其内部成员只维护了一个routes字典作为路由表，利用其进行规则匹配</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@interface HHRouter ()</div><div class="line">@property (strong, nonatomic) NSMutableDictionary *routes;</div><div class="line">@end</div></pre></td></tr></table></figure>
 <p>HHRouter提供了两个map接口，来进行路由规则的设置：其中第一个map方法以viewController的Class为参数来进行路由规则设置，第二个方法以Block为参数来设置路由规则，往后如果有匹配的路由路径可以直接可以用来取出对应的结果进行页面跳转或者闭包调用：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">- (void)map:(NSString *)route toControllerClass:(Class)controllerClass</div><div class="line">&#123;</div><div class="line">    NSMutableDictionary *subRoutes = [self subRoutesToRoute:route];</div><div class="line">    subRoutes[@&quot;_&quot;] = controllerClass;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)map:(NSString *)route toBlock:(HHRouterBlock)block</div><div class="line">&#123;</div><div class="line">    NSMutableDictionary *subRoutes = [self subRoutesToRoute:route];</div><div class="line">    subRoutes[@&quot;_&quot;] = [block copy];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -355,7 +352,7 @@
 <p>First let’s look at a very simple example. Let’s say you want to define a search request message format, where each search request has a query string, the particular page of results you are interested in, and a number of results per page. Here’s the .proto file you use to define the message type.</p>
 </blockquote>
 <p>首先让我们来看一个非常简单的例子。如果你想要定义一个搜索请求的消息格式，每一个搜索请求中都包含着一个查询字符串，你想要查询的页码和每一页包含着多少条查询结果。你可以使用.proto文件来定义如下的消息格式。</p>
-<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">message SearchRequest &#123;</div><div class="line">  required string query = 1;</div><div class="line">  optional int32 page_number = 2;</div><div class="line">  optional int32 result_per_page = 3;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">message</span> <span class="title">SearchRequest</span> </span>&#123;</div><div class="line">  <span class="keyword">required</span> <span class="built_in">string</span> query = <span class="number">1</span>;</div><div class="line">  <span class="keyword">optional</span> <span class="built_in">int32</span> page_number = <span class="number">2</span>;</div><div class="line">  <span class="keyword">optional</span> <span class="built_in">int32</span> result_per_page = <span class="number">3</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
           
       
       
