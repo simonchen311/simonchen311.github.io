@@ -152,26 +152,17 @@
       <input type="hidden" class="isFancy" />
     
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/summary-of-some-routers-solution.html/">iOS开源路由技术总结</a>
-    </h1>
-  
-
-      </header>
-      
-    
     <div class="article-entry" itemprop="articleBody">
       
           
-              <h2 id="问题的引出"><a href="#问题的引出" class="headerlink" title="问题的引出"></a>问题的引出</h2><p>在团队开发中，一个产品往往会分割为许多不同的模块，交给不同的开发人员，而模块之间如果有交互需求的话，必然会需要了解其他模块所暴露的调用接口，传参方式等等，从而引入其他模块头文件，当产品越来越庞大，所依赖模块不断增多的情况下，外部模块如果发生一些变动很有可能会导致需要跟着它的变化修改大量代<br>码，这不符合开发中“高内聚，低耦合”的基本原则。</p>
-<p>设计一个路由层是可以用来解决这个问题的，其目的就是解决各模块之间的交互需要引入其他模块的头文件，通过路由中转来解除模块间的相互依赖。</p>
-<p>目前已经有了一些开源的路由解决方案，本次我选取了在Github上几个典型的开源路由： HHRouter、Routeble-iOS、JLRoutes、MGJRouter、CTMediator，阅读源码并总结学习这些路由方案是如何实现的。</p>
-<p>大部分的路由解决方案都是通过URL Scheme调用方式进行的，通过先前约定好的URL格式来利用路由进行模块间的调用。而一个完整的URL组成部分如下所示：</p>
-<p><code>Scheme://username:password@hostname[:port]/path/[;parameters][?query]#fragment</code></p>
-          
+        <h2 id="CTMediator"><a href="#CTMediator" class="headerlink" title="CTMediator"></a>CTMediator</h2><p>CTMediator有一个中间者Mediator专门负责处理各种调用请求，其实现的本质是利用Runtime来解决的。</p>
+<p>CTMediator利用了target-action的思想，其提供的targetName指的是调用对象的类名，action是接口名SEL，params是一个字典用来传递参数，最后一个BOOL值是用来判断是否将target缓存起来。在方法内部，调用统一接口<code>safePerformAction: target: params:</code>进行消息转发处理，从而将其他类与Mediator之间进行解耦。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">- (id)performTarget:(NSString *)targetName action:(NSString *)actionName params:(NSDictionary *)params shouldCacheTarget:(BOOL)shouldCacheTarget</div><div class="line">&#123;</div><div class="line">    </div><div class="line">    NSString *targetClassString = [NSString stringWithFormat:@&quot;Target_%@&quot;, targetName];</div><div class="line">    NSString *actionString = [NSString stringWithFormat:@&quot;Action_%@:&quot;, actionName];</div><div class="line">    Class targetClass;</div><div class="line">    </div><div class="line">    NSObject *target = self.cachedTarget[targetClassString];</div><div class="line">    if (target == nil) &#123;</div><div class="line">        targetClass = NSClassFromString(targetClassString);</div><div class="line">        target = [[targetClass alloc] init];</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    SEL action = NSSelectorFromString(actionString);</div><div class="line">    </div><div class="line">    if (target == nil) &#123;</div><div class="line">        // 这里是处理无响应请求的地方之一，这个demo做得比较简单，如果没有可以响应的target，就直接return了。实际开发过程中是可以事先给一个固定的target专门用于在这个时候顶上，然后处理这种请求的</div><div class="line">        return nil;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    if (shouldCacheTarget) &#123;</div><div class="line">        self.cachedTarget[targetClassString] = target;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if ([target respondsToSelector:action]) &#123;</div><div class="line">        return [self safePerformAction:action target:target params:params];</div><div class="line">    &#125; else &#123;</div><div class="line">        // 有可能target是Swift对象</div><div class="line">        actionString = [NSString stringWithFormat:@&quot;Action_%@WithParams:&quot;, actionName];</div><div class="line">        action = NSSelectorFromString(actionString);</div><div class="line">        if ([target respondsToSelector:action]) &#123;</div><div class="line">            return [self safePerformAction:action target:target params:params];</div><div class="line">        &#125; else &#123;</div><div class="line">            // 这里是处理无响应请求的地方，如果无响应，则尝试调用对应target的notFound方法统一处理</div><div class="line">            SEL action = NSSelectorFromString(@&quot;notFound:&quot;);</div><div class="line">            if ([target respondsToSelector:action]) &#123;</div><div class="line">                return [self safePerformAction:action target:target params:params];</div><div class="line">            &#125; else &#123;</div><div class="line">                // 这里也是处理无响应请求的地方，在notFound都没有的时候，这个demo是直接return了。实际开发过程中，可以用前面提到的固定的target顶上的。</div><div class="line">                [self.cachedTarget removeObjectForKey:targetClassString];</div><div class="line">                return nil;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>为了防止Mediator这个类过于庞大，可以使用Category对Mediator按照功能进行分割，其内部调用的还是上面这样的统一接口，这样就不会造成单一Mediator类臃肿杂乱的问题了。</p>
+<h2 id="MGJRouter"><a href="#MGJRouter" class="headerlink" title="MGJRouter"></a>MGJRouter</h2><p>看源码后发现，MGJRouter在路由设计上的实现与HHRouter是一样的，同样是在配置URL时将其设置为多级字典，匹配上还是利用其进行一一匹配。</p>
+<p>但是MGJROuter还是在HHRouter上做了一些改进，除了一些细节上的改动意外，最大的区别是MGJRouter提供了一个统一的接口进行URL管理：提供一个接口让参数进行自动赋值，并获取处理完成后的URL。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">+ (NSString *)generateURLWithPattern:(NSString *)pattern parameters:(NSArray *)parameters</div><div class="line">&#123;</div><div class="line">    NSInteger startIndexOfColon = 0;</div><div class="line">    </div><div class="line">    NSMutableArray *placeholders = [NSMutableArray array];</div><div class="line">    </div><div class="line">    for (int i = 0; i &lt; pattern.length; i++) &#123;</div><div class="line">        NSString *character = [NSString stringWithFormat:@&quot;%c&quot;, [pattern characterAtIndex:i]];</div><div class="line">        if ([character isEqualToString:@&quot;:&quot;]) &#123;</div><div class="line">            startIndexOfColon = i;</div><div class="line">        &#125;</div><div class="line">        if ([specialCharacters rangeOfString:character].location != NSNotFound &amp;&amp; i &gt; (startIndexOfColon + 1) &amp;&amp; startIndexOfColon) &#123;</div><div class="line">            NSRange range = NSMakeRange(startIndexOfColon, i - startIndexOfColon);</div><div class="line">            NSString *placeholder = [pattern substringWithRange:range];</div><div class="line">            if (![self checkIfContainsSpecialCharacter:placeholder]) &#123;</div><div class="line">                [placeholders addObject:placeholder];</div><div class="line">                startIndexOfColon = 0;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        if (i == pattern.length - 1 &amp;&amp; startIndexOfColon) &#123;</div><div class="line">            NSRange range = NSMakeRange(startIndexOfColon, i - startIndexOfColon + 1);</div><div class="line">            NSString *placeholder = [pattern substringWithRange:range];</div><div class="line">            if (![self checkIfContainsSpecialCharacter:placeholder]) &#123;</div><div class="line">                [placeholders addObject:placeholder];</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    __block NSString *parsedResult = pattern;</div><div class="line">    </div><div class="line">    [placeholders enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) &#123;</div><div class="line">        idx = parameters.count &gt; idx ? idx : parameters.count - 1;</div><div class="line">        parsedResult = [parsedResult stringByReplacingOccurrencesOfString:obj withString:parameters[idx]];</div><div class="line">    &#125;];</div><div class="line">    </div><div class="line">    return parsedResult;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
       
       
     </div>
@@ -179,20 +170,8 @@
     <div class="article-info article-info-index">
       
       
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/programming/">开发</a>
-    </div>
-
 
       
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Source-Code/">Source Code</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a  href="/summary-of-some-routers-solution.html/#more">More >></a>
-        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -329,7 +308,7 @@
 <p>First let’s look at a very simple example. Let’s say you want to define a search request message format, where each search request has a query string, the particular page of results you are interested in, and a number of results per page. Here’s the .proto file you use to define the message type.</p>
 </blockquote>
 <p>首先让我们来看一个非常简单的例子。如果你想要定义一个搜索请求的消息格式，每一个搜索请求中都包含着一个查询字符串，你想要查询的页码和每一页包含着多少条查询结果。你可以使用.proto文件来定义如下的消息格式。</p>
-<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">message</span> <span class="title">SearchRequest</span> </span>&#123;</div><div class="line">  <span class="keyword">required</span> <span class="built_in">string</span> query = <span class="number">1</span>;</div><div class="line">  <span class="keyword">optional</span> <span class="built_in">int32</span> page_number = <span class="number">2</span>;</div><div class="line">  <span class="keyword">optional</span> <span class="built_in">int32</span> result_per_page = <span class="number">3</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">message SearchRequest &#123;</div><div class="line">  required string query = 1;</div><div class="line">  optional int32 page_number = 2;</div><div class="line">  optional int32 result_per_page = 3;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
           
       
       
