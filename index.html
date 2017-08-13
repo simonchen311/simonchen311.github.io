@@ -139,56 +139,6 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="post-summary-of-some-routers-solution" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/summary-of-some-routers-solution.html/" class="article-date">
-      <time datetime="2017-08-01T07:32:06.000Z" itemprop="datePublished">2017-08-01</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="CTMediator"><a href="#CTMediator" class="headerlink" title="CTMediator"></a>CTMediator</h2><p>CTMediator有一个中间者Mediator专门负责处理各种调用请求，其实现的本质是利用Runtime来解决的。</p>
-<p>CTMediator利用了target-action的思想，其提供的targetName指的是调用对象的类名，action是接口名SEL，params是一个字典用来传递参数，最后一个BOOL值是用来判断是否将target缓存起来。在方法内部，调用统一接口<code>safePerformAction: target: params:</code>进行消息转发处理，从而将其他类与Mediator之间进行解耦。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">- (id)performTarget:(NSString *)targetName action:(NSString *)actionName params:(NSDictionary *)params shouldCacheTarget:(BOOL)shouldCacheTarget</div><div class="line">&#123;</div><div class="line">    </div><div class="line">    NSString *targetClassString = [NSString stringWithFormat:@&quot;Target_%@&quot;, targetName];</div><div class="line">    NSString *actionString = [NSString stringWithFormat:@&quot;Action_%@:&quot;, actionName];</div><div class="line">    Class targetClass;</div><div class="line">    </div><div class="line">    NSObject *target = self.cachedTarget[targetClassString];</div><div class="line">    if (target == nil) &#123;</div><div class="line">        targetClass = NSClassFromString(targetClassString);</div><div class="line">        target = [[targetClass alloc] init];</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    SEL action = NSSelectorFromString(actionString);</div><div class="line">    </div><div class="line">    if (target == nil) &#123;</div><div class="line">        // 这里是处理无响应请求的地方之一，这个demo做得比较简单，如果没有可以响应的target，就直接return了。实际开发过程中是可以事先给一个固定的target专门用于在这个时候顶上，然后处理这种请求的</div><div class="line">        return nil;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    if (shouldCacheTarget) &#123;</div><div class="line">        self.cachedTarget[targetClassString] = target;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if ([target respondsToSelector:action]) &#123;</div><div class="line">        return [self safePerformAction:action target:target params:params];</div><div class="line">    &#125; else &#123;</div><div class="line">        // 有可能target是Swift对象</div><div class="line">        actionString = [NSString stringWithFormat:@&quot;Action_%@WithParams:&quot;, actionName];</div><div class="line">        action = NSSelectorFromString(actionString);</div><div class="line">        if ([target respondsToSelector:action]) &#123;</div><div class="line">            return [self safePerformAction:action target:target params:params];</div><div class="line">        &#125; else &#123;</div><div class="line">            // 这里是处理无响应请求的地方，如果无响应，则尝试调用对应target的notFound方法统一处理</div><div class="line">            SEL action = NSSelectorFromString(@&quot;notFound:&quot;);</div><div class="line">            if ([target respondsToSelector:action]) &#123;</div><div class="line">                return [self safePerformAction:action target:target params:params];</div><div class="line">            &#125; else &#123;</div><div class="line">                // 这里也是处理无响应请求的地方，在notFound都没有的时候，这个demo是直接return了。实际开发过程中，可以用前面提到的固定的target顶上的。</div><div class="line">                [self.cachedTarget removeObjectForKey:targetClassString];</div><div class="line">                return nil;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>为了防止Mediator这个类过于庞大，可以使用Category对Mediator按照功能进行分割，其内部调用的还是上面这样的统一接口，这样就不会造成单一Mediator类臃肿杂乱的问题了。</p>
-<h2 id="MGJRouter"><a href="#MGJRouter" class="headerlink" title="MGJRouter"></a>MGJRouter</h2><p>看源码后发现，MGJRouter在路由设计上的实现与HHRouter是一样的，同样是在配置URL时将其设置为多级字典，匹配上还是利用其进行一一匹配。</p>
-<p>但是MGJROuter还是在HHRouter上做了一些改进，除了一些细节上的改动意外，最大的区别是MGJRouter提供了一个统一的接口进行URL管理：提供一个接口让参数进行自动赋值，并获取处理完成后的URL。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">+ (NSString *)generateURLWithPattern:(NSString *)pattern parameters:(NSArray *)parameters</div><div class="line">&#123;</div><div class="line">    NSInteger startIndexOfColon = 0;</div><div class="line">    </div><div class="line">    NSMutableArray *placeholders = [NSMutableArray array];</div><div class="line">    </div><div class="line">    for (int i = 0; i &lt; pattern.length; i++) &#123;</div><div class="line">        NSString *character = [NSString stringWithFormat:@&quot;%c&quot;, [pattern characterAtIndex:i]];</div><div class="line">        if ([character isEqualToString:@&quot;:&quot;]) &#123;</div><div class="line">            startIndexOfColon = i;</div><div class="line">        &#125;</div><div class="line">        if ([specialCharacters rangeOfString:character].location != NSNotFound &amp;&amp; i &gt; (startIndexOfColon + 1) &amp;&amp; startIndexOfColon) &#123;</div><div class="line">            NSRange range = NSMakeRange(startIndexOfColon, i - startIndexOfColon);</div><div class="line">            NSString *placeholder = [pattern substringWithRange:range];</div><div class="line">            if (![self checkIfContainsSpecialCharacter:placeholder]) &#123;</div><div class="line">                [placeholders addObject:placeholder];</div><div class="line">                startIndexOfColon = 0;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        if (i == pattern.length - 1 &amp;&amp; startIndexOfColon) &#123;</div><div class="line">            NSRange range = NSMakeRange(startIndexOfColon, i - startIndexOfColon + 1);</div><div class="line">            NSString *placeholder = [pattern substringWithRange:range];</div><div class="line">            if (![self checkIfContainsSpecialCharacter:placeholder]) &#123;</div><div class="line">                [placeholders addObject:placeholder];</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    __block NSString *parsedResult = pattern;</div><div class="line">    </div><div class="line">    [placeholders enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) &#123;</div><div class="line">        idx = parameters.count &gt; idx ? idx : parameters.count - 1;</div><div class="line">        parsedResult = [parsedResult stringByReplacingOccurrencesOfString:obj withString:parameters[idx]];</div><div class="line">    &#125;];</div><div class="line">    </div><div class="line">    return parsedResult;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-      
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
     <article id="post-FBKVOController Source Code analysis" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -620,6 +570,77 @@
       
         <p class="article-more-link">
           <a  href="/iOS-Runtime-Method.html/#more">More >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-iOS-Runtime-Object" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/iOS-Runtime-Object.html/" class="article-date">
+      <time datetime="2016-09-17T06:49:00.000Z" itemprop="datePublished">2016-09-17</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/iOS-Runtime-Object.html/">iOS Runtime 运行时笔记(一)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <p><br> </p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Objective-C（下简称 OC）是一门动态性语言， 它把尽可能多的决策从编译、链接时期推迟到运行时期。这意味着 OC 不仅需要编译器，还需要一个执行编译代码的运行时系统（runtime system）。Runtime system 对于 OC 而言就像一个操作系统，让它能正常工作，实际上它是一个基本上用C和汇编写的库，这个库使得C语言有了面向对象的能力。</p>
+<blockquote>
+<p>这次我看的是<code>objc4-706</code>版本，下面的源码也是基于这个版本来的。</p>
+</blockquote>
+          
+      
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/programming/">开发</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mechanism/">Mechanism</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Runtime/">Runtime</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a  href="/iOS-Runtime-Object.html/#more">More >></a>
         </p>
       
       <div class="clearfix"></div>
