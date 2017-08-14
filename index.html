@@ -659,10 +659,153 @@
 
 
   
+    <article id="post-sandbox" class="article article-type-post" itemscope itemprop="blogPost">
   
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
-    </nav>
+    <div class="article-meta">
+      <a href="/sandbox.html/" class="article-date">
+      <time datetime="2016-09-05T03:09:00.000Z" itemprop="datePublished">2016-09-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/sandbox.html/">iOS应用的沙盒目录结构</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <p><br></p>
+<h2 id="总览"><a href="#总览" class="headerlink" title="总览"></a>总览</h2><p>出于安全，iOS系统的沙盒机制规定每个应用都只能访问当前沙盒目录下的文件（也有例外，比如通讯录可以授权给其他应用访问）。</p>
+<blockquote>
+<p>lldb中敲入<code>NSHomeDirectory()</code>可以显示当前沙盒目录路径</p>
+</blockquote>
+<p>每个沙盒目录包括下面的结构目录：</p>
+<ul>
+<li>.app</li>
+<li>Documents</li>
+<li>Library</li>
+<li>tmp</li>
+</ul>
+          
+      
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/programming/">开发</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a  href="/sandbox.html/#more">More >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-SDWebImage-Souce-Code-Analysis" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/SDWebImage-Souce-Code-Analysis.html/" class="article-date">
+      <time datetime="2016-08-24T10:34:48.000Z" itemprop="datePublished">2016-08-24</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/SDWebImage-Souce-Code-Analysis.html/">SDWebImage源码阅读</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <p>SDWebImage这套开源库可以说是开发必备品了，于是写这篇文章对其内部主要源码的实现整体理顺一下。</p>
+<h2 id="UIImageView入口"><a href="#UIImageView入口" class="headerlink" title="UIImageView入口"></a>UIImageView入口</h2><p>我们在使用SDWebImage时，经常是利用它提供的接口直接在UIImageView或者UIButton上设置URL来下载图片并且显示出来</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)sd_setImageWithURL:(<span class="keyword">nullable</span> <span class="built_in">NSURL</span> *)url placeholderImage:(<span class="keyword">nullable</span> <span class="built_in">UIImage</span> *)placeholder options:(SDWebImageOptions)options completed:(<span class="keyword">nullable</span> SDExternalCompletionBlock)completedBlock &#123;</div><div class="line">    [<span class="keyword">self</span> sd_setImageWithURL:url placeholderImage:placeholder options:options progress:<span class="literal">nil</span> completed:completedBlock];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)sd_setImageWithURL:(<span class="keyword">nullable</span> <span class="built_in">NSURL</span> *)url</div><div class="line">          placeholderImage:(<span class="keyword">nullable</span> <span class="built_in">UIImage</span> *)placeholder</div><div class="line">                   options:(SDWebImageOptions)options</div><div class="line">                  progress:(<span class="keyword">nullable</span> SDWebImageDownloaderProgressBlock)progressBlock</div><div class="line">                 completed:(<span class="keyword">nullable</span> SDExternalCompletionBlock)completedBlock &#123;</div><div class="line">    [<span class="keyword">self</span> sd_internalSetImageWithURL:url</div><div class="line">                    placeholderImage:placeholder</div><div class="line">                             options:options</div><div class="line">                        operationKey:<span class="literal">nil</span></div><div class="line">                       setImageBlock:<span class="literal">nil</span></div><div class="line">                            progress:progressBlock</div><div class="line">                           completed:completedBlock];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+          
+      
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/programming/">开发</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Source-Code/">Source Code</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a  href="/SDWebImage-Souce-Code-Analysis.html/#more">More >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
   
 </div>
       <footer id="footer">
