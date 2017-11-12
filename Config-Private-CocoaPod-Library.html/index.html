@@ -5,18 +5,18 @@
   
   <title>配置私有CocoaPod库 | Simon’s Homepage</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前言目前在公司对项目在做组件化的工作，其过程势必需要对代码拆分，因为现阶段都是用CocoaPod对各种SDK的管理，故需要对拆分后的组件逐个进行私有Pod库的配置，进行管理，所以用这篇文章记录下整个配置过程以及中间遇到的问题。 流程创建私有仓库因为公司现在对代码都是在gitLab上管托，所以针对单个组件来说，就需要在gitLab上创建一个私有的仓库，管托单个组件的代码。 这里最好在创建仓库的时候，">
+  <meta name="description" content="前言目前在公司对项目在做组件化的工作，其过程势必需要对代码拆分，因为现阶段都是用CocoaPod对各种SDK的管理，故需要对拆分后的组件逐个进行私有Pod库的配置，进行管理，所以用这篇文章记录下整个配置过程以及中间遇到的问题。">
 <meta name="keywords" content="iOS,Tools">
 <meta property="og:type" content="article">
 <meta property="og:title" content="配置私有CocoaPod库">
 <meta property="og:url" content="http://simonchen.club/Config-Private-CocoaPod-Library.html/index.html">
 <meta property="og:site_name" content="Simon’s Homepage">
-<meta property="og:description" content="前言目前在公司对项目在做组件化的工作，其过程势必需要对代码拆分，因为现阶段都是用CocoaPod对各种SDK的管理，故需要对拆分后的组件逐个进行私有Pod库的配置，进行管理，所以用这篇文章记录下整个配置过程以及中间遇到的问题。 流程创建私有仓库因为公司现在对代码都是在gitLab上管托，所以针对单个组件来说，就需要在gitLab上创建一个私有的仓库，管托单个组件的代码。 这里最好在创建仓库的时候，">
+<meta property="og:description" content="前言目前在公司对项目在做组件化的工作，其过程势必需要对代码拆分，因为现阶段都是用CocoaPod对各种SDK的管理，故需要对拆分后的组件逐个进行私有Pod库的配置，进行管理，所以用这篇文章记录下整个配置过程以及中间遇到的问题。">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1300265-ac938711bb5e147d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-11-12T08:35:25.000Z">
+<meta property="og:updated_time" content="2017-11-12T08:36:41.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="配置私有CocoaPod库">
-<meta name="twitter:description" content="前言目前在公司对项目在做组件化的工作，其过程势必需要对代码拆分，因为现阶段都是用CocoaPod对各种SDK的管理，故需要对拆分后的组件逐个进行私有Pod库的配置，进行管理，所以用这篇文章记录下整个配置过程以及中间遇到的问题。 流程创建私有仓库因为公司现在对代码都是在gitLab上管托，所以针对单个组件来说，就需要在gitLab上创建一个私有的仓库，管托单个组件的代码。 这里最好在创建仓库的时候，">
+<meta name="twitter:description" content="前言目前在公司对项目在做组件化的工作，其过程势必需要对代码拆分，因为现阶段都是用CocoaPod对各种SDK的管理，故需要对拆分后的组件逐个进行私有Pod库的配置，进行管理，所以用这篇文章记录下整个配置过程以及中间遇到的问题。">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1300265-ac938711bb5e147d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
   
     <link rel="alternative" href="/atom.xml" title="Simon’s Homepage" type="application/atom+xml">
@@ -184,6 +184,7 @@
       
           
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>目前在公司对项目在做组件化的工作，其过程势必需要对代码拆分，因为现阶段都是用CocoaPod对各种SDK的管理，故需要对拆分后的组件逐个进行<code>私有Pod</code>库的配置，进行管理，所以用这篇文章记录下整个配置过程以及中间遇到的问题。</p>
+<a id="more"></a>
 <h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><h3 id="创建私有仓库"><a href="#创建私有仓库" class="headerlink" title="创建私有仓库"></a>创建私有仓库</h3><p>因为公司现在对代码都是在gitLab上管托，所以针对单个组件来说，就需要在gitLab上创建一个私有的仓库，管托单个组件的代码。</p>
 <p>这里最好在创建仓库的时候，同时建立好LISENCE文件，因为之后的步骤需要用到。一般都是用的<code>MIT LISENCE</code>，其实只要找到其他一份LISENCE证书文件，复制里面的文字就可以了，然后对首行的文字进行修改，其他内容全部是一模一样，直接用就可以了，其格式如下:</p>
 <p><code>Copyright (c) 2017 [Name] &lt;Email&gt;</code></p>
@@ -258,7 +259,7 @@
         <p><span>本文标题:</span><a href="/Config-Private-CocoaPod-Library.html/">配置私有CocoaPod库</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
         <p><span>发布时间:</span>2017年11月05日 - 22时54分</p>
-        <p><span>最后更新:</span>2017年11月12日 - 16时35分</p>
+        <p><span>最后更新:</span>2017年11月12日 - 16时36分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/Config-Private-CocoaPod-Library.html/" title="配置私有CocoaPod库">http://simonchen.club/Config-Private-CocoaPod-Library.html/</a>
             <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/Config-Private-CocoaPod-Library.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
