@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="Simon’s Homepage">
 <meta property="og:description" content="前言目前在公司对项目在做组件化的工作，其过程势必需要对代码拆分，因为现阶段都是用CocoaPod对各种SDK的管理，故需要对拆分后的组件逐个进行私有Pod库的配置，进行管理，所以用这篇文章记录下整个配置过程以及中间遇到的问题。">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1300265-ac938711bb5e147d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-11-12T08:36:41.000Z">
+<meta property="og:updated_time" content="2017-11-12T08:38:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="配置私有CocoaPod库">
 <meta name="twitter:description" content="前言目前在公司对项目在做组件化的工作，其过程势必需要对代码拆分，因为现阶段都是用CocoaPod对各种SDK的管理，故需要对拆分后的组件逐个进行私有Pod库的配置，进行管理，所以用这篇文章记录下整个配置过程以及中间遇到的问题。">
@@ -220,7 +220,6 @@
 <p>值得注意的是，这里一定需要打标签，并且标签的内容需要与.podspec文件中的version字段保持一致。</p>
 <p>打标签的命令如下，打完后记得将标签推送到远程仓库，因为只是<code>git push</code>是不会推送标签内容的。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">git tag -a [name] -m "[description]"</div><div class="line">git push [origin] --tags</div><div class="line"></div><div class="line">//或者</div><div class="line"></div><div class="line">git push origin [tagname]</div></pre></td></tr></table></figure>
-<p>### </p>
 <p>如果标签打错了可以删除并重新推送，删除的命令是:</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">// 远程仓库的标签删除</div><div class="line">git push origin :[tagname]</div><div class="line"></div><div class="line">或者</div><div class="line"></div><div class="line">git push origin --delete tag [tagname]</div><div class="line"></div><div class="line">// 删除本地标签</div><div class="line">git tag -d [tagname]</div></pre></td></tr></table></figure>
 <h3 id="创建私有库中心"><a href="#创建私有库中心" class="headerlink" title="创建私有库中心"></a>创建私有库中心</h3><p>这里的私有库中心，指的也是一个git私有仓库，只不过这个仓库是专门用来管理.podspec文件的，命令行是：</p>
@@ -259,7 +258,7 @@
         <p><span>本文标题:</span><a href="/Config-Private-CocoaPod-Library.html/">配置私有CocoaPod库</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
         <p><span>发布时间:</span>2017年11月05日 - 22时54分</p>
-        <p><span>最后更新:</span>2017年11月12日 - 16时36分</p>
+        <p><span>最后更新:</span>2017年11月12日 - 16时38分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/Config-Private-CocoaPod-Library.html/" title="配置私有CocoaPod库">http://simonchen.club/Config-Private-CocoaPod-Library.html/</a>
             <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/Config-Private-CocoaPod-Library.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
