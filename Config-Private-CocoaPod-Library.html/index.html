@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>配置私有CocoaPod库 | Simon’s Homepage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言目前在公司对项目在做组件化的工作，其过程势必需要对代码拆分，因为现阶段都是用CocoaPod对各种SDK的管理，故需要对拆分后的组件逐个进行私有Pod库的配置，进行管理，所以用这篇文章记录下整个配置过程以及中间遇到的问题。 流程创建私有仓库因为公司现在对代码都是在gitLab上管托，所以针对单个组件来说，就需要在gitLab上创建一个私有的仓库，管托单个组件的代码。 这里最好在创建仓库的时候，">
+<meta name="keywords" content="iOS,Tools">
+<meta property="og:type" content="article">
+<meta property="og:title" content="配置私有CocoaPod库">
+<meta property="og:url" content="http://simonchen.club/Config-Private-CocoaPod-Library.html/index.html">
+<meta property="og:site_name" content="Simon’s Homepage">
+<meta property="og:description" content="前言目前在公司对项目在做组件化的工作，其过程势必需要对代码拆分，因为现阶段都是用CocoaPod对各种SDK的管理，故需要对拆分后的组件逐个进行私有Pod库的配置，进行管理，所以用这篇文章记录下整个配置过程以及中间遇到的问题。 流程创建私有仓库因为公司现在对代码都是在gitLab上管托，所以针对单个组件来说，就需要在gitLab上创建一个私有的仓库，管托单个组件的代码。 这里最好在创建仓库的时候，">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1300265-ac938711bb5e147d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-11-12T08:35:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="配置私有CocoaPod库">
+<meta name="twitter:description" content="前言目前在公司对项目在做组件化的工作，其过程势必需要对代码拆分，因为现阶段都是用CocoaPod对各种SDK的管理，故需要对拆分后的组件逐个进行私有Pod库的配置，进行管理，所以用这篇文章记录下整个配置过程以及中间遇到的问题。 流程创建私有仓库因为公司现在对代码都是在gitLab上管托，所以针对单个组件来说，就需要在gitLab上创建一个私有的仓库，管托单个组件的代码。 这里最好在创建仓库的时候，">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1300265-ac938711bb5e147d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+  
+    <link rel="alternative" href="/atom.xml" title="Simon’s Homepage" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/head.jpg">
+  
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+  <!-- 加载特效 -->
+    <script src="/js/pace.js"></script>
+    <link href="/css/pace/pace-theme-flash.css" rel="stylesheet" />
+  <script>
+      var yiliaConfig = {
+          rootUrl: '/',
+          fancybox: true,
+          animate: false,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false
+      }
+  </script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            
+            <img src="/img/head.jpg" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+            
+        </a>
+
+        <hgroup>
+          <h1 class="header-author"><a href="/" title="Hi Mate">Simon Chen</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">凡配称为理想的事物，就必带有善美的本质</p>
+        
+        
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">首页</a></li>
+                        
+                            <li><a href="/archives">归档</a></li>
+                        
+                            <li><a href="/tags">类别</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                
+                
+
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="Me">Simon Chen</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                
+                    <img src="/img/head.jpg" class="js-avatar" style="width: 100%; height: 100%; opacity: 1;">
+                
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="Me">Simon Chen</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">凡配称为理想的事物，就必带有善美的本质</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">首页</a></li>
+                
+                    <li><a href="/archives">归档</a></li>
+                
+                    <li><a href="/tags">类别</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                </div>
+            </nav>
+        </header>                
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-Config-Private-CocoaPod-Library" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/Config-Private-CocoaPod-Library.html/" class="article-date">
+      <time datetime="2017-11-05T14:54:07.000Z" itemprop="datePublished">2017-11-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      配置私有CocoaPod库
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/programming/">开发</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tools/">Tools</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>目前在公司对项目在做组件化的工作，其过程势必需要对代码拆分，因为现阶段都是用CocoaPod对各种SDK的管理，故需要对拆分后的组件逐个进行<code>私有Pod</code>库的配置，进行管理，所以用这篇文章记录下整个配置过程以及中间遇到的问题。</p>
+<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><h3 id="创建私有仓库"><a href="#创建私有仓库" class="headerlink" title="创建私有仓库"></a>创建私有仓库</h3><p>因为公司现在对代码都是在gitLab上管托，所以针对单个组件来说，就需要在gitLab上创建一个私有的仓库，管托单个组件的代码。</p>
+<p>这里最好在创建仓库的时候，同时建立好LISENCE文件，因为之后的步骤需要用到。一般都是用的<code>MIT LISENCE</code>，其实只要找到其他一份LISENCE证书文件，复制里面的文字就可以了，然后对首行的文字进行修改，其他内容全部是一模一样，直接用就可以了，其格式如下:</p>
+<p><code>Copyright (c) 2017 [Name] &lt;Email&gt;</code></p>
+<p>顺便也可以同时创建<code>README</code>文件，虽然不是必要，但是在首页对当前仓库里的代码文件进行描述和说明也是很有用的。</p>
+<h3 id="组织目录"><a href="#组织目录" class="headerlink" title="组织目录"></a>组织目录</h3><p>私有仓库创建好后，便可以使用<code>git clone</code>将远程仓库克隆到本地了，建议在clone的路径下面新建一个目录，用来存放拆分后的组件代码文件。</p>
+<p>现在clone后下的目录有3样东西：</p>
+<ul>
+<li><p>新建的存放代码的文件夹</p>
+</li>
+<li><p>REDAME文件</p>
+</li>
+<li><p>LISENCE文件</p>
+</li>
+</ul>
+<h3 id="创建PODSEPC文件"><a href="#创建PODSEPC文件" class="headerlink" title="创建PODSEPC文件"></a>创建PODSEPC文件</h3><p>podsepc文件是什么，做什么用的我在这里就不具体描述了，网上一搜一大堆，或许哪天有时间我也可以稍微更新下这里。</p>
+<p>创建该文件需要在终端中先cd到组件目录下面，然后再敲入一下命令行进行创建即可：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod spec create [name]</div></pre></td></tr></table></figure>
+<p>建议名称就是用组件的名称，到时候放在Pod中的组件就是显示的这个名字。</p>
+<h3 id="编辑PODSEPC文件"><a href="#编辑PODSEPC文件" class="headerlink" title="编辑PODSEPC文件"></a>编辑PODSEPC文件</h3><p>用Xcode或者markdown编辑或者其他工具打开这个文件进行编辑，文件具体内容如下，直接根据需要进行不同的修改就可以了，然后再保存。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">Pod::Spec.new do |s|</div><div class="line"></div><div class="line">  //名称</div><div class="line">  s.name         = "XXXX"</div><div class="line">  </div><div class="line">  //版本号  </div><div class="line">  s.version      = "0.0.1"</div><div class="line">  </div><div class="line">  //摘要</div><div class="line">  s.summary      = "XXXX"</div><div class="line">  </div><div class="line">  //详细描述</div><div class="line">  s.description  = &lt;&lt;-DESC</div><div class="line">                   XXXXXXX</div><div class="line">                   DESC</div><div class="line">                   </div><div class="line">  //主页</div><div class="line">  s.homepage     = "XXXX"</div><div class="line">  </div><div class="line">  //证书文件</div><div class="line"><span class="meta">  #</span>s.license      = "MIT"</div><div class="line">  s.license      = &#123; :type =&gt; "MIT"， :file =&gt; "LICENSE" &#125;</div><div class="line">  </div><div class="line">  //作者</div><div class="line">  s.author             = &#123; "Simon" =&gt; "****@***.com" &#125;</div><div class="line">  </div><div class="line">  //支持的平台与最低版本</div><div class="line">  s.platform     = :ios，"7.0"</div><div class="line">  </div><div class="line">  //git仓库地址</div><div class="line">  s.source       = &#123; :git =&gt; "https://XXXX.git"， :tag =&gt; "0.0.1" &#125;</div><div class="line">  </div><div class="line">  //文件本地路径，以spec文件所在目录为基准</div><div class="line">  s.source_files  = "Classes"， "Classes/**/*.&#123;h，m&#125;"</div><div class="line"></div><div class="line">  //是否支持ARC</div><div class="line">  s.requires_arc = true</div><div class="line">  </div><div class="line">  //依赖框架</div><div class="line">  s.framework = "Foundation", "UIKit"</div><div class="line">  </div><div class="line">  //依赖的库</div><div class="line">  s.denpendency "AFNetworking"</div><div class="line">  </div><div class="line">  //依赖的framework</div><div class="line">  s.vendored_frameworks = 'XXX/XXX/*.framework'</div><div class="line">  </div><div class="line">  //依赖的静态库</div><div class="line">  s.vendored_libraries = 'XXX/XXX/.a'</div><div class="line">  </div><div class="line"> //子spec</div><div class="line"> s.subspec 'XXXXX' do 'a'</div><div class="line"> 	a.source_files = 'XXX/XXX/XXX/XX*.&#123;h,m&#125;'</div><div class="line"> end</div><div class="line">  </div><div class="line">end</div></pre></td></tr></table></figure>
+<p>编辑完成后，再在终端中输入如下命令进行本地验证</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod lib lint</div></pre></td></tr></table></figure>
+<p>它从本地验证你的pod能否通过验证，如果不能通过，会提示你具体原因，这里最好是将将Warning和Error同时修复掉，如果实在没有办法解决，请使用如下命令:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod lib lint --allow-warnings</div></pre></td></tr></table></figure>
+<p>如果项目中依赖了静态库或者框架，需要加上</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod lib lint --use=libraries</div></pre></td></tr></table></figure>
+<p>如果依赖了其他的私有库，又需要使用</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod lib lint --source = "http://XXXX/[私有spec仓库地址], https://github.com/Cocoapods/spec.git"</div></pre></td></tr></table></figure>
+<blockquote>
+<p>也可以使用<code>Pod spec lint</code>，区别就是它是远程验证，只不过我习惯于用<code>pod lib lint</code>，本地验证无误后再把代码Push上去。</p>
+</blockquote>
+<h3 id="将文件PUSH到远程仓库，并打上标签"><a href="#将文件PUSH到远程仓库，并打上标签" class="headerlink" title="将文件PUSH到远程仓库，并打上标签"></a>将文件PUSH到远程仓库，并打上标签</h3><p>所有的文件编辑完成后将其PUSH到远程仓库，这一步很简单。</p>
+<p>值得注意的是，这里一定需要打标签，并且标签的内容需要与.podspec文件中的version字段保持一致。</p>
+<p>打标签的命令如下，打完后记得将标签推送到远程仓库，因为只是<code>git push</code>是不会推送标签内容的。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">git tag -a [name] -m "[description]"</div><div class="line">git push [origin] --tags</div><div class="line"></div><div class="line">//或者</div><div class="line"></div><div class="line">git push origin [tagname]</div></pre></td></tr></table></figure>
+<p>### </p>
+<p>如果标签打错了可以删除并重新推送，删除的命令是:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">// 远程仓库的标签删除</div><div class="line">git push origin :[tagname]</div><div class="line"></div><div class="line">或者</div><div class="line"></div><div class="line">git push origin --delete tag [tagname]</div><div class="line"></div><div class="line">// 删除本地标签</div><div class="line">git tag -d [tagname]</div></pre></td></tr></table></figure>
+<h3 id="创建私有库中心"><a href="#创建私有库中心" class="headerlink" title="创建私有库中心"></a>创建私有库中心</h3><p>这里的私有库中心，指的也是一个git私有仓库，只不过这个仓库是专门用来管理.podspec文件的，命令行是：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod repo add [name] [git url]</div></pre></td></tr></table></figure>
+<p>如果已经创建过，可以在<code>~/.cocoapod/repds</code>目录下面找到对应的仓库目录。</p>
+<p>相信绝大多数公司已经有自己的地址了，直接拿来用就可以，这步也是直接被我跳过了。</p>
+<h3 id="将PODSPEC文件添加到中心"><a href="#将PODSPEC文件添加到中心" class="headerlink" title="将PODSPEC文件添加到中心"></a>将PODSPEC文件添加到中心</h3><p>直接在终端中输入</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod repo push [name] [podspec]</div></pre></td></tr></table></figure>
+<p>其中name是指的私有库中心的名称，也就是<code>~/.cocoapod/repds</code>目录下那个管理的文件夹名称。</p>
+<h3 id="修改主工程的PODFILE文件"><a href="#修改主工程的PODFILE文件" class="headerlink" title="修改主工程的PODFILE文件"></a>修改主工程的PODFILE文件</h3><p>最后一步，直接在主工程中的PODFILE文件内添加好创建的组件库，然后<code>pod install</code>后，就可以直接用啦。</p>
+<h2 id="坑"><a href="#坑" class="headerlink" title="坑"></a>坑</h2><p>虽然整个过程步骤不是很多，但是我在做的时候还是碰到了1，2个比较头疼的问题。</p>
+<h3 id="pod-linb-lint-报错：source-files路径中找不到任何文件"><a href="#pod-linb-lint-报错：source-files路径中找不到任何文件" class="headerlink" title="pod linb lint 报错：source_files路径中找不到任何文件"></a>pod linb lint 报错：source_files路径中找不到任何文件</h3><p>这个.spec文件中的s.source_files字段是要将所有文件的路径写其的，有几个不同的路径就写多少，要不然就出现了这个错误。</p>
+<h3 id="pod-repo-push-报错-the-repo-at…-is-not-clean"><a href="#pod-repo-push-报错-the-repo-at…-is-not-clean" class="headerlink" title="pod repo push 报错 the repo at… is not clean"></a>pod repo push 报错 the repo at… is not clean</h3><p>提交新的spec文件了这个错，后来发现原因是我直接在本地的spec仓库中对原来文件做了些操作，所以这里直接将改动的地方，提交到远程仓库中，然后再用pod repo push就可以了。</p>
+<h3 id="报错：没有权限提交代码到spec仓库中"><a href="#报错：没有权限提交代码到spec仓库中" class="headerlink" title="报错：没有权限提交代码到spec仓库中"></a>报错：没有权限提交代码到spec仓库中</h3><p>这个我一开始直接感觉是SSH出问题了，但是检查发现SSH Key的配置没有错误，后来发现时.spec文件中s.source地址一定是<code>http开头的路径</code>，不能是<code>git@</code>开头的。</p>
+<h3 id="第三方框架或者静态库不支持i386与X86-64架构"><a href="#第三方框架或者静态库不支持i386与X86-64架构" class="headerlink" title="第三方框架或者静态库不支持i386与X86_64架构"></a>第三方框架或者静态库不支持i386与X86_64架构</h3><p>一开始没找到解决方式，有种想哭的感觉，这个东西必须要用，但是又过不了验证，并且是第三方的东西，拿不到源码，无法让其支持模拟器……</p>
+<p>还好后来找到了个解决办法，虽然是下下策，但是也顺利的让我解决了这个问题，非常感谢<a href="http://www.bijishequ.com/detail/435200?p=" target="_blank" rel="external">这篇文章的作者</a>帮了我大忙，还是稍微记录下解决方式吧：</p>
+<p>原理是：直接修改验证源码，将检测直接跳过去：</p>
+<ul>
+<li><p>终端输入<code>open /usr/local/lib/ruby/gems/2.3.0/gems/cocoapods-1.3.0.beta.2/lib</code></p>
+</li>
+<li><p>打开<code>cocoapods</code>文件夹，在里面找到<code>validator.rb</code>文件</p>
+</li>
+<li><p>将文件中的下面代码给改掉，这里最好备份下，改完验证后，在改回原来的</p>
+</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/1300265-ac938711bb5e147d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片"></p>
+
+      
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/Config-Private-CocoaPod-Library.html/">配置私有CocoaPod库</a></p>
+        <p><span>文章作者:</span><a href="/" title="访问 Simon Chen 的个人博客">Simon Chen</a></p>
+        <p><span>发布时间:</span>2017年11月05日 - 22时54分</p>
+        <p><span>最后更新:</span>2017年11月12日 - 16时35分</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/Config-Private-CocoaPod-Library.html/" title="配置私有CocoaPod库">http://simonchen.club/Config-Private-CocoaPod-Library.html/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://simonchen.club/Config-Private-CocoaPod-Library.html/　　作者: Simon Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script src="/js/clipboard.min.js"></script>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+<nav id="article-nav">
+  
+    <a href="/Beehive-framework-analysis.html/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          BeeHive框架分析
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#流程"><span class="toc-number">2.</span> <span class="toc-text">流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建私有仓库"><span class="toc-number">2.1.</span> <span class="toc-text">创建私有仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#组织目录"><span class="toc-number">2.2.</span> <span class="toc-text">组织目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建PODSEPC文件"><span class="toc-number">2.3.</span> <span class="toc-text">创建PODSEPC文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编辑PODSEPC文件"><span class="toc-number">2.4.</span> <span class="toc-text">编辑PODSEPC文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#将文件PUSH到远程仓库，并打上标签"><span class="toc-number">2.5.</span> <span class="toc-text">将文件PUSH到远程仓库，并打上标签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建私有库中心"><span class="toc-number">2.6.</span> <span class="toc-text">创建私有库中心</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#将PODSPEC文件添加到中心"><span class="toc-number">2.7.</span> <span class="toc-text">将PODSPEC文件添加到中心</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改主工程的PODFILE文件"><span class="toc-number">2.8.</span> <span class="toc-text">修改主工程的PODFILE文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#坑"><span class="toc-number">3.</span> <span class="toc-text">坑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pod-linb-lint-报错：source-files路径中找不到任何文件"><span class="toc-number">3.1.</span> <span class="toc-text">pod linb lint 报错：source_files路径中找不到任何文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pod-repo-push-报错-the-repo-at…-is-not-clean"><span class="toc-number">3.2.</span> <span class="toc-text">pod repo push 报错 the repo at… is not clean</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#报错：没有权限提交代码到spec仓库中"><span class="toc-number">3.3.</span> <span class="toc-text">报错：没有权限提交代码到spec仓库中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第三方框架或者静态库不支持i386与X86-64架构"><span class="toc-number">3.4.</span> <span class="toc-text">第三方框架或者静态库不支持i386与X86_64架构</span></a></li></ol></li></ol>
+</div>
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+        }
+    })
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+    }
+</script>
+
+
+
+
+
+<div class="bdsharebuttonbox">
+	<a href="#" class="fx fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+	<a href="#" class="fx fa-weixin bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+	<a href="#" class="fx fa-qq bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+	<a href="#" class="fx fa-facebook-official bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+	<a href="#" class="fx fa-twitter bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+	<a href="#" class="fx fa-linkedin bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+	<a href="#" class="fx fa-files-o bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+</div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+
+
+
+    
+        <section class="youyan" id="comments">
+  <div id="uyan_frame"></div>
+  <script src="http://v2.uyan.cc/code/uyan.js?uid=2132200"></script>
+</section>
+
+    
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/Beehive-framework-analysis.html/" title="上一篇: BeeHive框架分析">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+    </div>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/Config-Private-CocoaPod-Library.html/">配置私有CocoaPod库</a></li><li class="post-list-item"><a class="post-list-link" href="/Beehive-framework-analysis.html/">BeeHive框架分析</a></li><li class="post-list-item"><a class="post-list-link" href="/FBKVOController Source Code analysis.html/">Facebook开源代码 - FBKVOController阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/Protocol-Buffer-Doc-Translation.html/">Protocol Buffer2 官方文档翻译</a></li><li class="post-list-item"><a class="post-list-link" href="/Runloop.html/">RunLoop探究</a></li><li class="post-list-item"><a class="post-list-link" href="/AOP-Aspect.html/">AOP编程 - Aspects源码阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/multiSSHKey.html/">多GitHub账号的SSH配置</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Method.html/">iOS Runtime 运行时笔记(二)</a></li><li class="post-list-item"><a class="post-list-link" href="/iOS-Runtime-Object.html/">iOS Runtime 运行时笔记(一)</a></li><li class="post-list-item"><a class="post-list-link" href="/sandbox.html/">iOS应用的沙盒目录结构</a></li><li class="post-list-item"><a class="post-list-link" href="/SDWebImage-Souce-Code-Analysis.html/">SDWebImage源码阅读</a></li></ul>
+    <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+    <script>
+        $(".post-list").addClass("toc-article");
+        $(".post-list-item a").attr("target","_blank");
+        $("#post-nav-button > a:nth-child(2)").click(function() {
+            $(".fa-bars, .fa-times").toggle();
+            $(".post-list").toggle(300);
+            if ($(".toc").length > 0) {
+                $("#toc, #tocButton").toggle(200, function() {
+                    if ($(".switch-area").is(":visible")) {
+                        $("#tocButton").attr("value", valueHide);
+                        }
+                    })
+            }
+            else {
+            }
+        })
+    </script>
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                &copy; 2017 Simon Chen
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/luuman/hexo-theme-spfk" target="_blank">spfk</a> by luuman
+            </div>
+        </div>
+        
+    </div>
+</footer>
+
+    </div>
+    <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var backgroundnum = 24;
+            var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+            $("#mobile-nav").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+            $(".left-col").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+        })
+    </script>
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    $(document).ready(function() {
+        if ($("#comments").length < 1) {
+            $("#scroll > a:nth-child(2)").hide();
+        };
+    })
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+  </div>
+</body>
+</html>
