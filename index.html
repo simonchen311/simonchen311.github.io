@@ -206,86 +206,6 @@
 
 
   
-    <article id="post-Beehive-framework-analysis" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/Beehive-framework-analysis.html/" class="article-date">
-      <time datetime="2017-09-24T15:10:47.000Z" itemprop="datePublished">2017-09-24</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Beehive-framework-analysis.html/">BeeHive框架分析</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h3 id="组件管理"><a href="#组件管理" class="headerlink" title="组件管理"></a>组件管理</h3><p>组件管理<code>BHModuleManager</code>，这个类是专门对组件进行管理的，他分为几个功能：</p>
-<ul>
-<li>静态注册组件</li>
-<li>动态注册/卸载组件</li>
-<li>事件触发</li>
-</ul>
-<h4 id="静态注册"><a href="#静态注册" class="headerlink" title="静态注册"></a>静态注册</h4><p>静态注册只是把组件的信息添加到字典中。</p>
-<p>静态注册会遍历plist文件，取出所有的组件集合，每一个组件信息为一个字典所代表，里面包含着下面几个内容：</p>
-<ul>
-<li><code>kModuleInfoNameKey</code> : 组件名称</li>
-<li><code>kModuleInfoHasInstantiatedKey</code> : 是否实例化</li>
-<li><code>kModuleInfoLevelKey</code> : 组件优先级</li>
-</ul>
-<p>所有的组件信息只是被添加至一个<code>BHModuleInfos</code>集合中，这里并不会对组件进行实例化</p>
-<p>如果需要实例化，则提供了方法将所有组件信息进行一次性遍历后实例化</p>
-<h4 id="动态注册"><a href="#动态注册" class="headerlink" title="动态注册"></a>动态注册</h4><p>动态注册实际上是手动指定一个ModuleClass进行注册，注册后除了将组件信息添加到集合中之外，实际上还进行了手动实例化，实例化后的组件类额外放到了一个集合中<code>BHModules</code>进行统一管理</p>
-<p>在组件实例化的过程中，会统一对注册默认的系统事件，注册事件实际上是将组件添加到<code>BHModulesByEvent</code>集合中，这个集合以事件类型为key，value对应的就是可以响应这个事件的组件集合</p>
-<p>卸载组件的过程实际上就是将对应的组件从集合中删除。</p>
-<h4 id="事件触发"><a href="#事件触发" class="headerlink" title="事件触发"></a>事件触发</h4><p>默认事件已经封装在字典中了，事件的触发实际上就是对某一个特定的事件，在<code>BHModulesByEvent</code>中取出可以响应这个事件的组件集合，并且对组件依次利用<code>performSelector: withObject:</code>去调用这个事件</p>
-<blockquote>
-<p>关于异步调用：<br>BeeHive实际上是以组件为单位，判断组件是否需要异步调用。提供<code>async</code>接口供外部判断是否需要异步调用。</p>
-</blockquote>
-
-      
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SourceCode/">SourceCode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
     <article id="post-FBKVOController Source Code analysis" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -884,10 +804,75 @@
 
 
   
+    <article id="post-SDWebImage-Souce-Code-Analysis" class="article article-type-post" itemscope itemprop="blogPost">
   
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
-    </nav>
+    <div class="article-meta">
+      <a href="/SDWebImage-Souce-Code-Analysis.html/" class="article-date">
+      <time datetime="2016-08-24T10:34:48.000Z" itemprop="datePublished">2016-08-24</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/SDWebImage-Souce-Code-Analysis.html/">SDWebImage源码阅读</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <p>SDWebImage这套开源库可以说是开发必备品了，于是写这篇文章对其内部主要源码的实现整体理顺一下。</p>
+<h2 id="UIImageView入口"><a href="#UIImageView入口" class="headerlink" title="UIImageView入口"></a>UIImageView入口</h2><p>我们在使用SDWebImage时，经常是利用它提供的接口直接在UIImageView或者UIButton上设置URL来下载图片并且显示出来</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)sd_setImageWithURL:(<span class="keyword">nullable</span> <span class="built_in">NSURL</span> *)url placeholderImage:(<span class="keyword">nullable</span> <span class="built_in">UIImage</span> *)placeholder options:(SDWebImageOptions)options completed:(<span class="keyword">nullable</span> SDExternalCompletionBlock)completedBlock &#123;</div><div class="line">    [<span class="keyword">self</span> sd_setImageWithURL:url placeholderImage:placeholder options:options progress:<span class="literal">nil</span> completed:completedBlock];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)sd_setImageWithURL:(<span class="keyword">nullable</span> <span class="built_in">NSURL</span> *)url</div><div class="line">          placeholderImage:(<span class="keyword">nullable</span> <span class="built_in">UIImage</span> *)placeholder</div><div class="line">                   options:(SDWebImageOptions)options</div><div class="line">                  progress:(<span class="keyword">nullable</span> SDWebImageDownloaderProgressBlock)progressBlock</div><div class="line">                 completed:(<span class="keyword">nullable</span> SDExternalCompletionBlock)completedBlock &#123;</div><div class="line">    [<span class="keyword">self</span> sd_internalSetImageWithURL:url</div><div class="line">                    placeholderImage:placeholder</div><div class="line">                             options:options</div><div class="line">                        operationKey:<span class="literal">nil</span></div><div class="line">                       setImageBlock:<span class="literal">nil</span></div><div class="line">                            progress:progressBlock</div><div class="line">                           completed:completedBlock];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+          
+      
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/programming/">开发</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Source-Code/">Source Code</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a  href="/SDWebImage-Souce-Code-Analysis.html/#more">More >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
   
 </div>
       <footer id="footer">
